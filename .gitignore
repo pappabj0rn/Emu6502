@@ -1,0 +1,7 @@
+﻿.vs
+Emu6502/bin
+Emu6502/obj
+Emu6502.Console/bin
+Emu6502.Console/obj
+Emu6502.Tests.Unit/bin
+Emu6502.Tests.Unit/obj
