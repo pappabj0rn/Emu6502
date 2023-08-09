@@ -1,59 +1,107 @@
-﻿using System.Diagnostics;
+﻿namespace Emu6502;
 
-namespace Emu6502;
+public class Registers
+{
+    public byte A;
+    public byte X;
+    public byte Y;
+    public byte S;
+    public ushort PC;
+}
+
+public class Flags
+{
+    public bool N;
+    public bool V;
+    public bool B;
+    public bool D;
+    public bool I;
+    public bool Z;
+    public bool C;
+}
+
+internal class ExecutionState
+{
+    internal int RemainingCycles;
+    internal int Ticks;
+    
+    internal Action<Cpu>? Instruction;
+    internal int InstructionSubstate;
+
+    internal bool Halted => RemainingCycles == 0;
+
+    internal void Tick()
+    {
+        RemainingCycles--;
+        Ticks++;
+    }
+
+    internal void ClearInstruction()
+    {
+        Instruction = null;
+        InstructionSubstate = 0;
+    }
+}
 
 public class Cpu
 {
+    private ExecutionState _state = new();
+    private byte[] _memory;
+
     public static class Instructions
     {
-        public const byte Test = 0x02;
+        public const byte Test_2cycle = 0x02;
         public const byte LDA_Immediate = 0xA9;
         public const byte NOP = 0xEA;
     }
 
-    public byte A { get; set; }
-    public byte X { get; set; }
-    public byte Y { get; set; }
-    public byte S { get; set; }
-    public ushort PC { get; set; }
+    public Flags Flags { get; } = new();
+    public Registers Registers { get; } = new();
 
-    public bool N { get; set; }
-    public bool V { get; set; }
-    public bool B { get; set; }
-    public bool D { get; set; }
-    public bool I { get; set; }
-    public bool Z { get; set; }
-    public bool C { get; set; }
-
-    private int _ticks;
-    private byte[] _memory;
+    public int Ticks => _state.Ticks;
 
     private Dictionary<byte, Action<Cpu>> _instructions = new()
     {
-        { 
-            Instructions.Test,
+#if DEBUG
+        {
+            Instructions.Test_2cycle,
             (cpu) =>
             {
-                Console.WriteLine("test instruction");
-                cpu._ticks++;
+                if(cpu._state.InstructionSubstate == 0)
+                {
+                    Console.WriteLine("test instruction cycle 1");
+                    cpu.Registers.X = 1;
+                    cpu._state.Tick();
+                    cpu._state.InstructionSubstate++; 
+                }
+
+                if(cpu._state.Halted) return;
+                Console.WriteLine("test instruction cycle 2");
+                cpu.Registers.X = 2;
+                cpu._state.Tick();
+
+                cpu._state.ClearInstruction();
             }
         },
+#endif
         {
             Instructions.LDA_Immediate,
             (cpu) =>
             {
-                cpu.A = cpu.FetchMemory();
-                cpu.N = (cpu.A & 0b1000_0000) > 0;
-                cpu.Z = cpu.A == 0;
+                cpu.Registers.A = cpu.FetchMemory();
+                cpu.Flags.N = (cpu.Registers.A & 0b1000_0000) > 0;
+                cpu.Flags.Z = cpu.Registers.A == 0;
+
+                cpu._state.ClearInstruction();
             }
         },
-        {
-            Instructions.NOP,
-            (cpu) =>
-            {
-                cpu._ticks++;
-            }
-        },
+        //{
+        //    Instructions.NOP,
+        //    (cpu, state) =>
+        //    {
+        //        cpu.Ticks++;
+        //    }
+        //},
     };
 
     public Cpu(byte[] memory)
@@ -63,42 +111,51 @@ public class Cpu
 
     public void Reset()
     {
-        A = 0;
-        X = 0;
-        Y = 0;
-        S = 0;
-        PC = 0xfffc;
-        N = false;
-        V = false;
-        B = false;
-        D = false;
-        I = false;
-        Z = false;
-        C = false;
+        Registers.A = 0;
+        Registers.X = 0;
+        Registers.Y = 0;
+        Registers.S = 0;
+        Flags.N = false;
+        Flags.V = false;
+        Flags.B = false;
+        Flags.D = false;
+        Flags.I = false;
+        Flags.Z = false;
+        Flags.C = false;
+
+        Registers.PC = (ushort)(_memory[0xfffc] + (_memory[0xfffd] << 8));
     }
 
     public void Execute(int cycles)
     {
-        while (_ticks < cycles)
+        _state.RemainingCycles += cycles;
+
+        while (!_state.Halted)
         {
-            var inst = FetchMemory();
-            try
+            if(_state.Instruction is null)
             {
-                _instructions[inst](this);
+                var inst = FetchMemory();
+                try
+                {
+                    _state.Instruction = _instructions[inst];
+                }
+                catch (KeyNotFoundException)
+                {
+                    Console.WriteLine($"Error: Undefined instruction 0x{inst:X2} @0x{Registers.PC:X4}");
+                    break;
+                }                
             }
-            catch (KeyNotFoundException)
-            {
-                Console.WriteLine(">> Undefined instruction");
-                break;
-            }            
+
+            if (_state.Halted) return;
+            _state.Instruction(this);
         }
     }
 
     private byte FetchMemory()
     {
-        var b = _memory[PC];
-        PC++;
-        _ticks++;
+        var b = _memory[Registers.PC];
+        Registers.PC++;
+        _state.Tick();
         return b;
     }
 }

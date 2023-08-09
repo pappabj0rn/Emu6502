@@ -1,8 +1,8 @@
 ﻿using Emu6502;
 
 var memory = new byte[0xffff];
-memory[0xfffc] = Cpu.Instructions.Test;
-memory[0xfffd] = 0x42;
+memory[0x00] = Cpu.Instructions.Test_2cycle;
+memory[0x01] = 0x42;
 
 Emu6502.Cpu cpu = new(memory);
 cpu.Reset();
