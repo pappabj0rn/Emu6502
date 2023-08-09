@@ -32,6 +32,7 @@ public class Cpu : ICpu
     {
         Array.Fill(_instructions, new InvalidOperation());
         _instructions[Instructions.LDA_Immediate] = new LDA_Immediate();
+        _instructions[Instructions.NOP] = new NOP();
 
         _instructions[Instructions.Test_2cycle] = new Test_2cycle();
     }
@@ -62,15 +63,7 @@ public class Cpu : ICpu
             if (State.Instruction is null)
             {
                 var inst = FetchMemory();
-                try
-                {
-                    State.Instruction = _instructions[inst];
-                }
-                catch (KeyNotFoundException)
-                {
-                    Console.WriteLine($"Error: Undefined instruction 0x{inst:X2} @0x{Registers.PC:X4}");
-                    break;
-                }
+                State.Instruction = _instructions[inst];
             }
 
             if (State.Halted) return;

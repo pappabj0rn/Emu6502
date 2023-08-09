@@ -103,6 +103,15 @@ public abstract class CpuTests
             }
             catch (InvalidOperationException) { }
         }
+
+        [Theory]
+        [InlineData(Cpu.Instructions.LDA_Immediate)]
+        [InlineData(Cpu.Instructions.NOP)]
+        public void Should_not_throw_IOE_for_valid_instruction(byte instruction)
+        {
+            Memory[0x00] = instruction;
+            Cpu.Execute(2);
+        }
     }
 
     public class Stack : CpuTests
