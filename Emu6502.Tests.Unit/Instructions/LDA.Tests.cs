@@ -1,4 +1,5 @@
 ﻿using Emu6502.Instructions;
+using Newtonsoft.Json.Linq;
 
 namespace Emu6502.Tests.Unit.Instructions;
 
@@ -243,6 +244,26 @@ public abstract class LDA_Tests : InstructionTestBase
             CpuMock.Registers.A.Should().Be(value);
             CpuMock.Flags.Z.Should().Be(expected_z);
             CpuMock.Flags.N.Should().Be(expected_n);
+        }
+
+        [Fact]
+        public void Should_wrap_around_to_start_of_zeropage_instead_of_crossing_page_boundary()
+        {
+            CpuMock
+                .FetchMemory()
+                .Returns(
+                    (byte)0xFF
+                );
+
+            CpuMock.Registers.X = 0x02;
+
+            CpuMock
+                .FetchMemory(0x0001)
+                .Returns((byte)0x65);
+
+            Sut.Execute(CpuMock);
+
+            CpuMock.Registers.A.Should().Be(0x65);
         }
     }
 }

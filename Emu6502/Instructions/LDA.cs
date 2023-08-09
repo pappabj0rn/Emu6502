@@ -3,11 +3,7 @@
 /*
 Load Accumulator with Memory
 
-M -> A
-N	Z	C	I	D	V
-+	+	-	-	-	-
 addressing	    assembler	    opc	bytes	cycles°
-zeropage,X	    LDA oper,X	    B5	2	    4  
 absolute,X	    LDA oper,X	    BD	3	    4* 
 absolute,Y	    LDA oper,Y	    B9	3	    4* 
 (indirect,X)	LDA (oper,X)	A1	2	    6  
@@ -75,7 +71,7 @@ public class LDA_ZeropageX : LDA
         SubTasks = new() {
             (cpu) => _addr = cpu.FetchMemory(),
             (cpu) => _addr += cpu.FetchX(),
-            (cpu) => LoadAccumulatorWithMemory(cpu, _addr)
+            (cpu) => LoadAccumulatorWithMemory(cpu, (ushort)(_addr & 0x00ff))
         };
     }
 }
