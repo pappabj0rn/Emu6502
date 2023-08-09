@@ -2,18 +2,19 @@
 
 namespace Emu6502;
 
-public class Cpu
+public class Cpu : ICpu
 {
     private byte[] _memory;
-    
+
     public static class Instructions
     {
         public const byte Test_2cycle = 0x02;
+        public const byte JMP_Absolute = 0x5C;
         public const byte LDA_Immediate = 0xA9;
         public const byte NOP = 0xEA;
     }
 
-    internal ExecutionState State { get; } = new();
+    public ExecutionState State { get; } = new();
     public Flags Flags { get; } = new();
     public Registers Registers { get; } = new();
 
@@ -31,7 +32,9 @@ public class Cpu
     private void SetupInstructionsTable()
     {
         Array.Fill(_instructions, new InvalidOperation());
+        _instructions[Instructions.JMP_Absolute] = new JMP_Absolute();
         _instructions[Instructions.LDA_Immediate] = new LDA_Immediate();
+        _instructions[Instructions.NOP] = new NOP();
 
         _instructions[Instructions.Test_2cycle] = new Test_2cycle();
     }
@@ -59,18 +62,10 @@ public class Cpu
 
         while (!State.Halted)
         {
-            if(State.Instruction is null)
+            if (State.Instruction is null)
             {
                 var inst = FetchMemory();
-                try
-                {
-                    State.Instruction = _instructions[inst];
-                }
-                catch (KeyNotFoundException)
-                {
-                    Console.WriteLine($"Error: Undefined instruction 0x{inst:X2} @0x{Registers.PC:X4}");
-                    break;
-                }                
+                State.Instruction = _instructions[inst];
             }
 
             if (State.Halted) return;
