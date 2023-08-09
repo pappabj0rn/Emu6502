@@ -2,9 +2,9 @@
 
 namespace Emu6502.Tests.Unit.Instructions;
 
-public abstract class LDA : InstructionTestBase
+public abstract class LDA_Tests : InstructionTestBase
 {
-    public class Immediate : LDA
+    public class Immediate : LDA_Tests
     {
         protected Instruction _sut = new LDA_Immediate();
 
