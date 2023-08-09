@@ -10,8 +10,16 @@ public class Cpu : ICpu
     {
         public const byte Test_2cycle = 0x02;
         public const byte JMP_Absolute = 0x5C;
+        
         public const byte LDA_Immediate = 0xA9;
+        public const byte LDA_Zeropage = 0xA5;
+        public const byte LDA_ZeropageX = 0xB5;        
         public const byte LDA_Absolute = 0xAD;
+        public const byte LDA_AbsoluteX = 0xBD;
+        public const byte LDA_AbsoluteY = 0xB9;
+        public const byte LDA_IndirectX = 0xA1;
+        public const byte LDA_IndirectY = 0xB1;
+
         public const byte NOP = 0xEA;
     }
 
@@ -34,8 +42,11 @@ public class Cpu : ICpu
     {
         Array.Fill(_instructions, new InvalidOperation());
         _instructions[Instructions.JMP_Absolute] = new JMP_Absolute();
+
         _instructions[Instructions.LDA_Immediate] = new LDA_Immediate();
-        //_instructions[Instructions.LDA_Absolute] = new LDA_Absolute();
+        _instructions[Instructions.LDA_Absolute] = new LDA_Absolute();
+        _instructions[Instructions.LDA_Zeropage] = new LDA_Zeropage();
+
         _instructions[Instructions.NOP] = new NOP();
 
         _instructions[Instructions.Test_2cycle] = new Test_2cycle();

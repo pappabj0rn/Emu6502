@@ -16,6 +16,8 @@ public abstract class InstructionTestBase
     
     public InstructionTestBase()
     {
+        State.Instruction = Sut;
+
         CpuMock.State.Returns(State);
 
         CpuMock
