@@ -4,6 +4,6 @@ public class InvalidOperation : Instruction
 {
     public override void Execute(ICpu cpu)
     {
-        throw new InvalidOperationException();
+        throw new InvalidOperationException("Tried to execute unknown instruction");
     }
 }

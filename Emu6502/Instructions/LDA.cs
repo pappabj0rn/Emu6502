@@ -65,3 +65,17 @@ public class LDA_Zeropage : LDA
         };
     }
 }
+
+public class LDA_ZeropageX : LDA
+{
+    private ushort _addr = 0;
+
+    public LDA_ZeropageX()
+    {
+        SubTasks = new() {
+            (cpu) => _addr = cpu.FetchMemory(),
+            (cpu) => _addr += cpu.FetchX(),
+            (cpu) => LoadAccumulatorWithMemory(cpu, _addr)
+        };
+    }
+}

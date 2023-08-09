@@ -88,9 +88,21 @@ public class Cpu : ICpu
 
     public byte FetchMemory(ushort? addr = null)
     {
-        var b = _memory[addr ?? Registers.PC];
-        Registers.PC++;
         State.Tick();
-        return b;
+        return _memory[addr ?? Registers.PC++];
     }
+
+    public byte FetchX()
+    {
+        State.Tick();
+        return Registers.X;
+    }
+
+    public byte FetchY()
+    {
+        State.Tick();
+        return Registers.Y;
+    }
+
+
 }

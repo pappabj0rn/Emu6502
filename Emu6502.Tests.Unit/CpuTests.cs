@@ -121,8 +121,101 @@ public abstract class CpuTests
         }
     }
 
-    public class Stack : CpuTests
+    public class FetchMemory : CpuTests
     {
+        [Fact]
+        public void Should_return_value_at_given_address()
+        {
+            Memory[0x11] = 0x12;
 
+            var result = Cpu.FetchMemory(0x11);
+
+            result.Should().Be(Memory[0x11]);
+        }
+
+        [Fact]
+        public void Should_return_value_at_address_defined_by_pc_when_given_address_is_null()
+        {
+            Memory[0x13] = 0x12;
+
+            Cpu.Registers.PC = 0x13;
+            var result = Cpu.FetchMemory();
+
+            result.Should().Be(Memory[0x13]);
+        }
+
+        [Fact]
+        public void Should_increase_state_ticks_by_one()
+        {
+            Cpu.FetchMemory();
+
+            Cpu.State.Ticks.Should().Be(1);
+        }
+
+        [Fact]
+        public void Should_increment_pc_when_called_without_address()
+        {
+            Memory[0x13] = 0x12;
+            Memory[0x14] = 0x13;
+
+            Cpu.Registers.PC = 0x13;
+
+            Cpu.FetchMemory().Should().Be(Memory[0x13]);
+            Cpu.FetchMemory().Should().Be(Memory[0x14]);
+        }
+
+        [Fact]
+        public void Should_not_increment_pc_when_called_with_address()
+        {
+            Memory[0x13] = 0x12;
+            Memory[0x14] = 0x13;
+
+            Cpu.Registers.PC = 0x13;
+
+            Cpu.FetchMemory(0x13).Should().Be(Memory[0x13]);
+            Cpu.FetchMemory().Should().Be(Memory[0x13]);
+        }
+    }
+
+    public class FetchX : CpuTests
+    {
+        [Fact]
+        public void Should_return_value_of_x()
+        {
+            Cpu.Registers.X = 0x99;
+
+            var result = Cpu.FetchX();
+
+            result.Should().Be(Cpu.Registers.X);
+        }
+
+        [Fact]
+        public void Should_increase_state_ticks_by_one()
+        {
+            Cpu.FetchX();
+
+            Cpu.State.Ticks.Should().Be(1);
+        }
+    }
+
+    public class FetchY : CpuTests
+    {
+        [Fact]
+        public void Should_return_value_of_y()
+        {
+            Cpu.Registers.Y = 0x69;
+
+            var result = Cpu.FetchY();
+
+            result.Should().Be(Cpu.Registers.Y);
+        }
+
+        [Fact]
+        public void Should_increase_state_ticks_by_one()
+        {
+            Cpu.FetchY();
+
+            Cpu.State.Ticks.Should().Be(1);
+        }
     }
 }

@@ -186,4 +186,63 @@ public abstract class LDA_Tests : InstructionTestBase
             CpuMock.Flags.N.Should().Be(expected_n);
         }
     }
+
+    public class ZeropageX : LDA_Tests
+    {
+        public override int NumberOfCyclesForExecution => 3;
+        protected override Instruction Sut { get; } = new LDA_ZeropageX();
+
+        public override void SteppedThroughSetup()
+        {
+            CpuMock
+                .FetchMemory()
+                .Returns(
+                    (byte)0x20,
+                    (byte)0xFF
+                );
+
+            CpuMock.Registers.X = 0x11;
+
+            CpuMock
+                .FetchMemory(0x0031)
+                .Returns((byte)0x01);
+        }
+
+        public override void SteppedThroughVerification()
+        {
+            CpuMock.Registers.A.Should().Be(1);
+        }
+
+        [Theory]
+        [InlineData(0x00, true, false)]
+        [InlineData(0x01, false, false)]
+        [InlineData(0x7F, false, false)]
+        [InlineData(0x80, false, true)]
+        [InlineData(0x81, false, true)]
+        [InlineData(0xFF, false, true)]
+        public void Should_update_Z_and_N_flags_matching_value_loaded_into_accumulator(
+            byte value,
+            bool expected_z,
+            bool expected_n)
+        {
+            CpuMock
+                .FetchMemory()
+                .Returns(
+                    (byte)0x23,
+                    (byte)0xFF
+                );
+
+            CpuMock.Registers.X = 0x11;
+
+            CpuMock
+                .FetchMemory(0x0034)
+                .Returns(value);
+
+            Sut.Execute(CpuMock);
+
+            CpuMock.Registers.A.Should().Be(value);
+            CpuMock.Flags.Z.Should().Be(expected_z);
+            CpuMock.Flags.N.Should().Be(expected_n);
+        }
+    }
 }

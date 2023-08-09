@@ -24,6 +24,16 @@ public abstract class InstructionTestBase
             .FetchMemory()
             .ReturnsForAnyArgs((byte)0x00)
             .AndDoes(x =>State.Tick());
+
+        CpuMock
+            .FetchX()
+            .Returns(x => CpuMock.Registers.X)
+            .AndDoes(x => State.Tick());
+
+        CpuMock
+            .FetchY()
+            .Returns(x => CpuMock.Registers.Y)
+            .AndDoes(x => State.Tick());
     }
 
     [Fact]
@@ -36,6 +46,7 @@ public abstract class InstructionTestBase
         State.RemainingCycles.Should().Be(0);
         State.Ticks.Should().Be(NumberOfCyclesForExecution);
         State.Instruction.Should().BeNull();
+        State.InstructionSubstate.Should().Be(0);
     }
 
     [Fact]

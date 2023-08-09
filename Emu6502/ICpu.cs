@@ -9,6 +9,8 @@
 
         void Execute(int cycles);
         byte FetchMemory(ushort? addr = null);
+        byte FetchX();
+        byte FetchY();
         void Reset();
     }
 }

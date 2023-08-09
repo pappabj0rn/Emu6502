@@ -20,11 +20,14 @@ public abstract class Instruction
                 subtask(cpu);
 
                 if (i == SubTasks.Count - 1)
-                { 
-                    cpu.State.ClearInstruction(); 
+                {
+                    cpu.State.ClearInstruction();
+                }
+                else
+                {
+                    cpu.State.InstructionSubstate++;
                 }
 
-                cpu.State.InstructionSubstate++;
                 if (cpu.State.Halted) return;
             }
 
