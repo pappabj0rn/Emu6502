@@ -2,21 +2,19 @@
 
 public class Test_2cycle : Instruction
 {
-    public override void Execute(ICpu cpu)
+    public Test_2cycle()
     {
-        if (cpu.State.InstructionSubstate == 0)
-        {
-            Console.WriteLine("test instruction cycle 1");
-            cpu.Registers.X = 1;
-            cpu.State.Tick();
-            cpu.State.InstructionSubstate++;
-        }
-
-        if (cpu.State.Halted) return;
-        Console.WriteLine("test instruction cycle 2");
-        cpu.Registers.X = 2;
-        cpu.State.Tick();
-
-        cpu.State.ClearInstruction();
+        SubTasks = new() {
+            (cpu) => {
+                Console.WriteLine("test instruction cycle 1");
+                cpu.Registers.X = 1;
+                cpu.State.Tick();
+            },
+            (cpu) => {
+                Console.WriteLine("test instruction cycle 2");
+                cpu.Registers.X = 2;
+                cpu.State.Tick();
+            }
+        };
     }
 }
