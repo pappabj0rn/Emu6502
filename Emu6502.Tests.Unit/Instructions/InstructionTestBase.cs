@@ -13,6 +13,6 @@ public abstract class InstructionTestBase
         CpuMock
             .FetchMemory()
             .Returns((byte)0x00)
-            .AndDoes(x => State.Tick());
+            .AndDoes(x =>State.Tick());
     }
 }

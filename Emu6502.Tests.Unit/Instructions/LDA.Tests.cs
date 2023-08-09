@@ -20,8 +20,8 @@ public abstract class LDA : InstructionTestBase
 
             _sut.Execute(CpuMock);
 
-            State.RemainingCycles .Should().Be(0);
-            State.Ticks .Should().Be(1);
+            State.RemainingCycles.Should().Be(0);
+            State.Ticks.Should().Be(1);
             State.Instruction.Should().BeNull();
         }
 
@@ -29,8 +29,8 @@ public abstract class LDA : InstructionTestBase
         public void Should_load_byte_following_instruction_into_accumulator()
         {
             CpuMock
-                .FetchMemory()
-                .Returns((byte)0x01);
+            .FetchMemory()
+            .Returns((byte)0x01);
 
             _sut.Execute(CpuMock);
 
