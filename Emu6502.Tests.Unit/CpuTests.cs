@@ -105,12 +105,13 @@ public abstract class CpuTests
         }
 
         [Theory]
-        [InlineData(Cpu.Instructions.LDA_Immediate)]
-        [InlineData(Cpu.Instructions.NOP)]
-        public void Should_not_throw_IOE_for_valid_instruction(byte instruction)
+        [InlineData(Cpu.Instructions.LDA_Immediate, 2)]
+        [InlineData(Cpu.Instructions.NOP, 2)]
+        [InlineData(Cpu.Instructions.JMP_Absolute, 3)]
+        public void Should_not_throw_IOE_for_valid_instruction(byte instruction, int requiredCycles)
         {
             Memory[0x00] = instruction;
-            Cpu.Execute(2);
+            Cpu.Execute(requiredCycles);
         }
     }
 

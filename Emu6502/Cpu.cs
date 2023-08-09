@@ -9,6 +9,7 @@ public class Cpu : ICpu
     public static class Instructions
     {
         public const byte Test_2cycle = 0x02;
+        public const byte JMP_Absolute = 0x5C;
         public const byte LDA_Immediate = 0xA9;
         public const byte NOP = 0xEA;
     }
@@ -31,6 +32,7 @@ public class Cpu : ICpu
     private void SetupInstructionsTable()
     {
         Array.Fill(_instructions, new InvalidOperation());
+        _instructions[Instructions.JMP_Absolute] = new JMP_Absolute();
         _instructions[Instructions.LDA_Immediate] = new LDA_Immediate();
         _instructions[Instructions.NOP] = new NOP();
 
