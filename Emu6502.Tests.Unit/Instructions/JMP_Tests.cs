@@ -29,5 +29,20 @@ public abstract class JMP_Tests : InstructionTestBase
 
             CpuMock.Registers.PC.Should().Be(0x2211);
         }
+
+        public override void SteppedThroughSetup()
+        {
+            CpuMock
+                .FetchMemory()
+                .ReturnsForAnyArgs(
+                    (byte)0x11,
+                    (byte)0x22
+                );
+        }
+
+        public override void SteppedThroughVerification()
+        {
+            CpuMock.Registers.PC.Should().Be(0x2211);
+        }
     }    
 }

@@ -106,25 +106,23 @@ public abstract class LDA_Tests : InstructionTestBase
             CpuMock.Flags.N.Should().Be(expected_n);
         }
 
-        //todo make generic, move to instructiontestbase for instruction having NumberOfCyclesForExecution > 1
-        [Fact]
-        public void Should_be_able_to_be_stepped_through()
+        public override void SteppedThroughSetup()
         {
             CpuMock
                 .FetchMemory()
-                .ReturnsForAnyArgs(
+                .Returns(
                     (byte)0x02,
-                    (byte)0x00,
-                    (byte)0x01
+                    (byte)0x01,
+                    (byte)0xFF
                 );
 
-            for (int i = 0; i< NumberOfCyclesForExecution; i++)
-            {
-                State.Instruction.Should().NotBeNull();
-                State.RemainingCycles = 1;
-                Sut.Execute(CpuMock);
-            }
-            
+            CpuMock
+                .FetchMemory(0x0102)
+                .Returns((byte)0x01);
+        }
+
+        public override void SteppedThroughVerification()
+        {
             CpuMock.Registers.A.Should().Be(1);
         }
     }

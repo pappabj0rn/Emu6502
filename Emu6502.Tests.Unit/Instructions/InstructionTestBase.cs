@@ -8,8 +8,12 @@ public abstract class InstructionTestBase
 
     protected abstract Instruction Sut { get; }
     public abstract int NumberOfCyclesForExecution { get; }
+    public virtual void SteppedThroughSetup() { }
+    public virtual void SteppedThroughVerification() 
+    {
+        throw new NotImplementedException($"SteppedThroughVerification not implemeted for test of {Sut.GetType().FullName}");
+    }
     
-
     public InstructionTestBase()
     {
         CpuMock.State.Returns(State);
@@ -30,5 +34,22 @@ public abstract class InstructionTestBase
         State.RemainingCycles.Should().Be(0);
         State.Ticks.Should().Be(NumberOfCyclesForExecution);
         State.Instruction.Should().BeNull();
+    }
+
+    [Fact]
+    public void Should_be_able_to_be_stepped_through_when_requiring_more_than_one_cycle()
+    {
+        if (NumberOfCyclesForExecution == 1) return;
+
+        SteppedThroughSetup();
+
+        for (int i = 0; i < NumberOfCyclesForExecution; i++)
+        {
+            State.Instruction.Should().NotBeNull();
+            State.RemainingCycles = 1;
+            Sut.Execute(CpuMock);
+        }
+
+        SteppedThroughVerification();
     }
 }
