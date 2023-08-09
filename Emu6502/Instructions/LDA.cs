@@ -2,7 +2,7 @@
 
 public class LDA_Immediate : Instruction
 {
-    public override void Execute(Cpu cpu)
+    public override void Execute(ICpu cpu)
     {
         cpu.Registers.A = cpu.FetchMemory();
         cpu.Flags.N = (cpu.Registers.A & 0b1000_0000) > 0;

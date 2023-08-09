@@ -2,13 +2,17 @@
 
 public abstract class InstructionTestBase
 {
-    protected Cpu Cpu;
-    protected byte[] Memory;
+    protected ICpu CpuMock = Substitute.For<ICpu>();
+    protected ExecutionState State = new();
+    
 
     public InstructionTestBase()
     {
-        Memory = new byte[0xffff];
-        Cpu = new Cpu(Memory);
-        Cpu.Reset();
+        CpuMock.State.Returns(State);
+
+        CpuMock
+            .FetchMemory()
+            .Returns((byte)0x00)
+            .AndDoes(x => State.Tick());
     }
 }

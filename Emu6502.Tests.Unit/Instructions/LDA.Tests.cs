@@ -1,27 +1,40 @@
-﻿namespace Emu6502.Tests.Unit.Instructions;
+﻿using Emu6502.Instructions;
+
+namespace Emu6502.Tests.Unit.Instructions;
 
 public abstract class LDA : InstructionTestBase
 {
     public class Immediate : LDA
     {
-        [Fact]
-        public void Should_execute_in_two_cycles()
-        {
-            Memory[0x00] = Cpu.Instructions.LDA_Immediate;
+        protected Instruction _sut = new LDA_Immediate();
 
-            Cpu.Execute(2);
-            Cpu.Ticks.Should().Be(2);
-            Cpu.Registers.PC.Should().Be(0x02);
+        public Immediate()
+        {
+            State.Instruction = _sut;
+        }
+
+        [Fact]
+        public void Should_execute_in_one_cycle()
+        {
+            State.RemainingCycles = 1;
+
+            _sut.Execute(CpuMock);
+
+            State.RemainingCycles .Should().Be(0);
+            State.Ticks .Should().Be(1);
+            State.Instruction.Should().BeNull();
         }
 
         [Fact]
         public void Should_load_byte_following_instruction_into_accumulator()
         {
-            Memory[0x00] = Cpu.Instructions.LDA_Immediate;
-            Memory[0x01] = 0x01;
+            CpuMock
+                .FetchMemory()
+                .Returns((byte)0x01);
 
-            Cpu.Execute(2);
-            Cpu.Registers.A.Should().Be(0x01);
+            _sut.Execute(CpuMock);
+
+            CpuMock.Registers.A.Should().Be(0x01);
         }
 
         [Theory]
@@ -33,13 +46,15 @@ public abstract class LDA : InstructionTestBase
         [InlineData(0xFF, false, true)]
         public void Should_update_Z_and_N_flags_matching_value_loaded_into_accumulator(byte value, bool expected_z, bool expected_n)
         {
-            Memory[0x0000] = Cpu.Instructions.LDA_Immediate;
-            Memory[0x0001] = value;
+            CpuMock
+                .FetchMemory()
+                .Returns(value);
 
-            Cpu.Execute(2);
-            Cpu.Registers.A.Should().Be(value);
-            Cpu.Flags.Z.Should().Be(expected_z);
-            Cpu.Flags.N.Should().Be(expected_n);
+            _sut.Execute(CpuMock);
+
+            CpuMock.Registers.A.Should().Be(value);
+            CpuMock.Flags.Z.Should().Be(expected_z);
+            CpuMock.Flags.N.Should().Be(expected_n);
         }
     }
 }

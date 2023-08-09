@@ -2,23 +2,23 @@
 
 namespace Emu6502;
 
-internal class ExecutionState
+public class ExecutionState
 {
-    internal int RemainingCycles;
-    internal int Ticks;
-    
-    internal Instruction? Instruction;
-    internal int InstructionSubstate;
+    public int RemainingCycles { get; set; }
+    public int Ticks { get; private set; }
+
+    public Instruction? Instruction { get; set; }
+    public int InstructionSubstate { get; set; }
 
     internal bool Halted => RemainingCycles == 0;
 
-    internal void Tick()
+    public void Tick()
     {
         RemainingCycles--;
         Ticks++;
     }
 
-    internal void ClearInstruction()
+    public void ClearInstruction()
     {
         Instruction = null;
         InstructionSubstate = 0;

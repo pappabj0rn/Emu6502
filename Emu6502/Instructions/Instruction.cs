@@ -2,13 +2,13 @@
 
 public abstract class Instruction
 {
-    public abstract void Execute(Cpu cpu);
+    public abstract void Execute(ICpu cpu);
 }
 
 public class InvalidOperation : Instruction
 {
-    public override void Execute(Cpu cpu)
+    public override void Execute(ICpu cpu)
     {
-        throw new NotImplementedException();
+        throw new InvalidOperationException();
     }
 }

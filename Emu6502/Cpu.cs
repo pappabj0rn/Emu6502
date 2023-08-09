@@ -2,10 +2,10 @@
 
 namespace Emu6502;
 
-public class Cpu
+public class Cpu : ICpu
 {
     private byte[] _memory;
-    
+
     public static class Instructions
     {
         public const byte Test_2cycle = 0x02;
@@ -13,7 +13,7 @@ public class Cpu
         public const byte NOP = 0xEA;
     }
 
-    internal ExecutionState State { get; } = new();
+    public ExecutionState State { get; } = new();
     public Flags Flags { get; } = new();
     public Registers Registers { get; } = new();
 
@@ -59,7 +59,7 @@ public class Cpu
 
         while (!State.Halted)
         {
-            if(State.Instruction is null)
+            if (State.Instruction is null)
             {
                 var inst = FetchMemory();
                 try
@@ -70,7 +70,7 @@ public class Cpu
                 {
                     Console.WriteLine($"Error: Undefined instruction 0x{inst:X2} @0x{Registers.PC:X4}");
                     break;
-                }                
+                }
             }
 
             if (State.Halted) return;

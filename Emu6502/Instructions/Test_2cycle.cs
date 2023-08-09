@@ -2,7 +2,7 @@
 
 public class Test_2cycle : Instruction
 {
-    public override void Execute(Cpu cpu)
+    public override void Execute(ICpu cpu)
     {
         if (cpu.State.InstructionSubstate == 0)
         {

@@ -101,7 +101,7 @@ public abstract class CpuTests
             {
                 Cpu.Execute(2);
             }
-            catch (NotImplementedException) { }
+            catch (InvalidOperationException) { }
         }
     }
 
