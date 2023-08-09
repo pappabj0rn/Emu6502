@@ -1,53 +1,11 @@
-﻿namespace Emu6502;
+﻿using Emu6502.Instructions;
 
-public class Registers
-{
-    public byte A;
-    public byte X;
-    public byte Y;
-    public byte S;
-    public ushort PC;
-}
-
-public class Flags
-{
-    public bool N;
-    public bool V;
-    public bool B;
-    public bool D;
-    public bool I;
-    public bool Z;
-    public bool C;
-}
-
-internal class ExecutionState
-{
-    internal int RemainingCycles;
-    internal int Ticks;
-    
-    internal Action<Cpu>? Instruction;
-    internal int InstructionSubstate;
-
-    internal bool Halted => RemainingCycles == 0;
-
-    internal void Tick()
-    {
-        RemainingCycles--;
-        Ticks++;
-    }
-
-    internal void ClearInstruction()
-    {
-        Instruction = null;
-        InstructionSubstate = 0;
-    }
-}
+namespace Emu6502;
 
 public class Cpu
 {
-    private ExecutionState _state = new();
     private byte[] _memory;
-
+    
     public static class Instructions
     {
         public const byte Test_2cycle = 0x02;
@@ -55,58 +13,27 @@ public class Cpu
         public const byte NOP = 0xEA;
     }
 
+    internal ExecutionState State { get; } = new();
     public Flags Flags { get; } = new();
     public Registers Registers { get; } = new();
 
-    public int Ticks => _state.Ticks;
+    public int Ticks => State.Ticks;
 
-    private Dictionary<byte, Action<Cpu>> _instructions = new()
-    {
-#if DEBUG
-        {
-            Instructions.Test_2cycle,
-            (cpu) =>
-            {
-                if(cpu._state.InstructionSubstate == 0)
-                {
-                    Console.WriteLine("test instruction cycle 1");
-                    cpu.Registers.X = 1;
-                    cpu._state.Tick();
-                    cpu._state.InstructionSubstate++; 
-                }
-
-                if(cpu._state.Halted) return;
-                Console.WriteLine("test instruction cycle 2");
-                cpu.Registers.X = 2;
-                cpu._state.Tick();
-
-                cpu._state.ClearInstruction();
-            }
-        },
-#endif
-        {
-            Instructions.LDA_Immediate,
-            (cpu) =>
-            {
-                cpu.Registers.A = cpu.FetchMemory();
-                cpu.Flags.N = (cpu.Registers.A & 0b1000_0000) > 0;
-                cpu.Flags.Z = cpu.Registers.A == 0;
-
-                cpu._state.ClearInstruction();
-            }
-        },
-        //{
-        //    Instructions.NOP,
-        //    (cpu, state) =>
-        //    {
-        //        cpu.Ticks++;
-        //    }
-        //},
-    };
+    private Instruction[] _instructions = new Instruction[256];
 
     public Cpu(byte[] memory)
     {
+        SetupInstructionsTable();
+
         _memory = memory;
+    }
+
+    private void SetupInstructionsTable()
+    {
+        Array.Fill(_instructions, new InvalidOperation());
+        _instructions[Instructions.LDA_Immediate] = new LDA_Immediate();
+
+        _instructions[Instructions.Test_2cycle] = new Test_2cycle();
     }
 
     public void Reset()
@@ -128,16 +55,16 @@ public class Cpu
 
     public void Execute(int cycles)
     {
-        _state.RemainingCycles += cycles;
+        State.RemainingCycles += cycles;
 
-        while (!_state.Halted)
+        while (!State.Halted)
         {
-            if(_state.Instruction is null)
+            if(State.Instruction is null)
             {
                 var inst = FetchMemory();
                 try
                 {
-                    _state.Instruction = _instructions[inst];
+                    State.Instruction = _instructions[inst];
                 }
                 catch (KeyNotFoundException)
                 {
@@ -146,16 +73,16 @@ public class Cpu
                 }                
             }
 
-            if (_state.Halted) return;
-            _state.Instruction(this);
+            if (State.Halted) return;
+            State.Instruction.Execute(this);
         }
     }
 
-    private byte FetchMemory()
+    public byte FetchMemory()
     {
         var b = _memory[Registers.PC];
         Registers.PC++;
-        _state.Tick();
+        State.Tick();
         return b;
     }
 }

@@ -4,7 +4,7 @@ var memory = new byte[0xffff];
 memory[0x00] = Cpu.Instructions.Test_2cycle;
 memory[0x01] = 0x42;
 
-Emu6502.Cpu cpu = new(memory);
+Cpu cpu = new(memory);
 cpu.Reset();
 cpu.Execute(3);
 

@@ -92,6 +92,17 @@ public abstract class CpuTests
             Cpu.Registers.X.Should().Be(2);
             Cpu.Registers.PC.Should().Be(0x01);
         }
+
+        [Fact]
+        public void Executing_and_invalid_op_code_will_throw_an_exception()
+        {
+            Memory[0x00] = 0xFF;
+            try
+            {
+                Cpu.Execute(2);
+            }
+            catch (NotImplementedException) { }
+        }
     }
 
     public class Stack : CpuTests
