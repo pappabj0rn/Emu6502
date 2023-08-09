@@ -8,7 +8,7 @@
         ExecutionState State { get; }
 
         void Execute(int cycles);
-        byte FetchMemory();
+        byte FetchMemory(ushort? addr = null);
         void Reset();
     }
 }

@@ -11,6 +11,7 @@ public class Cpu : ICpu
         public const byte Test_2cycle = 0x02;
         public const byte JMP_Absolute = 0x5C;
         public const byte LDA_Immediate = 0xA9;
+        public const byte LDA_Absolute = 0xAD;
         public const byte NOP = 0xEA;
     }
 
@@ -34,6 +35,7 @@ public class Cpu : ICpu
         Array.Fill(_instructions, new InvalidOperation());
         _instructions[Instructions.JMP_Absolute] = new JMP_Absolute();
         _instructions[Instructions.LDA_Immediate] = new LDA_Immediate();
+        //_instructions[Instructions.LDA_Absolute] = new LDA_Absolute();
         _instructions[Instructions.NOP] = new NOP();
 
         _instructions[Instructions.Test_2cycle] = new Test_2cycle();
@@ -73,9 +75,9 @@ public class Cpu : ICpu
         }
     }
 
-    public byte FetchMemory()
+    public byte FetchMemory(ushort? addr = null)
     {
-        var b = _memory[Registers.PC];
+        var b = _memory[addr ?? Registers.PC];
         Registers.PC++;
         State.Tick();
         return b;

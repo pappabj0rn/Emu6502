@@ -1,4 +1,6 @@
-﻿namespace Emu6502.Tests.Unit;
+﻿using Emu6502.Instructions;
+
+namespace Emu6502.Tests.Unit;
 
 public abstract class CpuTests
 {
@@ -105,13 +107,15 @@ public abstract class CpuTests
         }
 
         [Theory]
-        [InlineData(Cpu.Instructions.LDA_Immediate, 2)]
-        [InlineData(Cpu.Instructions.NOP, 2)]
-        [InlineData(Cpu.Instructions.JMP_Absolute, 3)]
-        public void Should_not_throw_IOE_for_valid_instruction(byte instruction, int requiredCycles)
+        [InlineData(Cpu.Instructions.LDA_Immediate, typeof(LDA_Immediate))]
+        [InlineData(Cpu.Instructions.NOP, typeof(NOP))]
+        [InlineData(Cpu.Instructions.JMP_Absolute, typeof(JMP_Absolute))]
+        public void Should_not_throw_IOE_for_valid_instruction(byte instruction, Type expectedType)
         {
             Memory[0x00] = instruction;
-            Cpu.Execute(requiredCycles);
+            Cpu.Execute(1);
+
+            Cpu.State.Instruction.Should().BeOfType(expectedType);
         }
     }
 
