@@ -183,6 +183,76 @@ public abstract class LDA_Tests : InstructionTestBase
         }
     }
 
+    public class AbsoluteY : LDA_Tests
+    {
+        public override int NumberOfCyclesForExecution => 3;
+        protected override Instruction Sut { get; } = new LDA_AbsoluteY();
+
+        public override void SteppedThroughSetup()
+        {
+            CpuMock
+                .FetchMemory()
+                .Returns(
+                    (byte)0x02,
+                    (byte)0x01,
+                    (byte)0xFF
+                );
+
+            CpuMock.Registers.Y = 0x03;
+
+            CpuMock
+                .FetchMemory(0x0105)
+                .Returns((byte)0x06);
+        }
+
+        public override void SteppedThroughVerification()
+        {
+            CpuMock.Registers.A.Should().Be(6);
+        }
+
+        protected override void LDA_instruction_test_memory_setup(ICpu cpu, byte value)
+        {
+            CpuMock
+                .FetchMemory()
+                .Returns(
+                    (byte)0x03,
+                    (byte)0x04,
+                    (byte)0xFF
+                );
+
+            CpuMock.Registers.Y = 0x05;
+
+            CpuMock
+                .FetchMemory(0x0408)
+                .Returns(value);
+        }
+
+        [Fact]
+        public void Should_require_4_cycles_when_y_indexing_causes_page_transition()
+        {
+            CpuMock.State.RemainingCycles = 5;
+
+            CpuMock
+                .FetchMemory(Arg.Is<ushort?>(x => x == null))
+                .Returns(
+                    (byte)0x01,
+                    (byte)0x04,
+                    (byte)0xFF
+                );
+
+            CpuMock.Registers.Y = 0xFF;
+
+            CpuMock
+                .FetchMemory(Arg.Is<ushort>(0x0500))
+                .Returns((byte)0x69);
+
+            Sut.Execute(CpuMock);
+
+            CpuMock.Registers.A.Should().Be(0x69);
+            CpuMock.State.Ticks.Should().Be(4);
+        }
+    }
+
     public class Zeropage : LDA_Tests
     {
         public override int NumberOfCyclesForExecution => 2;

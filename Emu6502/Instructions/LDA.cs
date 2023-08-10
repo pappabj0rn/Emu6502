@@ -9,7 +9,6 @@ M -> A
 
 addressing	    assembler	    opc	bytes	cycles°
 -----------------------------------------------------
-absolute,Y	    LDA oper,Y	    B9	3	    4* 
 (indirect),Y	LDA (oper),Y	B1	2	    5* 
 
 
@@ -56,7 +55,6 @@ public class LDA_Absolute : LDA
 public class LDA_AbsoluteX : LDA
 {
     private ushort _addr;
-    private byte _pageTransition;
 
     public LDA_AbsoluteX()
     {
@@ -65,7 +63,26 @@ public class LDA_AbsoluteX : LDA
             (cpu) => {
                 if(_addr > 0xff)
                 {
-                    _pageTransition = 1;
+                    cpu.State.Tick();
+                }
+            },
+            (cpu) => _addr += (ushort)(cpu.FetchMemory() << 8),
+            (cpu) => LoadAccumulatorWithMemory(cpu, _addr)
+        };
+    }
+}
+
+public class LDA_AbsoluteY : LDA
+{
+    private ushort _addr;
+
+    public LDA_AbsoluteY()
+    {
+        SubTasks = new() {
+            (cpu) => _addr = (ushort)(cpu.FetchMemory() + cpu.Registers.Y),
+            (cpu) => {
+                if(_addr > 0xff)
+                {
                     cpu.State.Tick();
                 }
             },
