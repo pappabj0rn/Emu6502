@@ -6,7 +6,6 @@ Load Accumulator with Memory
 addressing	    assembler	    opc	bytes	cycles°
 absolute,X	    LDA oper,X	    BD	3	    4* 
 absolute,Y	    LDA oper,Y	    B9	3	    4* 
-(indirect,X)	LDA (oper,X)	A1	2	    6  
 (indirect),Y	LDA (oper),Y	B1	2	    5* 
 
 °inc fetching instruction
@@ -72,6 +71,23 @@ public class LDA_ZeropageX : LDA
             (cpu) => _addr = cpu.FetchMemory(),
             (cpu) => _addr += cpu.FetchX(),
             (cpu) => LoadAccumulatorWithMemory(cpu, (ushort)(_addr & 0x00ff))
+        };
+    }
+}
+
+public class LDA_PreIndexedIndirectZeropageX : LDA
+{
+    private ushort _indAddr = 0;
+    private ushort _addr = 0;
+
+    public LDA_PreIndexedIndirectZeropageX()
+    {
+        SubTasks = new() {
+            (cpu) => _indAddr = cpu.FetchMemory(),
+            (cpu) => _indAddr += cpu.FetchX(),
+            (cpu) => _addr = cpu.FetchMemory((ushort)(_indAddr & 0x00ff)),
+            (cpu) => _addr += (ushort)(cpu.FetchMemory((ushort)((_indAddr + 1) & 0x00ff)) << 8),
+            (cpu) => LoadAccumulatorWithMemory(cpu, _addr)
         };
     }
 }

@@ -110,6 +110,8 @@ public abstract class CpuTests
         [InlineData(Cpu.Instructions.LDA_Immediate, typeof(LDA_Immediate))]
         [InlineData(Cpu.Instructions.LDA_Absolute, typeof(LDA_Absolute))]
         [InlineData(Cpu.Instructions.LDA_Zeropage, typeof(LDA_Zeropage))]
+        [InlineData(Cpu.Instructions.LDA_ZeropageX, typeof(LDA_ZeropageX))]
+        [InlineData(Cpu.Instructions.LDA_PreIndexedIndirectZeropageX, typeof(LDA_PreIndexedIndirectZeropageX))]
         [InlineData(Cpu.Instructions.NOP, typeof(NOP))]
         [InlineData(Cpu.Instructions.JMP_Absolute, typeof(JMP_Absolute))]
         public void Should_not_throw_IOE_for_valid_instruction(byte instruction, Type expectedType)
