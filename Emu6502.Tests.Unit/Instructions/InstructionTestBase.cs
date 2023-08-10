@@ -23,7 +23,7 @@ public abstract class InstructionTestBase
         CpuMock
             .FetchMemory()
             .ReturnsForAnyArgs((byte)0x00)
-            .AndDoes(x =>State.Tick());
+            .AndDoes(x => State.Tick());
 
         CpuMock
             .FetchX()
