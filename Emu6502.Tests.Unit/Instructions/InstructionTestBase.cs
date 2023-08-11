@@ -24,16 +24,6 @@ public abstract class InstructionTestBase
             .FetchMemory()
             .ReturnsForAnyArgs((byte)0x00)
             .AndDoes(x => State.Tick());
-
-        CpuMock
-            .FetchX()
-            .Returns(x => CpuMock.Registers.X)
-            .AndDoes(x => State.Tick());
-
-        CpuMock
-            .FetchY()
-            .Returns(x => CpuMock.Registers.Y)
-            .AndDoes(x => State.Tick());
     }
 
     [Fact]

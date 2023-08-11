@@ -109,9 +109,12 @@ public abstract class CpuTests
         [Theory]
         [InlineData(Cpu.Instructions.LDA_Immediate, typeof(LDA_Immediate))]
         [InlineData(Cpu.Instructions.LDA_Absolute, typeof(LDA_Absolute))]
+        [InlineData(Cpu.Instructions.LDA_AbsoluteX, typeof(LDA_AbsoluteX))]
+        [InlineData(Cpu.Instructions.LDA_AbsoluteY, typeof(LDA_AbsoluteY))]
         [InlineData(Cpu.Instructions.LDA_Zeropage, typeof(LDA_Zeropage))]
         [InlineData(Cpu.Instructions.LDA_ZeropageX, typeof(LDA_ZeropageX))]
         [InlineData(Cpu.Instructions.LDA_PreIndexedIndirectZeropageX, typeof(LDA_PreIndexedIndirectZeropageX))]
+        [InlineData(Cpu.Instructions.LDA_PostIndexedIndirectZeropageY, typeof(LDA_PostIndexedIndirectZeropageY))]
         [InlineData(Cpu.Instructions.NOP, typeof(NOP))]
         [InlineData(Cpu.Instructions.JMP_Absolute, typeof(JMP_Absolute))]
         public void Should_not_throw_IOE_for_valid_instruction(byte instruction, Type expectedType)
@@ -176,48 +179,6 @@ public abstract class CpuTests
 
             Cpu.FetchMemory(0x13).Should().Be(Memory[0x13]);
             Cpu.FetchMemory().Should().Be(Memory[0x13]);
-        }
-    }
-
-    public class FetchX : CpuTests
-    {
-        [Fact]
-        public void Should_return_value_of_x()
-        {
-            Cpu.Registers.X = 0x99;
-
-            var result = Cpu.FetchX();
-
-            result.Should().Be(Cpu.Registers.X);
-        }
-
-        [Fact]
-        public void Should_increase_state_ticks_by_one()
-        {
-            Cpu.FetchX();
-
-            Cpu.State.Ticks.Should().Be(1);
-        }
-    }
-
-    public class FetchY : CpuTests
-    {
-        [Fact]
-        public void Should_return_value_of_y()
-        {
-            Cpu.Registers.Y = 0x69;
-
-            var result = Cpu.FetchY();
-
-            result.Should().Be(Cpu.Registers.Y);
-        }
-
-        [Fact]
-        public void Should_increase_state_ticks_by_one()
-        {
-            Cpu.FetchY();
-
-            Cpu.State.Ticks.Should().Be(1);
         }
     }
 }

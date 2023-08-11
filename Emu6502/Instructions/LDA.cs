@@ -98,7 +98,10 @@ public class LDA_ZeropageX : LDA
     {
         SubTasks = new() {
             (cpu) => _addr = cpu.FetchMemory(),
-            (cpu) => _addr += cpu.FetchX(),
+            (cpu) => {
+                _addr += cpu.Registers.X;
+                cpu.State.Tick();
+            },
             (cpu) => LoadAccumulatorWithMemory(cpu, (ushort)(_addr & 0x00ff))
         };
     }
@@ -113,7 +116,10 @@ public class LDA_PreIndexedIndirectZeropageX : LDA
     {
         SubTasks = new() {
             (cpu) => _indAddr = cpu.FetchMemory(),
-            (cpu) => _indAddr += cpu.FetchX(),
+            (cpu) => {
+                _indAddr += cpu.Registers.X;
+                cpu.State.Tick();
+            },
             (cpu) => _addr = cpu.FetchMemory((ushort)(_indAddr & 0x00ff)),
             (cpu) => _addr += (ushort)(cpu.FetchMemory((ushort)((_indAddr + 1) & 0x00ff)) << 8),
             (cpu) => LoadAccumulatorWithMemory(cpu, _addr)

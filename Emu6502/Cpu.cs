@@ -45,9 +45,12 @@ public class Cpu : ICpu
 
         _instructions[Instructions.LDA_Immediate] = new LDA_Immediate();
         _instructions[Instructions.LDA_Absolute] = new LDA_Absolute();
+        _instructions[Instructions.LDA_AbsoluteX] = new LDA_AbsoluteX();
+        _instructions[Instructions.LDA_AbsoluteY] = new LDA_AbsoluteY();
         _instructions[Instructions.LDA_Zeropage] = new LDA_Zeropage();
         _instructions[Instructions.LDA_ZeropageX] = new LDA_ZeropageX();
         _instructions[Instructions.LDA_PreIndexedIndirectZeropageX] = new LDA_PreIndexedIndirectZeropageX();
+        _instructions[Instructions.LDA_PostIndexedIndirectZeropageY] = new LDA_PostIndexedIndirectZeropageY();
 
         _instructions[Instructions.NOP] = new NOP();
 
@@ -93,18 +96,4 @@ public class Cpu : ICpu
         State.Tick();
         return _memory[addr ?? Registers.PC++];
     }
-
-    public byte FetchX()
-    {
-        State.Tick();
-        return Registers.X;
-    }
-
-    public byte FetchY()
-    {
-        State.Tick();
-        return Registers.Y;
-    }
-
-
 }
