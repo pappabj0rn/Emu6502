@@ -180,6 +180,7 @@ public abstract class LDA_Tests : InstructionTestBase
 
             CpuMock.Registers.A.Should().Be(0x69);
             CpuMock.State.Ticks.Should().Be(4);
+            CpuMock.State.Instruction.Should().BeNull();
         }
     }
 
@@ -230,7 +231,7 @@ public abstract class LDA_Tests : InstructionTestBase
         [Fact]
         public void Should_require_4_cycles_when_y_indexing_causes_page_transition()
         {
-            CpuMock.State.RemainingCycles = 5;
+            CpuMock.State.RemainingCycles = 4;
 
             CpuMock
                 .FetchMemory(Arg.Is<ushort?>(x => x == null))
@@ -250,6 +251,7 @@ public abstract class LDA_Tests : InstructionTestBase
 
             CpuMock.Registers.A.Should().Be(0x69);
             CpuMock.State.Ticks.Should().Be(4);
+            CpuMock.State.Instruction.Should().BeNull();
         }
     }
 
@@ -439,6 +441,96 @@ public abstract class LDA_Tests : InstructionTestBase
             Sut.Execute(CpuMock);
 
             CpuMock.Registers.A.Should().Be(0x74);
+        }
+    }
+
+    public class PostIndexedIndirectZeropageY : LDA_Tests
+    {
+        public override int NumberOfCyclesForExecution => 4;
+        protected override Instruction Sut { get; } = new LDA_PostIndexedIndirectZeropageY();
+
+        public override void SteppedThroughSetup()
+        {
+            CpuMock
+                .FetchMemory()
+                .Returns(
+                    (byte)0x70,
+                    (byte)0xFF
+                );
+
+            CpuMock.Registers.Y = 0x10;
+
+            CpuMock
+                .FetchMemory(0x0070)
+                .Returns((byte)0x43);
+            CpuMock
+                .FetchMemory(0x0071)
+                .Returns((byte)0x35);
+
+            CpuMock
+                .FetchMemory(0x3553)
+                .Returns((byte)0x23);
+        }
+
+        public override void SteppedThroughVerification()
+        {
+            CpuMock.Registers.A.Should().Be(0x23);
+        }
+
+        protected override void LDA_instruction_test_memory_setup(ICpu cpu, byte value)
+        {
+            CpuMock
+                .FetchMemory()
+                .Returns(
+                    (byte)0x23,
+                    (byte)0xFF
+                );
+
+            CpuMock.Registers.Y = 0x11;
+
+            CpuMock
+                .FetchMemory(0x0023)
+                .Returns((byte)0x01);
+
+            CpuMock
+                .FetchMemory(0x0024)
+                .Returns((byte)0x02);
+
+            CpuMock
+                .FetchMemory(0x0212)
+                .Returns(value);
+        }
+
+        [Fact]
+        public void Should_require_5_cycles_when_y_indexing_causes_page_transition()
+        {
+            CpuMock.State.RemainingCycles = 5;
+
+            CpuMock
+                .FetchMemory(Arg.Is<ushort?>(x => x == null))
+                .Returns(
+                    (byte)0x70,
+                    (byte)0xFF
+                );
+
+            CpuMock.Registers.Y = 0xFF;
+
+            CpuMock
+                .FetchMemory(Arg.Is<ushort>(0x0070))
+                .Returns((byte)0x43);
+            CpuMock
+                .FetchMemory(Arg.Is<ushort>(0x0071))
+                .Returns((byte)0x35);
+
+            CpuMock
+                .FetchMemory(Arg.Is<ushort>(0x3642))
+                .Returns((byte)0x78);
+
+            Sut.Execute(CpuMock);
+
+            CpuMock.Registers.A.Should().Be(0x78);
+            CpuMock.State.Ticks.Should().Be(5);
+            CpuMock.State.Instruction.Should().BeNull();
         }
     }
 }
