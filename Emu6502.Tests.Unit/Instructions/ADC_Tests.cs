@@ -274,4 +274,59 @@ public abstract class ADC_Tests : InstructionTestBase
             CpuMock.Registers.A.Should().Be(0x65);
         }
     }
+
+    public class IndirectX : ADC_Tests
+    {
+        public override int NumberOfCyclesForExecution => 5;
+        protected override Instruction Sut { get; } = new ADC_IndirectX();
+
+        public override void SteppedThroughSetup()
+        {
+            Memory[0x0000] = 0x20;
+            Memory[0x0001] = 0xff;
+            Memory[0x0002] = 0xff;
+
+            Memory[0x0031] = 0x01;
+            Memory[0x0032] = 0x02;
+
+            Memory[0x0201] = 0x05;
+
+            CpuMock.Registers.X = 0x11;
+        }
+
+        public override void SteppedThroughVerification()
+        {
+            CpuMock.Registers.A.Should().Be(0x05);
+        }
+
+        protected override void ADC_instruction_test_memory_setup(ICpu cpu, byte value)
+        {
+            Memory[0x0000] = 0x23;
+            Memory[0x0001] = 0xff;
+            Memory[0x0002] = 0xff;
+
+            Memory[0x0034] = 0x01;
+            Memory[0x0035] = 0x01;
+
+            Memory[0x0101] = value;
+
+            CpuMock.Registers.X = 0x11;
+        }
+
+        [Fact]
+        public void Should_wrap_around_to_start_of_zeropage_instead_of_crossing_page_boundary_when_fetching_indirect_address()
+        {
+            Memory[0x0000] = 0xff;
+            Memory[0x0001] = 0x01;
+            Memory[0x0002] = 0x01;
+
+            Memory[0x0101] = 0x74;
+
+            CpuMock.Registers.X = 0x02;
+
+            Sut.Execute(CpuMock);
+
+            CpuMock.Registers.A.Should().Be(0x74);
+        }
+    }
 }

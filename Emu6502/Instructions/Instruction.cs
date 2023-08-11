@@ -98,4 +98,18 @@ public abstract class Instruction
             }
         };
     }
+
+    protected List<Action<ICpu>> IndirectXAdressing()
+    {
+        return new()
+        {
+            (cpu) => { IndAddr = cpu.FetchMemory(); },
+            (cpu) => {
+                IndAddr += cpu.Registers.X;
+                cpu.State.Tick();
+            },
+            (cpu) => { Addr = cpu.FetchMemory((ushort)(IndAddr & 0x00ff)); },
+            (cpu) => { Addr += (ushort)(cpu.FetchMemory((ushort)((IndAddr + 1) & 0x00ff)) << 8); }
+        };
+    }
 }

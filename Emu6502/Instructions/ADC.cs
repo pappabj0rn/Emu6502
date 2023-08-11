@@ -91,3 +91,12 @@ public class ADC_ZeropageX : ADC
         SubTasks.Add((cpu) => AddMemoryAndCarryToAccumulator(cpu, Addr));
     }
 }
+
+public class ADC_IndirectX : ADC
+{
+    public ADC_IndirectX()
+    {
+        SubTasks = IndirectXAdressing();
+        SubTasks.Add((cpu) => AddMemoryAndCarryToAccumulator(cpu, Addr));
+    }
+}

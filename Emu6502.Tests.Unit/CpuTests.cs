@@ -113,7 +113,7 @@ public abstract class CpuTests
         [InlineData(Cpu.Instructions.LDA_AbsoluteY, typeof(LDA_AbsoluteY))]
         [InlineData(Cpu.Instructions.LDA_Zeropage, typeof(LDA_Zeropage))]
         [InlineData(Cpu.Instructions.LDA_ZeropageX, typeof(LDA_ZeropageX))]
-        [InlineData(Cpu.Instructions.LDA_PreIndexedIndirectZeropageX, typeof(LDA_PreIndexedIndirectZeropageX))]
+        [InlineData(Cpu.Instructions.LDA_IndirectX, typeof(LDA_IndirectX))]
         [InlineData(Cpu.Instructions.LDA_PostIndexedIndirectZeropageY, typeof(LDA_PostIndexedIndirectZeropageY))]
         [InlineData(Cpu.Instructions.NOP, typeof(NOP))]
         [InlineData(Cpu.Instructions.JMP_Absolute, typeof(JMP_Absolute))]
