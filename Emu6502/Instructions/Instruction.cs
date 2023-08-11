@@ -62,4 +62,19 @@ public abstract class Instruction
             (cpu) => { Addr += (ushort)(cpu.FetchMemory() << 8); }
         };
     }
+
+    protected List<Action<ICpu>> AbsoluteYAddressing()
+    {
+        return new()
+        {
+            (cpu) => { Addr = (ushort)(cpu.FetchMemory() + cpu.Registers.Y); },
+            (cpu) => {
+                if(Addr > 0xff)
+                {
+                    cpu.State.Tick();
+                }
+            },
+            (cpu) => { Addr += (ushort)(cpu.FetchMemory() << 8); }
+        };
+    }
 }

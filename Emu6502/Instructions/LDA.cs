@@ -45,17 +45,8 @@ public class LDA_AbsoluteY : LDA
 {
     public LDA_AbsoluteY()
     {
-        SubTasks = new() {
-            (cpu) => Addr = (ushort)(cpu.FetchMemory() + cpu.Registers.Y),
-            (cpu) => {
-                if(Addr > 0xff)
-                {
-                    cpu.State.Tick();
-                }
-            },
-            (cpu) => Addr += (ushort)(cpu.FetchMemory() << 8),
-            (cpu) => LoadAccumulatorWithMemory(cpu, Addr)
-        };
+        SubTasks = AbsoluteYAddressing();
+        SubTasks.Add((cpu) => LoadAccumulatorWithMemory(cpu, Addr));
     }
 }
 
