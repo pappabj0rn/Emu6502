@@ -10,15 +10,24 @@ public class Cpu : ICpu
     {
         public const byte Test_2cycle = 0x02;
         public const byte JMP_Absolute = 0x5C;
-        
+
         public const byte LDA_Immediate = 0xA9;
         public const byte LDA_Zeropage = 0xA5;
-        public const byte LDA_ZeropageX = 0xB5;        
+        public const byte LDA_ZeropageX = 0xB5;
         public const byte LDA_Absolute = 0xAD;
         public const byte LDA_AbsoluteX = 0xBD;
         public const byte LDA_AbsoluteY = 0xB9;
         public const byte LDA_PreIndexedIndirectZeropageX = 0xA1;
         public const byte LDA_PostIndexedIndirectZeropageY = 0xB1;
+
+        public const byte ADC_Immediate = 0x69;
+        public const byte ADC_Zeropage = 0x65;
+        public const byte ADC_ZeropageX = 0x75;
+        public const byte ADC_Absolute = 0x6D;
+        public const byte ADC_AbsoluteX = 0x7D;
+        public const byte ADC_AbsoluteY = 0x79;
+        public const byte ADC_PreIndexedIndirectZeropageX = 0x61;
+        public const byte ADC_PostIndexedIndirectZeropageY = 0x71;
 
         public const byte NOP = 0xEA;
     }

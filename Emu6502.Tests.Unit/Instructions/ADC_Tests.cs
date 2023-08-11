@@ -53,4 +53,47 @@ public abstract class ADC_Tests : InstructionTestBase
             Memory[0x0000] = expectedValue;
         }
     }
+
+    public class Absolute : ADC_Tests
+    {
+        public override int NumberOfCyclesForExecution => 3;
+        protected override Instruction Sut { get; } = new ADC_Absolute();
+
+        [Fact]
+        public void Should_load_byte_at_address_following_instruction_into_accumulator()
+        {
+            Memory[0x0000] = 0x23;
+            Memory[0x0001] = 0x45;
+
+            Memory[0x4523] = 0x01;
+
+            CpuMock.Flags.C = true;
+            CpuMock.Registers.A = 0x01;
+
+            Sut.Execute(CpuMock);
+
+            CpuMock.Registers.A.Should().Be(0x03);
+        }
+
+        protected override void ADC_instruction_test_memory_setup(ICpu cpu, byte expectedValue)
+        {
+            Memory[0x0000] = 0x12;
+            Memory[0x0001] = 0x34;
+
+            Memory[0x3412] = expectedValue;
+        }
+
+        public override void SteppedThroughSetup()
+        {
+            Memory[0x0000] = 0x23;
+            Memory[0x0001] = 0x45;
+
+            Memory[0x4523] = 0x55;
+        }
+
+        public override void SteppedThroughVerification()
+        {
+            CpuMock.Registers.A.Should().Be(0x55);
+        }
+    }
 }
