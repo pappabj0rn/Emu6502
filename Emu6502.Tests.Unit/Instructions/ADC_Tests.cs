@@ -21,7 +21,7 @@ public abstract class ADC_Tests : InstructionTestBase
     [InlineData(0x7F, 0x01, true, 0x81, false, true, false)]
     [InlineData(0x80, 0x01, true, 0x82, false, true, false)]
     [InlineData(0xFF, 0x02, true, 0x02, false, false, true)]
-    public void Should_update_Z_and_N_flags_matching_value_loaded_into_accumulator(
+    public void Should_update_Z_and_N_and_C_flags_matching_result_stored_in_accumulator(
         byte inital_a,
         byte memory,
         bool initial_c,
