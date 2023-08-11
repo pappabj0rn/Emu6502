@@ -18,7 +18,7 @@ public class Cpu : ICpu
         public const byte LDA_AbsoluteX = 0xBD;
         public const byte LDA_AbsoluteY = 0xB9;
         public const byte LDA_IndirectX = 0xA1;
-        public const byte LDA_PostIndexedIndirectZeropageY = 0xB1;
+        public const byte LDA_IndirectY = 0xB1;
 
         public const byte ADC_Immediate = 0x69;
         public const byte ADC_Zeropage = 0x65;
@@ -27,7 +27,7 @@ public class Cpu : ICpu
         public const byte ADC_AbsoluteX = 0x7D;
         public const byte ADC_AbsoluteY = 0x79;
         public const byte ADC_IndirectX = 0x61;
-        public const byte ADC_PostIndexedIndirectZeropageY = 0x71;
+        public const byte ADC_IndirectY = 0x71;
 
         public const byte NOP = 0xEA;
     }
@@ -59,7 +59,7 @@ public class Cpu : ICpu
         _instructions[Instructions.LDA_Zeropage] = new LDA_Zeropage();
         _instructions[Instructions.LDA_ZeropageX] = new LDA_ZeropageX();
         _instructions[Instructions.LDA_IndirectX] = new LDA_IndirectX();
-        _instructions[Instructions.LDA_PostIndexedIndirectZeropageY] = new LDA_PostIndexedIndirectZeropageY();
+        _instructions[Instructions.LDA_IndirectY] = new LDA_IndirectY();
 
         _instructions[Instructions.NOP] = new NOP();
 

@@ -112,4 +112,20 @@ public abstract class Instruction
             (cpu) => { Addr += (ushort)(cpu.FetchMemory((ushort)((IndAddr + 1) & 0x00ff)) << 8); }
         };
     }
+
+    protected List<Action<ICpu>> IndirectYAdressing()
+    {
+        return new()
+        {
+            (cpu) => { IndAddr = cpu.FetchMemory(); },
+            (cpu) => { Addr = (ushort)(cpu.FetchMemory(IndAddr) + cpu.Registers.Y); },
+            (cpu) => {
+                if(Addr > 0xff)
+                {
+                    cpu.State.Tick();
+                }
+            },
+            (cpu) => { Addr += (ushort)(cpu.FetchMemory((ushort?)(IndAddr + 1)) << 8); }
+        };
+    }
 }

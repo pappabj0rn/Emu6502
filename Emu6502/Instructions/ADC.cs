@@ -100,3 +100,12 @@ public class ADC_IndirectX : ADC
         SubTasks.Add((cpu) => AddMemoryAndCarryToAccumulator(cpu, Addr));
     }
 }
+
+public class ADC_IndirectY : ADC
+{
+    public ADC_IndirectY()
+    {
+        SubTasks = IndirectYAdressing();
+        SubTasks.Add((cpu) => AddMemoryAndCarryToAccumulator(cpu, Addr));
+    }
+}

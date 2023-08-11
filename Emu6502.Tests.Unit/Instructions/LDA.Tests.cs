@@ -313,10 +313,10 @@ public abstract class LDA_Tests : InstructionTestBase
         }
     }
 
-    public class PostIndexedIndirectZeropageY : LDA_Tests
+    public class IndirectY : LDA_Tests
     {
         public override int NumberOfCyclesForExecution => 4;
-        protected override Instruction Sut { get; } = new LDA_PostIndexedIndirectZeropageY();
+        protected override Instruction Sut { get; } = new LDA_IndirectY();
 
         public override void SteppedThroughSetup()
         {

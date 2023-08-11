@@ -329,4 +329,66 @@ public abstract class ADC_Tests : InstructionTestBase
             CpuMock.Registers.A.Should().Be(0x74);
         }
     }
+
+    public class IndirectY : ADC_Tests
+    {
+        public override int NumberOfCyclesForExecution => 4;
+        protected override Instruction Sut { get; } = new ADC_IndirectY();
+
+        public override void SteppedThroughSetup()
+        {
+            Memory[0x0000] = 0x70;
+            Memory[0x0001] = 0xff;
+            Memory[0x0002] = 0xff;
+
+            Memory[0x0070] = 0x43;
+            Memory[0x0071] = 0x35;
+
+            Memory[0x3553] = 0x23;
+
+            CpuMock.Registers.Y = 0x10;
+        }
+
+        public override void SteppedThroughVerification()
+        {
+            CpuMock.Registers.A.Should().Be(0x23);
+        }
+
+        protected override void ADC_instruction_test_memory_setup(ICpu cpu, byte value)
+        {
+            Memory[0x0000] = 0x23;
+            Memory[0x0001] = 0xff;
+            Memory[0x0002] = 0xff;
+
+            Memory[0x0023] = 0x01;
+            Memory[0x0024] = 0x02;
+
+            Memory[0x0212] = value;
+
+            CpuMock.Registers.Y = 0x11;
+        }
+
+        [Fact]
+        public void Should_require_5_cycles_when_y_indexing_causes_page_transition()
+        {
+            Memory[0x0000] = 0x70;
+            Memory[0x0001] = 0xff;
+            Memory[0x0002] = 0xff;
+
+            Memory[0x0070] = 0x43;
+            Memory[0x0071] = 0x35;
+
+            Memory[0x3642] = 0x78;
+
+            CpuMock.Registers.Y = 0xFF;
+
+            CpuMock.State.RemainingCycles = 5;
+
+            Sut.Execute(CpuMock);
+
+            CpuMock.Registers.A.Should().Be(0x78);
+            CpuMock.State.Ticks.Should().Be(5);
+            CpuMock.State.Instruction.Should().BeNull();
+        }
+    }
 }

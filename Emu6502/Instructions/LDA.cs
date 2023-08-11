@@ -77,21 +77,11 @@ public class LDA_IndirectX : LDA
     }
 }
 
-public class LDA_PostIndexedIndirectZeropageY : LDA
+public class LDA_IndirectY : LDA
 {
-    public LDA_PostIndexedIndirectZeropageY()
+    public LDA_IndirectY()
     {
-        SubTasks = new() {
-            (cpu) => IndAddr = cpu.FetchMemory(),
-            (cpu) => Addr = (ushort)(cpu.FetchMemory(IndAddr) + cpu.Registers.Y),
-            (cpu) => {
-                if(Addr > 0xff)
-                {
-                    cpu.State.Tick();
-                }
-            },
-            (cpu) => Addr += (ushort)(cpu.FetchMemory((ushort?)(IndAddr + 1)) << 8),
-            (cpu) => LoadAccumulatorWithMemory(cpu, Addr)
-        };
+        SubTasks = IndirectYAdressing();
+        SubTasks.Add((cpu) => LoadAccumulatorWithMemory(cpu, Addr));
     }
 }
