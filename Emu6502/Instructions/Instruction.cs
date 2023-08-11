@@ -85,4 +85,17 @@ public abstract class Instruction
             (cpu) => { Addr = cpu.FetchMemory(); }
         };
     }
+
+    protected List<Action<ICpu>> ZeropageXAddressing()
+    {
+        return new()
+        {
+            (cpu) => { Addr = cpu.FetchMemory(); },
+            (cpu) => {
+                Addr += cpu.Registers.X;
+                Addr &= 0xff;
+                cpu.State.Tick();
+            }
+        };
+    }
 }

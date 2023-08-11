@@ -63,14 +63,8 @@ public class LDA_ZeropageX : LDA
 {
     public LDA_ZeropageX()
     {
-        SubTasks = new() {
-            (cpu) => Addr = cpu.FetchMemory(),
-            (cpu) => {
-                Addr += cpu.Registers.X;
-                cpu.State.Tick();
-            },
-            (cpu) => LoadAccumulatorWithMemory(cpu, (ushort)(Addr & 0x00ff))
-        };
+        SubTasks = ZeropageXAddressing();
+        SubTasks.Add((cpu) => LoadAccumulatorWithMemory(cpu, Addr));
     }
 }
 

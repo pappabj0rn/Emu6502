@@ -229,4 +229,49 @@ public abstract class ADC_Tests : InstructionTestBase
             Memory[0x0003] = value;
         }
     }
+
+    public class ZeropageX : ADC_Tests
+    {
+        public override int NumberOfCyclesForExecution => 3;
+        protected override Instruction Sut { get; } = new ADC_ZeropageX();
+
+        public override void SteppedThroughSetup()
+        {
+            Memory[0x0000] = 0x20;
+            Memory[0x0001] = 0xff;
+
+            Memory[0x0031] = 0x01;
+
+            CpuMock.Registers.X = 0x11;
+        }
+
+        public override void SteppedThroughVerification()
+        {
+            CpuMock.Registers.A.Should().Be(1);
+        }
+
+        protected override void ADC_instruction_test_memory_setup(ICpu cpu, byte value)
+        {
+            Memory[0x0000] = 0x23;
+            Memory[0x0001] = 0xff;
+
+            Memory[0x0034] = value;
+
+            CpuMock.Registers.X = 0x11;
+        }
+
+        [Fact]
+        public void Should_wrap_around_to_start_of_zeropage_instead_of_crossing_page_boundary()
+        {
+            Memory[0x0000] = 0xff;
+            Memory[0x0001] = 0x65;
+            Memory[0x0002] = 0xff;
+
+            CpuMock.Registers.X = 0x02;
+
+            Sut.Execute(CpuMock);
+
+            CpuMock.Registers.A.Should().Be(0x65);
+        }
+    }
 }
