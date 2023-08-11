@@ -1,20 +1,25 @@
 ﻿namespace Emu6502.Instructions;
 
-//TODO Cpu.Flags.V not handled
 public abstract class ADC : Instruction
 {
     protected void AddMemoryAndCarryToAccumulator(
         ICpu cpu,
         ushort? addr = null)
     {
-        var result = (ushort)(cpu.FetchMemory(addr)
+        var op1 = cpu.FetchMemory(addr);
+        var result = (ushort)(op1
             + cpu.Registers.A
             + (cpu.Flags.C ? 1 : 0));
-
+        
+        var op1Positive = (op1 & 0x80) == 0x00;
+        var aPositive = (cpu.Registers.A & 0x80) == 0x00;
+        
         cpu.Registers.A = (byte)(result & 0xff);
-        cpu.Flags.N = (cpu.Registers.A & 0b1000_0000) > 0;
+        cpu.Flags.N = (cpu.Registers.A & 0x80) > 0;
+        cpu.Flags.V = ((op1Positive && aPositive) || (!op1Positive && !aPositive)) 
+                      && cpu.Flags.N == aPositive;
         cpu.Flags.Z = cpu.Registers.A == 0;
-        cpu.Flags.C = result > 0xff;        
+        cpu.Flags.C = result > 0xff;
     }
 }
 
