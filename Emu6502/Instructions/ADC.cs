@@ -49,15 +49,9 @@ public class ADC_Immediate : ADC
 
 public class ADC_Absolute : ADC
 {
-    private ushort _addr;
-
     public ADC_Absolute()
     {
-        SubTasks = new()
-        {
-            (cpu) => { _addr = cpu.FetchMemory(); },
-            (cpu) => { _addr += (ushort)(cpu.FetchMemory() << 8); },
-            (cpu) => AddMemoryAndCarryToAccumulator(cpu, _addr)
-        };
+        SubTasks = AbsoluteAddressing();
+        SubTasks.Add((cpu) => AddMemoryAndCarryToAccumulator(cpu, Addr));
     }
 }

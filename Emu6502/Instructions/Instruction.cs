@@ -3,6 +3,7 @@
 public abstract class Instruction
 {
     protected List<Action<ICpu>>? SubTasks;
+    
     public virtual void Execute(ICpu cpu)
     {
         if (SubTasks is null)
@@ -33,5 +34,17 @@ public abstract class Instruction
 
 
         }
+    }
+
+    protected ushort IndAddr;
+    protected ushort Addr;
+    
+    protected List<Action<ICpu>> AbsoluteAddressing()
+    {
+        return new()
+        {
+            (cpu) => { Addr = cpu.FetchMemory(); },
+            (cpu) => { Addr += (ushort)(cpu.FetchMemory() << 8); }
+        };
     }
 }
