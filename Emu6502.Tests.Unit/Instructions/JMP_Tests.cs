@@ -18,13 +18,9 @@ public abstract class JMP_Tests : InstructionTestBase
         [Fact]
         public void Should_set_pc_to_address_following_instruction()
         {
-            CpuMock
-                .FetchMemory()
-                .Returns(
-                    (byte)0x11, 
-                    (byte)0x22
-                );
-
+            Memory[0x0000] = 0x11;
+            Memory[0x0001] = 0x22;
+            
             Sut.Execute(CpuMock);
 
             CpuMock.Registers.PC.Should().Be(0x2211);
@@ -32,17 +28,13 @@ public abstract class JMP_Tests : InstructionTestBase
 
         public override void SteppedThroughSetup()
         {
-            CpuMock
-                .FetchMemory()
-                .ReturnsForAnyArgs(
-                    (byte)0x11,
-                    (byte)0x22
-                );
+            Memory[0x0000] = 0x12;
+            Memory[0x0001] = 0x23;
         }
 
         public override void SteppedThroughVerification()
         {
-            CpuMock.Registers.PC.Should().Be(0x2211);
+            CpuMock.Registers.PC.Should().Be(0x2312);
         }
     }    
 }

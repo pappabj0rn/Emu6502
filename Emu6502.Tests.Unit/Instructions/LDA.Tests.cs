@@ -35,20 +35,16 @@ public abstract class LDA_Tests : InstructionTestBase
         [Fact]
         public void Should_load_byte_following_instruction_into_accumulator()
         {
-            CpuMock
-            .FetchMemory()
-            .Returns((byte)0x01);
+            Memory[0x0000] = 0x12;
 
             Sut.Execute(CpuMock);
 
-            CpuMock.Registers.A.Should().Be(0x01);
+            CpuMock.Registers.A.Should().Be(0x12);
         }
 
         protected override void LDA_instruction_test_memory_setup(ICpu cpu, byte expectedValue)
         {
-            CpuMock
-                .FetchMemory()
-                .Returns(expectedValue);
+            Memory[0x0000] = expectedValue;
         }
     }
 
@@ -60,17 +56,10 @@ public abstract class LDA_Tests : InstructionTestBase
         [Fact]
         public void Should_load_byte_at_address_following_instruction_into_accumulator()
         {
-            CpuMock
-                .FetchMemory()
-                .Returns(
-                    (byte)0x03,
-                    (byte)0x00,
-                    (byte)0x00
-                );
-
-            CpuMock
-                .FetchMemory(0x0003)
-                .Returns((byte)0x01);
+            Memory[0x0000] = 0x03;
+            Memory[0x0001] = 0x00;
+            Memory[0x0002] = 0x00;
+            Memory[0x0003] = 0x01;
 
             Sut.Execute(CpuMock);
 
@@ -79,32 +68,20 @@ public abstract class LDA_Tests : InstructionTestBase
 
         protected override void LDA_instruction_test_memory_setup(ICpu cpu, byte value)
         {
-            CpuMock
-                .FetchMemory()
-                .Returns(
-                    (byte)0x03,
-                    (byte)0x04,
-                    (byte)0x00
-                );
-
-            CpuMock
-                .FetchMemory(0x0403)
-                .Returns(value);
+            Memory[0x0000] = 0x03;
+            Memory[0x0001] = 0x04;
+            Memory[0x0002] = 0x00;
+            
+            Memory[0x0403] = value;            
         }
 
         public override void SteppedThroughSetup()
         {
-            CpuMock
-                .FetchMemory()
-                .Returns(
-                    (byte)0x02,
-                    (byte)0x01,
-                    (byte)0xFF
-                );
+            Memory[0x0000] = 0x02;
+            Memory[0x0001] = 0x01;
+            Memory[0x0002] = 0xFF;
 
-            CpuMock
-                .FetchMemory(0x0102)
-                .Returns((byte)0x01);
+            Memory[0x0102] = 0x01;
         }
 
         public override void SteppedThroughVerification()
@@ -120,19 +97,13 @@ public abstract class LDA_Tests : InstructionTestBase
 
         public override void SteppedThroughSetup()
         {
-            CpuMock
-                .FetchMemory()
-                .Returns(
-                    (byte)0x02,
-                    (byte)0x01,
-                    (byte)0xFF
-                );
+            Memory[0x0000] = 0x02;
+            Memory[0x0001] = 0x01;
+            Memory[0x0002] = 0xff;
 
+            Memory[0x0105] = 0x06;
+            
             CpuMock.Registers.X = 0x03;
-
-            CpuMock
-                .FetchMemory(0x0105)
-                .Returns((byte)0x06);
         }
 
         public override void SteppedThroughVerification()
@@ -142,19 +113,13 @@ public abstract class LDA_Tests : InstructionTestBase
 
         protected override void LDA_instruction_test_memory_setup(ICpu cpu, byte value)
         {
-            CpuMock
-                .FetchMemory()
-                .Returns(
-                    (byte)0x03,
-                    (byte)0x04,
-                    (byte)0xFF
-                );
+            Memory[0x0000] = 0x03;
+            Memory[0x0001] = 0x04;
+            Memory[0x0002] = 0xff;
+
+            Memory[0x0408] = value;
 
             CpuMock.Registers.X = 0x05;
-
-            CpuMock
-                .FetchMemory(0x0408)
-                .Returns(value);
         }
 
         [Fact]
@@ -162,19 +127,13 @@ public abstract class LDA_Tests : InstructionTestBase
         {
             CpuMock.State.RemainingCycles = 5;
 
-            CpuMock
-                .FetchMemory(Arg.Is<ushort?>(x => x == null))
-                .Returns(
-                    (byte)0x01,
-                    (byte)0x04,
-                    (byte)0xFF
-                );
+            Memory[0x0000] = 0x01;
+            Memory[0x0001] = 0x04;
+            Memory[0x0002] = 0xff;
+
+            Memory[0x0500] = 0x69;
 
             CpuMock.Registers.X = 0xFF;
-
-            CpuMock
-                .FetchMemory(Arg.Is<ushort>(0x0500))
-                .Returns((byte)0x69);
 
             Sut.Execute(CpuMock);
 
@@ -191,19 +150,13 @@ public abstract class LDA_Tests : InstructionTestBase
 
         public override void SteppedThroughSetup()
         {
-            CpuMock
-                .FetchMemory()
-                .Returns(
-                    (byte)0x02,
-                    (byte)0x01,
-                    (byte)0xFF
-                );
+            Memory[0x0000] = 0x02;
+            Memory[0x0001] = 0x01;
+            Memory[0x0002] = 0xff;
+
+            Memory[0x0105] = 0x06;
 
             CpuMock.Registers.Y = 0x03;
-
-            CpuMock
-                .FetchMemory(0x0105)
-                .Returns((byte)0x06);
         }
 
         public override void SteppedThroughVerification()
@@ -213,19 +166,13 @@ public abstract class LDA_Tests : InstructionTestBase
 
         protected override void LDA_instruction_test_memory_setup(ICpu cpu, byte value)
         {
-            CpuMock
-                .FetchMemory()
-                .Returns(
-                    (byte)0x03,
-                    (byte)0x04,
-                    (byte)0xFF
-                );
+            Memory[0x0000] = 0x03;
+            Memory[0x0001] = 0x04;
+            Memory[0x0002] = 0xff;
+
+            Memory[0x0408] = value;
 
             CpuMock.Registers.Y = 0x05;
-
-            CpuMock
-                .FetchMemory(0x0408)
-                .Returns(value);
         }
 
         [Fact]
@@ -233,19 +180,13 @@ public abstract class LDA_Tests : InstructionTestBase
         {
             CpuMock.State.RemainingCycles = 4;
 
-            CpuMock
-                .FetchMemory(Arg.Is<ushort?>(x => x == null))
-                .Returns(
-                    (byte)0x01,
-                    (byte)0x04,
-                    (byte)0xFF
-                );
+            Memory[0x0000] = 0x01;
+            Memory[0x0001] = 0x04;
+            Memory[0x0002] = 0xff;
+
+            Memory[0x0500] = 0x69;
 
             CpuMock.Registers.Y = 0xFF;
-
-            CpuMock
-                .FetchMemory(Arg.Is<ushort>(0x0500))
-                .Returns((byte)0x69);
 
             Sut.Execute(CpuMock);
 
@@ -262,16 +203,10 @@ public abstract class LDA_Tests : InstructionTestBase
 
         public override void SteppedThroughSetup()
         {
-            CpuMock
-                .FetchMemory()
-                .Returns(
-                    (byte)0x20,
-                    (byte)0xFF
-                );
+            Memory[0x0000] = 0x20;
+            Memory[0x0001] = 0xff;
 
-            CpuMock
-                .FetchMemory(0x0020)
-                .Returns((byte)0x01);
+            Memory[0x0020] = 0x01;
         }
 
         public override void SteppedThroughVerification()
@@ -281,16 +216,10 @@ public abstract class LDA_Tests : InstructionTestBase
 
         protected override void LDA_instruction_test_memory_setup(ICpu cpu, byte value)
         {
-            CpuMock
-                .FetchMemory()
-                .Returns(
-                    (byte)0x03,
-                    (byte)0xFF
-                );
+            Memory[0x0000] = 0x03;
+            Memory[0x0001] = 0xff;
 
-            CpuMock
-                .FetchMemory(0x0003)
-                .Returns(value);
+            Memory[0x0003] = value;
         }
     }
 
@@ -301,18 +230,12 @@ public abstract class LDA_Tests : InstructionTestBase
 
         public override void SteppedThroughSetup()
         {
-            CpuMock
-                .FetchMemory()
-                .Returns(
-                    (byte)0x20,
-                    (byte)0xFF
-                );
+            Memory[0x0000] = 0x20;
+            Memory[0x0001] = 0xff;
+
+            Memory[0x0031] = 0x01;
 
             CpuMock.Registers.X = 0x11;
-
-            CpuMock
-                .FetchMemory(0x0031)
-                .Returns((byte)0x01);
         }
 
         public override void SteppedThroughVerification()
@@ -322,34 +245,22 @@ public abstract class LDA_Tests : InstructionTestBase
 
         protected override void LDA_instruction_test_memory_setup(ICpu cpu, byte value)
         {
-            CpuMock
-                .FetchMemory()
-                .Returns(
-                    (byte)0x23,
-                    (byte)0xFF
-                );
+            Memory[0x0000] = 0x23;
+            Memory[0x0001] = 0xff;
+
+            Memory[0x0034] = value;
 
             CpuMock.Registers.X = 0x11;
-
-            CpuMock
-                .FetchMemory(0x0034)
-                .Returns(value);
         }
 
         [Fact]
         public void Should_wrap_around_to_start_of_zeropage_instead_of_crossing_page_boundary()
         {
-            CpuMock
-                .FetchMemory()
-                .Returns(
-                    (byte)0xFF
-                );
-
+            Memory[0x0000] = 0xff;
+            Memory[0x0001] = 0x65;
+            Memory[0x0002] = 0xff;
+            
             CpuMock.Registers.X = 0x02;
-
-            CpuMock
-                .FetchMemory(0x0001)
-                .Returns((byte)0x65);
 
             Sut.Execute(CpuMock);
 
@@ -364,26 +275,16 @@ public abstract class LDA_Tests : InstructionTestBase
 
         public override void SteppedThroughSetup()
         {
-            CpuMock
-                .FetchMemory()
-                .Returns(
-                    (byte)0x20,
-                    (byte)0xFF
-                );
+            Memory[0x0000] = 0x20;
+            Memory[0x0001] = 0xff;
+            Memory[0x0002] = 0xff;
 
+            Memory[0x0031] = 0x01;
+            Memory[0x0032] = 0x02;
+
+            Memory[0x0201] = 0x05;
+            
             CpuMock.Registers.X = 0x11;
-
-            CpuMock
-                .FetchMemory(0x0031)
-                .Returns((byte)0x01);
-
-            CpuMock
-                .FetchMemory(0x0032)
-                .Returns((byte)0x02);
-
-            CpuMock
-                .FetchMemory(0x0201)
-                .Returns((byte)0x05);
         }
 
         public override void SteppedThroughVerification()
@@ -393,50 +294,28 @@ public abstract class LDA_Tests : InstructionTestBase
 
         protected override void LDA_instruction_test_memory_setup(ICpu cpu, byte value)
         {
-            CpuMock
-                .FetchMemory()
-                .Returns(
-                    (byte)0x23,
-                    (byte)0xFF
-                );
+            Memory[0x0000] = 0x23;
+            Memory[0x0001] = 0xff;
+            Memory[0x0002] = 0xff;
 
+            Memory[0x0034] = 0x01;
+            Memory[0x0035] = 0x01;
+
+            Memory[0x0101] = value;
+            
             CpuMock.Registers.X = 0x11;
-
-            CpuMock
-                .FetchMemory(0x0034)
-                .Returns((byte)0x01);
-
-            CpuMock
-                .FetchMemory(0x0035)
-                .Returns((byte)0x01);
-
-            CpuMock
-                .FetchMemory(0x0101)
-                .Returns(value);
         }
 
         [Fact]
         public void Should_wrap_around_to_start_of_zeropage_instead_of_crossing_page_boundary_when_fetching_indirect_address()
         {
-            CpuMock
-                .FetchMemory()
-                .Returns(
-                    (byte)0xFF
-                );
+            Memory[0x0000] = 0xff;
+            Memory[0x0001] = 0x01;
+            Memory[0x0002] = 0x01;
+
+            Memory[0x0101] = 0x74;
 
             CpuMock.Registers.X = 0x02;
-
-            CpuMock
-                .FetchMemory(0x0001)
-                .Returns((byte)0x01);
-
-            CpuMock
-                .FetchMemory(0x0002)
-                .Returns((byte)0x01);
-
-            CpuMock
-                .FetchMemory(0x0101)
-                .Returns((byte)0x74);
 
             Sut.Execute(CpuMock);
 
@@ -451,25 +330,16 @@ public abstract class LDA_Tests : InstructionTestBase
 
         public override void SteppedThroughSetup()
         {
-            CpuMock
-                .FetchMemory()
-                .Returns(
-                    (byte)0x70,
-                    (byte)0xFF
-                );
+            Memory[0x0000] = 0x70;
+            Memory[0x0001] = 0xff;
+            Memory[0x0002] = 0xff;
+
+            Memory[0x0070] = 0x43;
+            Memory[0x0071] = 0x35;
+
+            Memory[0x3553] = 0x23;
 
             CpuMock.Registers.Y = 0x10;
-
-            CpuMock
-                .FetchMemory(0x0070)
-                .Returns((byte)0x43);
-            CpuMock
-                .FetchMemory(0x0071)
-                .Returns((byte)0x35);
-
-            CpuMock
-                .FetchMemory(0x3553)
-                .Returns((byte)0x23);
         }
 
         public override void SteppedThroughVerification()
@@ -479,52 +349,33 @@ public abstract class LDA_Tests : InstructionTestBase
 
         protected override void LDA_instruction_test_memory_setup(ICpu cpu, byte value)
         {
-            CpuMock
-                .FetchMemory()
-                .Returns(
-                    (byte)0x23,
-                    (byte)0xFF
-                );
+            Memory[0x0000] = 0x23;
+            Memory[0x0001] = 0xff;
+            Memory[0x0002] = 0xff;
+
+            Memory[0x0023] = 0x01;
+            Memory[0x0024] = 0x02;
+
+            Memory[0x0212] = value;
 
             CpuMock.Registers.Y = 0x11;
-
-            CpuMock
-                .FetchMemory(0x0023)
-                .Returns((byte)0x01);
-
-            CpuMock
-                .FetchMemory(0x0024)
-                .Returns((byte)0x02);
-
-            CpuMock
-                .FetchMemory(0x0212)
-                .Returns(value);
         }
 
         [Fact]
         public void Should_require_5_cycles_when_y_indexing_causes_page_transition()
         {
-            CpuMock.State.RemainingCycles = 5;
+            Memory[0x0000] = 0x70;
+            Memory[0x0001] = 0xff;
+            Memory[0x0002] = 0xff;
 
-            CpuMock
-                .FetchMemory(Arg.Is<ushort?>(x => x == null))
-                .Returns(
-                    (byte)0x70,
-                    (byte)0xFF
-                );
+            Memory[0x0070] = 0x43;
+            Memory[0x0071] = 0x35;
+
+            Memory[0x3642] = 0x78;
 
             CpuMock.Registers.Y = 0xFF;
 
-            CpuMock
-                .FetchMemory(Arg.Is<ushort>(0x0070))
-                .Returns((byte)0x43);
-            CpuMock
-                .FetchMemory(Arg.Is<ushort>(0x0071))
-                .Returns((byte)0x35);
-
-            CpuMock
-                .FetchMemory(Arg.Is<ushort>(0x3642))
-                .Returns((byte)0x78);
+            CpuMock.State.RemainingCycles = 5;
 
             Sut.Execute(CpuMock);
 

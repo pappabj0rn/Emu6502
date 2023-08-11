@@ -5,6 +5,7 @@ public abstract class InstructionTestBase
 {
     protected ICpu CpuMock = Substitute.For<ICpu>();
     protected ExecutionState State = new();
+    protected byte[] Memory = new byte[0xFFFF];
 
     protected abstract Instruction Sut { get; }
     public abstract int NumberOfCyclesForExecution { get; }
@@ -21,9 +22,17 @@ public abstract class InstructionTestBase
         CpuMock.State.Returns(State);
 
         CpuMock
-            .FetchMemory()
-            .ReturnsForAnyArgs((byte)0x00)
-            .AndDoes(x => State.Tick());
+            .FetchMemory(Arg.Any<ushort?>())
+            .Returns(x =>
+            {
+                return x[0] is null
+                    ? Memory[CpuMock.Registers.PC++]
+                    : Memory[(ushort)x[0]];
+            })
+            .AndDoes(x =>
+            {
+                State.Tick();
+            });
     }
 
     [Fact]
