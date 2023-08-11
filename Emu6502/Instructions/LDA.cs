@@ -36,17 +36,8 @@ public class LDA_AbsoluteX : LDA
 {
     public LDA_AbsoluteX()
     {
-        SubTasks = new() {
-            (cpu) => Addr = (ushort)(cpu.FetchMemory() + cpu.Registers.X),
-            (cpu) => {
-                if(Addr > 0xff)
-                {
-                    cpu.State.Tick();
-                }
-            },
-            (cpu) => Addr += (ushort)(cpu.FetchMemory() << 8),
-            (cpu) => LoadAccumulatorWithMemory(cpu, Addr)
-        };
+        SubTasks = AbsoluteXAddressing();
+        SubTasks.Add((cpu) => LoadAccumulatorWithMemory(cpu, Addr));
     }
 }
 

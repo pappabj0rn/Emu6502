@@ -55,3 +55,12 @@ public class ADC_Absolute : ADC
         SubTasks.Add((cpu) => AddMemoryAndCarryToAccumulator(cpu, Addr));
     }
 }
+
+public class ADC_AbsoluteX : ADC
+{
+    public ADC_AbsoluteX()
+    {
+        SubTasks = AbsoluteXAddressing();
+        SubTasks.Add((cpu) => AddMemoryAndCarryToAccumulator(cpu, Addr));
+    }
+}

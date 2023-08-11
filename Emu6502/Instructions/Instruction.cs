@@ -38,12 +38,27 @@ public abstract class Instruction
 
     protected ushort IndAddr;
     protected ushort Addr;
-    
+
     protected List<Action<ICpu>> AbsoluteAddressing()
     {
         return new()
         {
             (cpu) => { Addr = cpu.FetchMemory(); },
+            (cpu) => { Addr += (ushort)(cpu.FetchMemory() << 8); }
+        };
+    }
+
+    protected List<Action<ICpu>> AbsoluteXAddressing()
+    {
+        return new()
+        {
+            (cpu) => { Addr = (ushort)(cpu.FetchMemory() + cpu.Registers.X); },
+            (cpu) => {
+                if(Addr > 0xff)
+                {
+                    cpu.State.Tick();
+                }
+            },
             (cpu) => { Addr += (ushort)(cpu.FetchMemory() << 8); }
         };
     }
