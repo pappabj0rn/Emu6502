@@ -32,16 +32,6 @@ public abstract class LDA_Tests : InstructionTestBase
         public override int NumberOfCyclesForExecution => 1;
         protected override Instruction Sut { get; } = new LDA_Immediate();
 
-        [Fact]
-        public void Should_load_byte_following_instruction_into_accumulator()
-        {
-            Memory[0x0000] = 0x12;
-
-            Sut.Execute(CpuMock);
-
-            CpuMock.Registers.A.Should().Be(0x12);
-        }
-
         protected override void LDA_instruction_test_memory_setup(ICpu cpu, byte expectedValue)
         {
             Memory[0x0000] = expectedValue;
