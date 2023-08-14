@@ -6,7 +6,7 @@ namespace Emu6502.Tests.Unit.Instructions;
 public abstract class Clear_flag_test : InstructionTestBase
 {
     public override int NumberOfCyclesForExecution => 1;
-    public abstract Expression<Func<ICpu,bool>> AffectedBit { get;}
+    public abstract Expression<Func<ICpu, bool>> AffectedBit { get; }
 
     [Fact]
     public void Should_clear_specified_flag()
