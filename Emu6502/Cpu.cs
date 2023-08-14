@@ -12,27 +12,39 @@ public class Cpu : ICpu
         public const byte JMP_Absolute = 0x5C;
 
         public const byte LDA_Immediate = 0xA9;
-        public const byte LDA_Zeropage = 0xA5;
+        public const byte LDA_Zeropage =  0xA5;
         public const byte LDA_ZeropageX = 0xB5;
-        public const byte LDA_Absolute = 0xAD;
+        public const byte LDA_Absolute =  0xAD;
         public const byte LDA_AbsoluteX = 0xBD;
         public const byte LDA_AbsoluteY = 0xB9;
         public const byte LDA_IndirectX = 0xA1;
         public const byte LDA_IndirectY = 0xB1;
 
+        public const byte LDX_Immediate = 0xA2;
+        public const byte LDX_Zeropage =  0xA6;
+        public const byte LDX_ZeropageY = 0xB6;
+        public const byte LDX_Absolute =  0xAE;
+        public const byte LDX_AbsoluteY = 0xBE;
+
+        public const byte LDY_Immediate = 0xA0;
+        public const byte LDY_Zeropage =  0xA4;
+        public const byte LDY_ZeropageX = 0xB4;
+        public const byte LDY_Absolute =  0xAC;
+        public const byte LDY_AbsoluteX = 0xBC;
+
         public const byte ADC_Immediate = 0x69;
-        public const byte ADC_Zeropage = 0x65;
+        public const byte ADC_Zeropage =  0x65;
         public const byte ADC_ZeropageX = 0x75;
-        public const byte ADC_Absolute = 0x6D;
+        public const byte ADC_Absolute =  0x6D;
         public const byte ADC_AbsoluteX = 0x7D;
         public const byte ADC_AbsoluteY = 0x79;
         public const byte ADC_IndirectX = 0x61;
         public const byte ADC_IndirectY = 0x71;
 
         public const byte SBC_Immediate = 0xE9;
-        public const byte SBC_Zeropage = 0xE5;
+        public const byte SBC_Zeropage =  0xE5;
         public const byte SBC_ZeropageX = 0xF5;
-        public const byte SBC_Absolute = 0xED;
+        public const byte SBC_Absolute =  0xED;
         public const byte SBC_AbsoluteX = 0xFD;
         public const byte SBC_AbsoluteY = 0xF9;
         public const byte SBC_IndirectX = 0xE1;
@@ -69,6 +81,18 @@ public class Cpu : ICpu
         _instructions[Instructions.LDA_ZeropageX] = new LDA_ZeropageX();
         _instructions[Instructions.LDA_IndirectX] = new LDA_IndirectX();
         _instructions[Instructions.LDA_IndirectY] = new LDA_IndirectY();
+
+        _instructions[Instructions.LDX_Immediate] = new LDX_Immediate();
+        _instructions[Instructions.LDX_Absolute] = new LDX_Absolute();
+        _instructions[Instructions.LDX_AbsoluteY] = new LDX_AbsoluteY();
+        _instructions[Instructions.LDX_Zeropage] = new LDX_Zeropage();
+        _instructions[Instructions.LDX_ZeropageY] = new LDX_ZeropageY();
+
+        _instructions[Instructions.LDY_Immediate] = new LDY_Immediate();
+        _instructions[Instructions.LDY_Absolute] = new LDY_Absolute();
+        _instructions[Instructions.LDY_AbsoluteX] = new LDY_AbsoluteX();
+        _instructions[Instructions.LDY_Zeropage] = new LDY_Zeropage();
+        _instructions[Instructions.LDY_ZeropageX] = new LDY_ZeropageX();
 
         _instructions[Instructions.ADC_Immediate] = new ADC_Immediate();
         _instructions[Instructions.ADC_Absolute] = new ADC_Absolute();

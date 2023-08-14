@@ -99,6 +99,19 @@ public abstract class Instruction
         };
     }
 
+    protected List<Action<ICpu>> ZeropageYAddressing()
+    {
+        return new()
+        {
+            (cpu) => { Addr = cpu.FetchMemory(); },
+            (cpu) => {
+                Addr += cpu.Registers.Y;
+                Addr &= 0xff;
+                cpu.State.Tick();
+            }
+        };
+    }
+
     protected List<Action<ICpu>> IndirectXAdressing()
     {
         return new()

@@ -116,6 +116,18 @@ public abstract class CpuTests
         [InlineData(Cpu.Instructions.LDA_IndirectX, typeof(LDA_IndirectX))]
         [InlineData(Cpu.Instructions.LDA_IndirectY, typeof(LDA_IndirectY))]
 
+        [InlineData(Cpu.Instructions.LDX_Immediate, typeof(LDX_Immediate))]
+        [InlineData(Cpu.Instructions.LDX_Absolute, typeof(LDX_Absolute))]
+        [InlineData(Cpu.Instructions.LDX_AbsoluteY, typeof(LDX_AbsoluteY))]
+        [InlineData(Cpu.Instructions.LDX_Zeropage, typeof(LDX_Zeropage))]
+        [InlineData(Cpu.Instructions.LDX_ZeropageY, typeof(LDX_ZeropageY))]
+
+        [InlineData(Cpu.Instructions.LDY_Immediate, typeof(LDY_Immediate))]
+        [InlineData(Cpu.Instructions.LDY_Absolute, typeof(LDY_Absolute))]
+        [InlineData(Cpu.Instructions.LDY_AbsoluteX, typeof(LDY_AbsoluteX))]
+        [InlineData(Cpu.Instructions.LDY_Zeropage, typeof(LDY_Zeropage))]
+        [InlineData(Cpu.Instructions.LDY_ZeropageX, typeof(LDY_ZeropageX))]
+
         [InlineData(Cpu.Instructions.ADC_Immediate, typeof(ADC_Immediate))]
         [InlineData(Cpu.Instructions.ADC_Absolute, typeof(ADC_Absolute))]
         [InlineData(Cpu.Instructions.ADC_AbsoluteX, typeof(ADC_AbsoluteX))]
