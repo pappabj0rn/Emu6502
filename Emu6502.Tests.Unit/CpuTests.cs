@@ -153,6 +153,10 @@ public abstract class CpuTests
         [InlineData(Cpu.Instructions.CLI, typeof(CLI))]
         [InlineData(Cpu.Instructions.CLV, typeof(CLV))]
 
+        [InlineData(Cpu.Instructions.SEC, typeof(SEC))]
+        [InlineData(Cpu.Instructions.SED, typeof(SED))]
+        [InlineData(Cpu.Instructions.SEI, typeof(SEI))]
+
         [InlineData(Cpu.Instructions.JMP_Absolute, typeof(JMP_Absolute))]
         public void Should_not_throw_IOE_for_valid_instruction(byte instruction, Type expectedType)
         {
