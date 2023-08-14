@@ -18,8 +18,8 @@ public abstract class SBC : Instruction
 
         cpu.Registers.A = (byte)result;
         cpu.Flags.N = (cpu.Registers.A & 0x80) > 0;
-        cpu.Flags.C = result > 0xff;
-        cpu.Flags.Z = cpu.Registers.A == 0 && cpu.Flags.C;                
+        cpu.Flags.Z = cpu.Registers.A == 0;
+        cpu.Flags.C = result > 0xff;               
         cpu.Flags.V = ((op1Positive && op2Positive) || (!op1Positive && !op2Positive))
                       && cpu.Flags.N == op2Positive;
     }

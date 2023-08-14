@@ -9,7 +9,7 @@ public abstract class SBC_Tests : InstructionTestBase
     [Theory]                            //nvdizc
     [InlineData(0x00, 0x01, false, 0xFE, "100100")]
     [InlineData(0x01, 0x01, false, 0xFF, "100100")]
-    [InlineData(0x00, 0xFF, false, 0x00, "000100")]
+    [InlineData(0x00, 0xFF, false, 0x00, "000110")]
     [InlineData(0x01, 0xFF, false, 0x01, "000100")]
     [InlineData(0x7F, 0x01, false, 0x7D, "000101")]
     [InlineData(0x80, 0x01, false, 0x7E, "010101")]
