@@ -51,6 +51,11 @@ public class Cpu : ICpu
         public const byte SBC_IndirectY = 0xF1;
 
         public const byte NOP = 0xEA;
+
+        public const byte CLC = 0x18;
+        public const byte CLD = 0xD8;
+        public const byte CLI = 0x58;
+        public const byte CLV = 0xB8;
     }
 
     public ExecutionState State { get; } = new();
@@ -113,6 +118,10 @@ public class Cpu : ICpu
         _instructions[Instructions.SBC_IndirectY] = new SBC_IndirectY();
 
         _instructions[Instructions.NOP] = new NOP();
+        _instructions[Instructions.CLC] = new CLC();
+        _instructions[Instructions.CLD] = new CLD();
+        _instructions[Instructions.CLI] = new CLI();
+        _instructions[Instructions.CLV] = new CLV();
 
         _instructions[Instructions.Test_2cycle] = new Test_2cycle();
     }

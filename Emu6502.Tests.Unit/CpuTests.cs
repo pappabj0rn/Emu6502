@@ -145,7 +145,14 @@ public abstract class CpuTests
         [InlineData(Cpu.Instructions.SBC_ZeropageX, typeof(SBC_ZeropageX))]
         [InlineData(Cpu.Instructions.SBC_IndirectX, typeof(SBC_IndirectX))]
         [InlineData(Cpu.Instructions.SBC_IndirectY, typeof(SBC_IndirectY))]
+
         [InlineData(Cpu.Instructions.NOP, typeof(NOP))]
+
+        [InlineData(Cpu.Instructions.CLC, typeof(CLC))]
+        [InlineData(Cpu.Instructions.CLD, typeof(CLD))]
+        [InlineData(Cpu.Instructions.CLI, typeof(CLI))]
+        [InlineData(Cpu.Instructions.CLV, typeof(CLV))]
+
         [InlineData(Cpu.Instructions.JMP_Absolute, typeof(JMP_Absolute))]
         public void Should_not_throw_IOE_for_valid_instruction(byte instruction, Type expectedType)
         {
