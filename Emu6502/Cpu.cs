@@ -29,6 +29,15 @@ public class Cpu : ICpu
         public const byte ADC_IndirectX = 0x61;
         public const byte ADC_IndirectY = 0x71;
 
+        public const byte SBC_Immediate = 0xE9;
+        public const byte SBC_Zeropage = 0xE5;
+        public const byte SBC_ZeropageX = 0xF5;
+        public const byte SBC_Absolute = 0xED;
+        public const byte SBC_AbsoluteX = 0xFD;
+        public const byte SBC_AbsoluteY = 0xF9;
+        public const byte SBC_IndirectX = 0xE1;
+        public const byte SBC_IndirectY = 0xF1;
+
         public const byte NOP = 0xEA;
     }
 
@@ -60,6 +69,24 @@ public class Cpu : ICpu
         _instructions[Instructions.LDA_ZeropageX] = new LDA_ZeropageX();
         _instructions[Instructions.LDA_IndirectX] = new LDA_IndirectX();
         _instructions[Instructions.LDA_IndirectY] = new LDA_IndirectY();
+
+        _instructions[Instructions.ADC_Immediate] = new ADC_Immediate();
+        _instructions[Instructions.ADC_Absolute] = new ADC_Absolute();
+        _instructions[Instructions.ADC_AbsoluteX] = new ADC_AbsoluteX();
+        _instructions[Instructions.ADC_AbsoluteY] = new ADC_AbsoluteY();
+        _instructions[Instructions.ADC_Zeropage] = new ADC_Zeropage();
+        _instructions[Instructions.ADC_ZeropageX] = new ADC_ZeropageX();
+        _instructions[Instructions.ADC_IndirectX] = new ADC_IndirectX();
+        _instructions[Instructions.ADC_IndirectY] = new ADC_IndirectY();
+
+        _instructions[Instructions.SBC_Immediate] = new SBC_Immediate();
+        _instructions[Instructions.SBC_Absolute] = new SBC_Absolute();
+        _instructions[Instructions.SBC_AbsoluteX] = new SBC_AbsoluteX();
+        _instructions[Instructions.SBC_AbsoluteY] = new SBC_AbsoluteY();
+        _instructions[Instructions.SBC_Zeropage] = new SBC_Zeropage();
+        _instructions[Instructions.SBC_ZeropageX] = new SBC_ZeropageX();
+        _instructions[Instructions.SBC_IndirectX] = new SBC_IndirectX();
+        _instructions[Instructions.SBC_IndirectY] = new SBC_IndirectY();
 
         _instructions[Instructions.NOP] = new NOP();
 

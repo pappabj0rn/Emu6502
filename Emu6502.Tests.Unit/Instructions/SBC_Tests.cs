@@ -1,41 +1,39 @@
 ﻿using Emu6502.Instructions;
 
 namespace Emu6502.Tests.Unit.Instructions;
-public abstract class ADC_Tests : InstructionTestBase
+
+public abstract class SBC_Tests : InstructionTestBase
 {
-    protected abstract void ADC_instruction_test_memory_setup(ICpu cpu, byte expectedValue);
+    protected abstract void SBC_instruction_test_memory_setup(ICpu cpu, byte operand);
 
-    [Theory]
-    [InlineData(0x00, 0x01, false, 0x01, false, false, false, false)]
-    [InlineData(0x01, 0x01, false, 0x02, false, false, false, false)]
-    [InlineData(0x00, 0xFF, false, 0xFF, false, true, false, false)]
-    [InlineData(0x01, 0xFF, false, 0x00, true, false, true, false)]
-    [InlineData(0x7F, 0x01, false, 0x80, false, true, false, true)]
-    [InlineData(0x80, 0x01, false, 0x81, false, true, false, false)]
-    [InlineData(0xFF, 0x02, false, 0x01, false, false, true, false)]
-    [InlineData(0x80, 0x80, false, 0x00, true, false, true, true)]
-    [InlineData(0x7E, 0x7E, false, 0xFC, false, true, false, true)]
-
-    [InlineData(0x00, 0x01, true,  0x02, false, false, false, false)]
-    [InlineData(0x01, 0x01, true,  0x03, false, false, false, false)]
-    [InlineData(0x00, 0xFF, true,  0x00, true, false, true, false)]
-    [InlineData(0x01, 0xFF, true,  0x01, false, false, true, false)]
-    [InlineData(0x7F, 0x01, true,  0x81, false, true, false, true)]
-    [InlineData(0x80, 0x01, true,  0x82, false, true, false, false)]
-    [InlineData(0xFF, 0x02, true,  0x02, false, false, true, false)]    
-    [InlineData(0x80, 0x80, true,  0x01, false, false, true, true)]
-    [InlineData(0x7E, 0x7E, true,  0xFD, false, true, false, true)]
+    [Theory]                            //nvdizc
+    [InlineData(0x00, 0x01, false, 0xFE, "100100")]
+    [InlineData(0x01, 0x01, false, 0xFF, "100100")]
+    [InlineData(0x00, 0xFF, false, 0x00, "000100")]
+    [InlineData(0x01, 0xFF, false, 0x01, "000100")]
+    [InlineData(0x7F, 0x01, false, 0x7D, "000101")]
+    [InlineData(0x80, 0x01, false, 0x7E, "010101")]
+    [InlineData(0xFF, 0x02, false, 0xFC, "100101")]
+    [InlineData(0x80, 0x80, false, 0xFF, "100100")]
+    [InlineData(0x7E, 0x7E, false, 0xFF, "100100")]
+    //                                   nvdizc
+    [InlineData(0x00, 0x01, true, 0xFF, "100100")]
+    [InlineData(0x01, 0x01, true, 0x00, "000111")]
+    [InlineData(0x00, 0xFF, true, 0x01, "000100")]
+    [InlineData(0x01, 0xFF, true, 0x02, "000100")]
+    [InlineData(0x7F, 0x01, true, 0x7E, "000101")]
+    [InlineData(0x80, 0x01, true, 0x7F, "010101")]
+    [InlineData(0xFF, 0x02, true, 0xFD, "100101")]
+    [InlineData(0x80, 0x80, true, 0x00, "000111")]
+    [InlineData(0x7E, 0x7E, true, 0x00, "000111")]
     public void Should_update_Z_and_N_and_C_flags_matching_result_stored_in_accumulator(
-        byte inital_a,
-        byte memory,
-        bool initial_c,
-        byte expected_a,
-        bool expected_z,
-        bool expected_n,
-        bool expected_c,
-        bool expected_v)
+       byte inital_a,
+       byte memory,
+       bool initial_c,
+       byte expected_a,
+       string expected_flags)
     {
-        ADC_instruction_test_memory_setup(CpuMock, memory);
+        SBC_instruction_test_memory_setup(CpuMock, memory);
 
         CpuMock.Registers.A = inital_a;
         CpuMock.Flags.C = initial_c;
@@ -43,29 +41,29 @@ public abstract class ADC_Tests : InstructionTestBase
         Sut.Execute(CpuMock);
 
         CpuMock.Registers.A.Should().Be(expected_a);
-        CpuMock.Flags.Z.Should().Be(expected_z);
-        CpuMock.Flags.N.Should().Be(expected_n);
-        CpuMock.Flags.C.Should().Be(expected_c);
-        CpuMock.Flags.V.Should().Be(expected_v);
+        CpuMock.Flags.N.Should().Be(expected_flags[0] == '1');
+        CpuMock.Flags.V.Should().Be(expected_flags[1] == '1');
+        CpuMock.Flags.Z.Should().Be(expected_flags[4] == '1');        
+        CpuMock.Flags.C.Should().Be(expected_flags[5] == '1');        
     }
 
-    public class Immediate : ADC_Tests
+    public class Immediate : SBC_Tests
     {
         public override int NumberOfCyclesForExecution => 1;
-        protected override Instruction Sut { get; } = new ADC_Immediate();
+        protected override Instruction Sut { get; } = new SBC_Immediate();
 
-        protected override void ADC_instruction_test_memory_setup(ICpu cpu, byte expectedValue)
+        protected override void SBC_instruction_test_memory_setup(ICpu cpu, byte operand)
         {
-            Memory[0x0000] = expectedValue;
+            Memory[0x0000] = operand;
         }
     }
 
-    public class Absolute : ADC_Tests
+    public class Absolute : SBC_Tests
     {
         public override int NumberOfCyclesForExecution => 3;
-        protected override Instruction Sut { get; } = new ADC_Absolute();
+        protected override Instruction Sut { get; } = new SBC_Absolute();
 
-        protected override void ADC_instruction_test_memory_setup(ICpu cpu, byte expectedValue)
+        protected override void SBC_instruction_test_memory_setup(ICpu cpu, byte expectedValue)
         {
             Memory[0x0000] = 0x12;
             Memory[0x0001] = 0x34;
@@ -78,19 +76,22 @@ public abstract class ADC_Tests : InstructionTestBase
             Memory[0x0000] = 0x23;
             Memory[0x0001] = 0x45;
 
-            Memory[0x4523] = 0x55;
+            Memory[0x4523] = 0x09;
+
+            CpuMock.Registers.A = 0x0A;
+            CpuMock.Flags.C = true;
         }
 
         public override void SteppedThroughVerification()
         {
-            CpuMock.Registers.A.Should().Be(0x55);
+            CpuMock.Registers.A.Should().Be(0x01);
         }
     }
 
-    public class AbsoluteX : ADC_Tests
+    public class AbsoluteX : SBC_Tests
     {
         public override int NumberOfCyclesForExecution => 3;
-        protected override Instruction Sut { get; } = new ADC_AbsoluteX();
+        protected override Instruction Sut { get; } = new SBC_AbsoluteX();
 
         public override void SteppedThroughSetup()
         {
@@ -101,14 +102,17 @@ public abstract class ADC_Tests : InstructionTestBase
             Memory[0x0105] = 0x06;
 
             CpuMock.Registers.X = 0x03;
+
+            CpuMock.Registers.A = 0x20;
+            CpuMock.Flags.C = true;
         }
 
         public override void SteppedThroughVerification()
         {
-            CpuMock.Registers.A.Should().Be(6);
+            CpuMock.Registers.A.Should().Be(0x1A);
         }
 
-        protected override void ADC_instruction_test_memory_setup(ICpu cpu, byte value)
+        protected override void SBC_instruction_test_memory_setup(ICpu cpu, byte value)
         {
             Memory[0x0000] = 0x03;
             Memory[0x0001] = 0x04;
@@ -128,22 +132,25 @@ public abstract class ADC_Tests : InstructionTestBase
             Memory[0x0001] = 0x04;
             Memory[0x0002] = 0xff;
 
-            Memory[0x0500] = 0x69;
+            Memory[0x0500] = 0x45;
 
             CpuMock.Registers.X = 0xFF;
 
+            CpuMock.Registers.A = 0x69;
+            CpuMock.Flags.C = true;
+
             Sut.Execute(CpuMock);
 
-            CpuMock.Registers.A.Should().Be(0x69);
+            CpuMock.Registers.A.Should().Be(0x24);
             CpuMock.State.Ticks.Should().Be(4);
             CpuMock.State.Instruction.Should().BeNull();
         }
     }
-    
-    public class AbsoluteY : ADC_Tests
+
+    public class AbsoluteY : SBC_Tests
     {
         public override int NumberOfCyclesForExecution => 3;
-        protected override Instruction Sut { get; } = new ADC_AbsoluteY();
+        protected override Instruction Sut { get; } = new SBC_AbsoluteY();
 
         public override void SteppedThroughSetup()
         {
@@ -154,14 +161,17 @@ public abstract class ADC_Tests : InstructionTestBase
             Memory[0x0105] = 0x06;
 
             CpuMock.Registers.Y = 0x03;
+
+            CpuMock.Registers.A = 0x0A;
+            CpuMock.Flags.C = true;
         }
 
         public override void SteppedThroughVerification()
         {
-            CpuMock.Registers.A.Should().Be(6);
+            CpuMock.Registers.A.Should().Be(0x04);
         }
 
-        protected override void ADC_instruction_test_memory_setup(ICpu cpu, byte value)
+        protected override void SBC_instruction_test_memory_setup(ICpu cpu, byte value)
         {
             Memory[0x0000] = 0x03;
             Memory[0x0001] = 0x04;
@@ -181,22 +191,25 @@ public abstract class ADC_Tests : InstructionTestBase
             Memory[0x0001] = 0x04;
             Memory[0x0002] = 0xff;
 
-            Memory[0x0500] = 0x69;
+            Memory[0x0500] = 0x45;
 
             CpuMock.Registers.Y = 0xFF;
 
+            CpuMock.Registers.A = 0x69;
+            CpuMock.Flags.C = true;
+
             Sut.Execute(CpuMock);
 
-            CpuMock.Registers.A.Should().Be(0x69);
+            CpuMock.Registers.A.Should().Be(0x24);
             CpuMock.State.Ticks.Should().Be(4);
             CpuMock.State.Instruction.Should().BeNull();
         }
     }
 
-    public class Zeropage : ADC_Tests
+    public class Zeropage : SBC_Tests
     {
         public override int NumberOfCyclesForExecution => 2;
-        protected override Instruction Sut { get; } = new ADC_Zeropage();
+        protected override Instruction Sut { get; } = new SBC_Zeropage();
 
         public override void SteppedThroughSetup()
         {
@@ -204,14 +217,17 @@ public abstract class ADC_Tests : InstructionTestBase
             Memory[0x0001] = 0xff;
 
             Memory[0x0020] = 0x01;
+
+            CpuMock.Registers.A = 0x02;
+            CpuMock.Flags.C = true;
         }
 
         public override void SteppedThroughVerification()
         {
-            CpuMock.Registers.A.Should().Be(1);
+            CpuMock.Registers.A.Should().Be(0x01);
         }
 
-        protected override void ADC_instruction_test_memory_setup(ICpu cpu, byte value)
+        protected override void SBC_instruction_test_memory_setup(ICpu cpu, byte value)
         {
             Memory[0x0000] = 0x03;
             Memory[0x0001] = 0xff;
@@ -220,10 +236,10 @@ public abstract class ADC_Tests : InstructionTestBase
         }
     }
 
-    public class ZeropageX : ADC_Tests
+    public class ZeropageX : SBC_Tests
     {
         public override int NumberOfCyclesForExecution => 3;
-        protected override Instruction Sut { get; } = new ADC_ZeropageX();
+        protected override Instruction Sut { get; } = new SBC_ZeropageX();
 
         public override void SteppedThroughSetup()
         {
@@ -233,14 +249,17 @@ public abstract class ADC_Tests : InstructionTestBase
             Memory[0x0031] = 0x01;
 
             CpuMock.Registers.X = 0x11;
+
+            CpuMock.Registers.A = 0x03;
+            CpuMock.Flags.C = true;
         }
 
         public override void SteppedThroughVerification()
         {
-            CpuMock.Registers.A.Should().Be(1);
+            CpuMock.Registers.A.Should().Be(0x02);
         }
 
-        protected override void ADC_instruction_test_memory_setup(ICpu cpu, byte value)
+        protected override void SBC_instruction_test_memory_setup(ICpu cpu, byte value)
         {
             Memory[0x0000] = 0x23;
             Memory[0x0001] = 0xff;
@@ -254,21 +273,24 @@ public abstract class ADC_Tests : InstructionTestBase
         public void Should_wrap_around_to_start_of_zeropage_instead_of_crossing_page_boundary()
         {
             Memory[0x0000] = 0xff;
-            Memory[0x0001] = 0x65;
+            Memory[0x0001] = 0x09;
             Memory[0x0002] = 0xff;
 
             CpuMock.Registers.X = 0x02;
 
+            CpuMock.Registers.A = 0x0A;
+            CpuMock.Flags.C = true;
+
             Sut.Execute(CpuMock);
 
-            CpuMock.Registers.A.Should().Be(0x65);
+            CpuMock.Registers.A.Should().Be(0x01);
         }
     }
 
-    public class IndirectX : ADC_Tests
+    public class IndirectX : SBC_Tests
     {
         public override int NumberOfCyclesForExecution => 5;
-        protected override Instruction Sut { get; } = new ADC_IndirectX();
+        protected override Instruction Sut { get; } = new SBC_IndirectX();
 
         public override void SteppedThroughSetup()
         {
@@ -282,6 +304,9 @@ public abstract class ADC_Tests : InstructionTestBase
             Memory[0x0201] = 0x05;
 
             CpuMock.Registers.X = 0x11;
+
+            CpuMock.Registers.A = 0x0A;
+            CpuMock.Flags.C = true;
         }
 
         public override void SteppedThroughVerification()
@@ -289,7 +314,7 @@ public abstract class ADC_Tests : InstructionTestBase
             CpuMock.Registers.A.Should().Be(0x05);
         }
 
-        protected override void ADC_instruction_test_memory_setup(ICpu cpu, byte value)
+        protected override void SBC_instruction_test_memory_setup(ICpu cpu, byte value)
         {
             Memory[0x0000] = 0x23;
             Memory[0x0001] = 0xff;
@@ -310,20 +335,23 @@ public abstract class ADC_Tests : InstructionTestBase
             Memory[0x0001] = 0x01;
             Memory[0x0002] = 0x01;
 
-            Memory[0x0101] = 0x74;
+            Memory[0x0101] = 0x08;
 
             CpuMock.Registers.X = 0x02;
 
+            CpuMock.Registers.A = 0x0A;
+            CpuMock.Flags.C = true;
+
             Sut.Execute(CpuMock);
 
-            CpuMock.Registers.A.Should().Be(0x74);
+            CpuMock.Registers.A.Should().Be(0x02);
         }
     }
 
-    public class IndirectY : ADC_Tests
+    public class IndirectY : SBC_Tests
     {
         public override int NumberOfCyclesForExecution => 4;
-        protected override Instruction Sut { get; } = new ADC_IndirectY();
+        protected override Instruction Sut { get; } = new SBC_IndirectY();
 
         public override void SteppedThroughSetup()
         {
@@ -336,15 +364,18 @@ public abstract class ADC_Tests : InstructionTestBase
 
             Memory[0x3553] = 0x23;
 
+            CpuMock.Registers.A = 0x25;
+            CpuMock.Flags.C = true;
+
             CpuMock.Registers.Y = 0x10;
         }
 
         public override void SteppedThroughVerification()
         {
-            CpuMock.Registers.A.Should().Be(0x23);
+            CpuMock.Registers.A.Should().Be(0x02);
         }
 
-        protected override void ADC_instruction_test_memory_setup(ICpu cpu, byte value)
+        protected override void SBC_instruction_test_memory_setup(ICpu cpu, byte value)
         {
             Memory[0x0000] = 0x23;
             Memory[0x0001] = 0xff;
@@ -368,15 +399,18 @@ public abstract class ADC_Tests : InstructionTestBase
             Memory[0x0070] = 0x43;
             Memory[0x0071] = 0x35;
 
-            Memory[0x3642] = 0x78;
+            Memory[0x3642] = 0x05;
 
             CpuMock.Registers.Y = 0xFF;
+
+            CpuMock.Registers.A = 0x0A;
+            CpuMock.Flags.C = true;
 
             CpuMock.State.RemainingCycles = 5;
 
             Sut.Execute(CpuMock);
 
-            CpuMock.Registers.A.Should().Be(0x78);
+            CpuMock.Registers.A.Should().Be(0x05);
             CpuMock.State.Ticks.Should().Be(5);
             CpuMock.State.Instruction.Should().BeNull();
         }

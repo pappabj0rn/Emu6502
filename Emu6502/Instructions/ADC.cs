@@ -6,8 +6,9 @@ public abstract class ADC : Instruction
         ICpu cpu,
         ushort? addr = null)
     {
-        var op1 = cpu.FetchMemory(addr);
-        var op2 = cpu.Registers.A;
+        var op1 = cpu.Registers.A;
+        var op2 = cpu.FetchMemory(addr);
+        
         var result = (ushort)(op1
             + op2
             + (cpu.Flags.C ? 1 : 0));

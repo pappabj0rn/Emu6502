@@ -1,38 +1,27 @@
 ﻿namespace Emu6502.Instructions;
 
-/*
- Subtract Memory from Accumulator with Borrow
-
-A - M - C -> A              N	Z	C	I	D	V
-                            +	+	+	-	-	+
-addressing	    assembler	    opc	bytes	cycles²
----------------------------------------------------
-immediate	    SBC #oper	    E9	2	    2  
-zeropage	    SBC oper	    E5	2	    3  
-zeropage,X	    SBC oper,X	    F5	2	    4  
-absolute	    SBC oper	    ED	3	    4  
-absolute,X	    SBC oper,X	    FD	3	    4* 
-absolute,Y	    SBC oper,Y	    F9	3	    4* 
-(indirect,X)	SBC (oper,X)	E1	2	    6
-(indirect),Y	SBC (oper),Y	F1	2	    5* 
-
- */
 public abstract class SBC : Instruction
 {
     protected void SubtractMemoryWithBorrowFromAccumulator(
         ICpu cpu,
         ushort? addr = null)
     {
-        //TODO
-        return;
-        var result = (ushort)(cpu.FetchMemory(addr)
-            + cpu.Registers.A
+        var op1 = cpu.Registers.A;
+        var op2 = (byte)~cpu.FetchMemory(addr);
+
+        var result = (ushort)(op1
+            + op2
             + (cpu.Flags.C ? 1 : 0));
 
-        cpu.Registers.A = (byte)(result & 0xff);
-        cpu.Flags.N = (cpu.Registers.A & 0b1000_0000) > 0;
-        cpu.Flags.Z = cpu.Registers.A == 0;
+        var op1Positive = (op1 & 0x80) == 0x00;
+        var op2Positive = (op2 & 0x80) == 0x00;
+
+        cpu.Registers.A = (byte)result;
+        cpu.Flags.N = (cpu.Registers.A & 0x80) > 0;
         cpu.Flags.C = result > 0xff;
+        cpu.Flags.Z = cpu.Registers.A == 0 && cpu.Flags.C;                
+        cpu.Flags.V = ((op1Positive && op2Positive) || (!op1Positive && !op2Positive))
+                      && cpu.Flags.N == op2Positive;
     }
 }
 
