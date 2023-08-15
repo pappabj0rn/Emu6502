@@ -50,6 +50,15 @@ public class Cpu : ICpu
         public const byte SBC_IndirectX = 0xE1;
         public const byte SBC_IndirectY = 0xF1;
 
+        public const byte ORA_Immediate = 0x09;
+        public const byte ORA_Zeropage =  0x05;
+        public const byte ORA_ZeropageX = 0x15;
+        public const byte ORA_Absolute =  0x0D;
+        public const byte ORA_AbsoluteX = 0x1D;
+        public const byte ORA_AbsoluteY = 0x19;
+        public const byte ORA_IndirectX = 0x01;
+        public const byte ORA_IndirectY = 0x11;
+
         public const byte DEC_Zeropage =  0xC6;
         public const byte DEC_ZeropageX = 0xD6;
         public const byte DEC_Absolute =  0xCD;
@@ -134,6 +143,15 @@ public class Cpu : ICpu
         _instructions[Instructions.SBC_ZeropageX] = new SBC_ZeropageX();
         _instructions[Instructions.SBC_IndirectX] = new SBC_IndirectX();
         _instructions[Instructions.SBC_IndirectY] = new SBC_IndirectY();
+
+        _instructions[Instructions.ORA_Immediate] = new ORA_Immediate();
+        _instructions[Instructions.ORA_Absolute] = new ORA_Absolute();
+        _instructions[Instructions.ORA_AbsoluteX] = new ORA_AbsoluteX();
+        _instructions[Instructions.ORA_AbsoluteY] = new ORA_AbsoluteY();
+        _instructions[Instructions.ORA_Zeropage] = new ORA_Zeropage();
+        _instructions[Instructions.ORA_ZeropageX] = new ORA_ZeropageX();
+        _instructions[Instructions.ORA_IndirectX] = new ORA_IndirectX();
+        _instructions[Instructions.ORA_IndirectY] = new ORA_IndirectY();
 
         _instructions[Instructions.DEC_Absolute] = new DEC_Absolute();
         _instructions[Instructions.DEC_AbsoluteX] = new DEC_AbsoluteX();

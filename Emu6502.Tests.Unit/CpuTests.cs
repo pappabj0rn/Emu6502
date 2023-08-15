@@ -146,6 +146,15 @@ public abstract class CpuTests
         [InlineData(Cpu.Instructions.SBC_IndirectX, typeof(SBC_IndirectX))]
         [InlineData(Cpu.Instructions.SBC_IndirectY, typeof(SBC_IndirectY))]
 
+        [InlineData(Cpu.Instructions.ORA_Immediate, typeof(ORA_Immediate))]
+        [InlineData(Cpu.Instructions.ORA_Absolute, typeof(ORA_Absolute))]
+        [InlineData(Cpu.Instructions.ORA_AbsoluteX, typeof(ORA_AbsoluteX))]
+        [InlineData(Cpu.Instructions.ORA_AbsoluteY, typeof(ORA_AbsoluteY))]
+        [InlineData(Cpu.Instructions.ORA_Zeropage, typeof(ORA_Zeropage))]
+        [InlineData(Cpu.Instructions.ORA_ZeropageX, typeof(ORA_ZeropageX))]
+        [InlineData(Cpu.Instructions.ORA_IndirectX, typeof(ORA_IndirectX))]
+        [InlineData(Cpu.Instructions.ORA_IndirectY, typeof(ORA_IndirectY))]
+
         [InlineData(Cpu.Instructions.DEC_Zeropage, typeof(DEC_Zeropage))]
         [InlineData(Cpu.Instructions.DEC_ZeropageX, typeof(DEC_ZeropageX))]
         [InlineData(Cpu.Instructions.DEC_Absolute, typeof(DEC_Absolute))]
