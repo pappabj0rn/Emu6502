@@ -51,13 +51,22 @@ public class Cpu : ICpu
         public const byte SBC_IndirectY = 0xF1;
 
         public const byte ORA_Immediate = 0x09;
-        public const byte ORA_Zeropage =  0x05;
+        public const byte ORA_Zeropage = 0x05;
         public const byte ORA_ZeropageX = 0x15;
-        public const byte ORA_Absolute =  0x0D;
+        public const byte ORA_Absolute = 0x0D;
         public const byte ORA_AbsoluteX = 0x1D;
         public const byte ORA_AbsoluteY = 0x19;
         public const byte ORA_IndirectX = 0x01;
         public const byte ORA_IndirectY = 0x11;
+
+        public const byte AND_Immediate = 0x29;
+        public const byte AND_Zeropage =  0x25;
+        public const byte AND_ZeropageX = 0x35;
+        public const byte AND_Absolute =  0x2D;
+        public const byte AND_AbsoluteX = 0x3D;
+        public const byte AND_AbsoluteY = 0x39;
+        public const byte AND_IndirectX = 0x21;
+        public const byte AND_IndirectY = 0x31;
 
         public const byte DEC_Zeropage =  0xC6;
         public const byte DEC_ZeropageX = 0xD6;
@@ -152,6 +161,15 @@ public class Cpu : ICpu
         _instructions[Instructions.ORA_ZeropageX] = new ORA_ZeropageX();
         _instructions[Instructions.ORA_IndirectX] = new ORA_IndirectX();
         _instructions[Instructions.ORA_IndirectY] = new ORA_IndirectY();
+
+        _instructions[Instructions.AND_Immediate] = new AND_Immediate();
+        _instructions[Instructions.AND_Absolute] = new AND_Absolute();
+        _instructions[Instructions.AND_AbsoluteX] = new AND_AbsoluteX();
+        _instructions[Instructions.AND_AbsoluteY] = new AND_AbsoluteY();
+        _instructions[Instructions.AND_Zeropage] = new AND_Zeropage();
+        _instructions[Instructions.AND_ZeropageX] = new AND_ZeropageX();
+        _instructions[Instructions.AND_IndirectX] = new AND_IndirectX();
+        _instructions[Instructions.AND_IndirectY] = new AND_IndirectY();
 
         _instructions[Instructions.DEC_Absolute] = new DEC_Absolute();
         _instructions[Instructions.DEC_AbsoluteX] = new DEC_AbsoluteX();

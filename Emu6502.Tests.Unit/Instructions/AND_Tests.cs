@@ -1,25 +1,26 @@
 ﻿using Emu6502.Instructions;
 
 namespace Emu6502.Tests.Unit.Instructions;
-public abstract class ORA_Tests : InstructionTestBase
+
+public abstract class AND_Tests : InstructionTestBase
 {
-    protected abstract void ORA_instruction_test_memory_setup(ICpu cpu, byte operand);
+    protected abstract void AND_instruction_test_memory_setup(ICpu cpu, byte operand);
 
     [Theory]                     //nvdizc
-    [InlineData(0x00, 0x01, 0x01, "000000")]
-    [InlineData(0x01, 0x00, 0x01, "000000")]
-    [InlineData(0x01, 0x01, 0x01, "000000")]
-    [InlineData(0x11, 0x6E, 0x7F, "000000")]
-    [InlineData(0x80, 0x20, 0xA0, "100000")]
-    [InlineData(0x0F, 0xF0, 0xFF, "100000")]
     [InlineData(0x00, 0x00, 0x00, "000010")]
-    public void Should_OR_A_with_memory_into_A_and_update_Z_and_N_flags_matching_result_stored_in_accumulator(
+    [InlineData(0x00, 0x01, 0x00, "000010")]
+    [InlineData(0x01, 0x00, 0x00, "000010")]
+    [InlineData(0x01, 0x01, 0x01, "000000")]
+    [InlineData(0xFF, 0x65, 0x65, "000000")]
+    [InlineData(0x83, 0xFF, 0x83, "100000")]
+    [InlineData(0xFF, 0xFF, 0xFF, "100000")]
+    public void Should_AND_A_with_memory_into_A_and_update_Z_and_N_flags_matching_result_stored_in_accumulator(
        byte inital_a,
        byte memory,
        byte expected_a,
        string expected_flags)
     {
-        ORA_instruction_test_memory_setup(CpuMock, memory);
+        AND_instruction_test_memory_setup(CpuMock, memory);
 
         CpuMock.Registers.A = inital_a;
 
@@ -32,23 +33,23 @@ public abstract class ORA_Tests : InstructionTestBase
         CpuMock.Flags.C.Should().Be(expected_flags[5] == '1');
     }
 
-    public class Immediate : ORA_Tests
+    public class Immediate : AND_Tests
     {
         public override int NumberOfCyclesForExecution => 1;
-        protected override Instruction Sut { get; } = new ORA_Immediate();
+        protected override Instruction Sut { get; } = new AND_Immediate();
 
-        protected override void ORA_instruction_test_memory_setup(ICpu cpu, byte operand)
+        protected override void AND_instruction_test_memory_setup(ICpu cpu, byte operand)
         {
             Memory[0x0000] = operand;
         }
     }
 
-    public class Absolute : ORA_Tests
+    public class Absolute : AND_Tests
     {
         public override int NumberOfCyclesForExecution => 3;
-        protected override Instruction Sut { get; } = new ORA_Absolute();
+        protected override Instruction Sut { get; } = new AND_Absolute();
 
-        protected override void ORA_instruction_test_memory_setup(ICpu cpu, byte operand)
+        protected override void AND_instruction_test_memory_setup(ICpu cpu, byte operand)
         {
             Memory[0x0000] = 0x12;
             Memory[0x0001] = 0x34;
@@ -63,19 +64,19 @@ public abstract class ORA_Tests : InstructionTestBase
 
             Memory[0x4523] = 0x55;
 
-            CpuMock.Registers.A = 0x22;
+            CpuMock.Registers.A = 0xFF;
         }
 
         public override void SteppedThroughVerification()
         {
-            CpuMock.Registers.A.Should().Be(0x77);
+            CpuMock.Registers.A.Should().Be(0x55);
         }
     }
 
-    public class AbsoluteX : ORA_Tests
+    public class AbsoluteX : AND_Tests
     {
         public override int NumberOfCyclesForExecution => 3;
-        protected override Instruction Sut { get; } = new ORA_AbsoluteX();
+        protected override Instruction Sut { get; } = new AND_AbsoluteX();
 
         public override void SteppedThroughSetup()
         {
@@ -91,10 +92,10 @@ public abstract class ORA_Tests : InstructionTestBase
 
         public override void SteppedThroughVerification()
         {
-            CpuMock.Registers.A.Should().Be(0x33);
+            CpuMock.Registers.A.Should().Be(0x00);
         }
 
-        protected override void ORA_instruction_test_memory_setup(ICpu cpu, byte value)
+        protected override void AND_instruction_test_memory_setup(ICpu cpu, byte value)
         {
             Memory[0x0000] = 0x03;
             Memory[0x0001] = 0x04;
@@ -121,16 +122,16 @@ public abstract class ORA_Tests : InstructionTestBase
 
             Sut.Execute(CpuMock);
 
-            CpuMock.Registers.A.Should().Be(0x77);
+            CpuMock.Registers.A.Should().Be(0x00);
             CpuMock.State.Ticks.Should().Be(4);
             CpuMock.State.Instruction.Should().BeNull();
         }
     }
 
-    public class AbsoluteY : ORA_Tests
+    public class AbsoluteY : AND_Tests
     {
         public override int NumberOfCyclesForExecution => 3;
-        protected override Instruction Sut { get; } = new ORA_AbsoluteY();
+        protected override Instruction Sut { get; } = new AND_AbsoluteY();
 
         public override void SteppedThroughSetup()
         {
@@ -141,15 +142,15 @@ public abstract class ORA_Tests : InstructionTestBase
             Memory[0x0105] = 0x06;
 
             CpuMock.Registers.Y = 0x03;
-            CpuMock.Registers.A = 0x11;
+            CpuMock.Registers.A = 0x00;
         }
 
         public override void SteppedThroughVerification()
         {
-            CpuMock.Registers.A.Should().Be(0x17);
+            CpuMock.Registers.A.Should().Be(0x00);
         }
 
-        protected override void ORA_instruction_test_memory_setup(ICpu cpu, byte value)
+        protected override void AND_instruction_test_memory_setup(ICpu cpu, byte value)
         {
             Memory[0x0000] = 0x03;
             Memory[0x0001] = 0x04;
@@ -176,16 +177,16 @@ public abstract class ORA_Tests : InstructionTestBase
 
             Sut.Execute(CpuMock);
 
-            CpuMock.Registers.A.Should().Be(0x79);
+            CpuMock.Registers.A.Should().Be(0x00);
             CpuMock.State.Ticks.Should().Be(4);
             CpuMock.State.Instruction.Should().BeNull();
         }
     }
 
-    public class Zeropage : ORA_Tests
+    public class Zeropage : AND_Tests
     {
         public override int NumberOfCyclesForExecution => 2;
-        protected override Instruction Sut { get; } = new ORA_Zeropage();
+        protected override Instruction Sut { get; } = new AND_Zeropage();
 
         public override void SteppedThroughSetup()
         {
@@ -198,10 +199,10 @@ public abstract class ORA_Tests : InstructionTestBase
 
         public override void SteppedThroughVerification()
         {
-            CpuMock.Registers.A.Should().Be(0x11);
+            CpuMock.Registers.A.Should().Be(0x01);
         }
 
-        protected override void ORA_instruction_test_memory_setup(ICpu cpu, byte value)
+        protected override void AND_instruction_test_memory_setup(ICpu cpu, byte value)
         {
             Memory[0x0000] = 0x03;
             Memory[0x0001] = 0xff;
@@ -210,10 +211,10 @@ public abstract class ORA_Tests : InstructionTestBase
         }
     }
 
-    public class ZeropageX : ORA_Tests
+    public class ZeropageX : AND_Tests
     {
         public override int NumberOfCyclesForExecution => 3;
-        protected override Instruction Sut { get; } = new ORA_ZeropageX();
+        protected override Instruction Sut { get; } = new AND_ZeropageX();
 
         public override void SteppedThroughSetup()
         {
@@ -223,15 +224,15 @@ public abstract class ORA_Tests : InstructionTestBase
             Memory[0x0031] = 0x01;
 
             CpuMock.Registers.X = 0x11;
-            CpuMock.Registers.A = 0x10;
+            CpuMock.Registers.A = 0xFF;
         }
 
         public override void SteppedThroughVerification()
         {
-            CpuMock.Registers.A.Should().Be(0x11);
+            CpuMock.Registers.A.Should().Be(0x01);
         }
 
-        protected override void ORA_instruction_test_memory_setup(ICpu cpu, byte value)
+        protected override void AND_instruction_test_memory_setup(ICpu cpu, byte value)
         {
             Memory[0x0000] = 0x23;
             Memory[0x0001] = 0xff;
@@ -253,14 +254,14 @@ public abstract class ORA_Tests : InstructionTestBase
 
             Sut.Execute(CpuMock);
 
-            CpuMock.Registers.A.Should().Be(0x75);
+            CpuMock.Registers.A.Should().Be(0x01);
         }
     }
 
-    public class IndirectX : ORA_Tests
+    public class IndirectX : AND_Tests
     {
         public override int NumberOfCyclesForExecution => 5;
-        protected override Instruction Sut { get; } = new ORA_IndirectX();
+        protected override Instruction Sut { get; } = new AND_IndirectX();
 
         public override void SteppedThroughSetup()
         {
@@ -279,10 +280,10 @@ public abstract class ORA_Tests : InstructionTestBase
 
         public override void SteppedThroughVerification()
         {
-            CpuMock.Registers.A.Should().Be(0x15);
+            CpuMock.Registers.A.Should().Be(0x01);
         }
 
-        protected override void ORA_instruction_test_memory_setup(ICpu cpu, byte value)
+        protected override void AND_instruction_test_memory_setup(ICpu cpu, byte value)
         {
             Memory[0x0000] = 0x23;
             Memory[0x0001] = 0xff;
@@ -310,14 +311,14 @@ public abstract class ORA_Tests : InstructionTestBase
 
             Sut.Execute(CpuMock);
 
-            CpuMock.Registers.A.Should().Be(0x74);
+            CpuMock.Registers.A.Should().Be(0x00);
         }
     }
 
-    public class IndirectY : ORA_Tests
+    public class IndirectY : AND_Tests
     {
         public override int NumberOfCyclesForExecution => 4;
-        protected override Instruction Sut { get; } = new ORA_IndirectY();
+        protected override Instruction Sut { get; } = new AND_IndirectY();
 
         public override void SteppedThroughSetup()
         {
@@ -331,15 +332,15 @@ public abstract class ORA_Tests : InstructionTestBase
             Memory[0x3553] = 0x23;
 
             CpuMock.Registers.Y = 0x10;
-            CpuMock.Registers.A = 0x10;
+            CpuMock.Registers.A = 0x20;
         }
 
         public override void SteppedThroughVerification()
         {
-            CpuMock.Registers.A.Should().Be(0x33);
+            CpuMock.Registers.A.Should().Be(0x20);
         }
 
-        protected override void ORA_instruction_test_memory_setup(ICpu cpu, byte value)
+        protected override void AND_instruction_test_memory_setup(ICpu cpu, byte value)
         {
             Memory[0x0000] = 0x23;
             Memory[0x0001] = 0xff;
@@ -372,7 +373,7 @@ public abstract class ORA_Tests : InstructionTestBase
 
             Sut.Execute(CpuMock);
 
-            CpuMock.Registers.A.Should().Be(0x79);
+            CpuMock.Registers.A.Should().Be(0x00);
             CpuMock.State.Ticks.Should().Be(5);
             CpuMock.State.Instruction.Should().BeNull();
         }
