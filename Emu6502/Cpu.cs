@@ -59,6 +59,15 @@ public class Cpu : ICpu
         public const byte ORA_IndirectX = 0x01;
         public const byte ORA_IndirectY = 0x11;
 
+        public const byte EOR_Immediate = 0x49;
+        public const byte EOR_Zeropage =  0x45;
+        public const byte EOR_ZeropageX = 0x55;
+        public const byte EOR_Absolute =  0x4D;
+        public const byte EOR_AbsoluteX = 0x5D;
+        public const byte EOR_AbsoluteY = 0x59;
+        public const byte EOR_IndirectX = 0x41;
+        public const byte EOR_IndirectY = 0x51;
+
         public const byte AND_Immediate = 0x29;
         public const byte AND_Zeropage =  0x25;
         public const byte AND_ZeropageX = 0x35;
@@ -161,6 +170,15 @@ public class Cpu : ICpu
         _instructions[Instructions.ORA_ZeropageX] = new ORA_ZeropageX();
         _instructions[Instructions.ORA_IndirectX] = new ORA_IndirectX();
         _instructions[Instructions.ORA_IndirectY] = new ORA_IndirectY();
+
+        _instructions[Instructions.EOR_Immediate] = new EOR_Immediate();
+        _instructions[Instructions.EOR_Absolute] = new EOR_Absolute();
+        _instructions[Instructions.EOR_AbsoluteX] = new EOR_AbsoluteX();
+        _instructions[Instructions.EOR_AbsoluteY] = new EOR_AbsoluteY();
+        _instructions[Instructions.EOR_Zeropage] = new EOR_Zeropage();
+        _instructions[Instructions.EOR_ZeropageX] = new EOR_ZeropageX();
+        _instructions[Instructions.EOR_IndirectX] = new EOR_IndirectX();
+        _instructions[Instructions.EOR_IndirectY] = new EOR_IndirectY();
 
         _instructions[Instructions.AND_Immediate] = new AND_Immediate();
         _instructions[Instructions.AND_Absolute] = new AND_Absolute();
