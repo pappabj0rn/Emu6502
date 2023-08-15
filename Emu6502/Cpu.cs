@@ -50,6 +50,13 @@ public class Cpu : ICpu
         public const byte SBC_IndirectX = 0xE1;
         public const byte SBC_IndirectY = 0xF1;
 
+        public const byte DEC_Zeropage = 0xC6;
+        public const byte DEC_ZeropageX = 0xD6;
+        public const byte DEC_Absolute = 0xCD;
+        public const byte DEC_AbsoluteX = 0xDE;
+        public const byte DEX = 0xCA;
+        public const byte DEY = 0x88;
+
         public const byte NOP = 0xEA;
 
         public const byte CLC = 0x18;
@@ -121,6 +128,13 @@ public class Cpu : ICpu
         _instructions[Instructions.SBC_IndirectX] = new SBC_IndirectX();
         _instructions[Instructions.SBC_IndirectY] = new SBC_IndirectY();
 
+        _instructions[Instructions.DEC_Absolute] = new DEC_Absolute();
+        _instructions[Instructions.DEC_AbsoluteX] = new DEC_AbsoluteX();
+        _instructions[Instructions.DEC_Zeropage] = new DEC_Zeropage();
+        _instructions[Instructions.DEC_ZeropageX] = new DEC_ZeropageX();
+        _instructions[Instructions.DEX] = new DEX();
+        _instructions[Instructions.DEY] = new DEY();
+
         _instructions[Instructions.NOP] = new NOP();
 
         _instructions[Instructions.CLC] = new CLC();
@@ -173,5 +187,11 @@ public class Cpu : ICpu
     {
         State.Tick();
         return _memory[addr ?? Registers.PC++];
+    }
+
+    public void WriteMemory(byte value, ushort? addr = null)
+    {
+        State.Tick();
+        _memory[addr ?? Registers.PC++] = value;
     }
 }

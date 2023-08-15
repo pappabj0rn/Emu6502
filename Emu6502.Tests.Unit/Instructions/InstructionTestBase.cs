@@ -33,6 +33,21 @@ public abstract class InstructionTestBase
             {
                 State.Tick();
             });
+
+        CpuMock
+            .When(x => x.WriteMemory(Arg.Any<byte>(), Arg.Any<ushort?>()))
+            .Do(x => {
+                State.Tick();
+                var value = (byte)x[0];
+                if (x[1] is null)
+                {
+                    Memory[CpuMock.Registers.PC++] = value;
+                }
+                else
+                {
+                    Memory[(ushort)x[1]] = value;
+                }
+            });
     }
 
     [Fact]

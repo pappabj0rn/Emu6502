@@ -146,6 +146,13 @@ public abstract class CpuTests
         [InlineData(Cpu.Instructions.SBC_IndirectX, typeof(SBC_IndirectX))]
         [InlineData(Cpu.Instructions.SBC_IndirectY, typeof(SBC_IndirectY))]
 
+        [InlineData(Cpu.Instructions.DEC_Zeropage, typeof(DEC_Zeropage))]
+        [InlineData(Cpu.Instructions.DEC_ZeropageX, typeof(DEC_ZeropageX))]
+        [InlineData(Cpu.Instructions.DEC_Absolute, typeof(DEC_Absolute))]
+        [InlineData(Cpu.Instructions.DEC_AbsoluteX, typeof(DEC_AbsoluteX))]
+        [InlineData(Cpu.Instructions.DEX, typeof(DEX))]
+        [InlineData(Cpu.Instructions.DEY, typeof(DEY))]
+
         [InlineData(Cpu.Instructions.NOP, typeof(NOP))]
 
         [InlineData(Cpu.Instructions.CLC, typeof(CLC))]
@@ -220,6 +227,53 @@ public abstract class CpuTests
 
             Cpu.FetchMemory(0x13).Should().Be(Memory[0x13]);
             Cpu.FetchMemory().Should().Be(Memory[0x13]);
+        }
+    }
+
+    public class WriteMemory : CpuTests
+    {
+        [Fact]
+        public void Should_set_value_at_given_address()
+        {
+            Cpu.WriteMemory(0x12, 0x5678);
+
+            Memory[0x5678].Should().Be(0x12);
+        }
+
+        [Fact]
+        public void Should_set_value_at_address_defined_by_pc_when_given_address_is_null()
+        {
+            Cpu.WriteMemory(0x15, 0x0005);
+
+            Memory[0x0005].Should().Be(0x15);
+        }
+
+        [Fact]
+        public void Should_increase_state_ticks_by_one()
+        {
+            Cpu.WriteMemory(0x00, 0x0000);
+
+            Cpu.State.Ticks.Should().Be(1);
+        }
+
+        [Fact]
+        public void Should_increment_pc_when_called_without_address()
+        {
+            Cpu.Registers.PC = 0x13;
+
+            Cpu.WriteMemory(0x00);
+
+            Cpu.Registers.PC.Should().Be(0x14);
+        }
+
+        [Fact]
+        public void Should_not_increment_pc_when_called_with_address()
+        {
+            Cpu.Registers.PC = 0x15;
+
+            Cpu.WriteMemory(0x00, 0x0000);
+
+            Cpu.Registers.PC.Should().Be(0x15);
         }
     }
 }

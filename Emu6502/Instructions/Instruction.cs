@@ -37,7 +37,7 @@ public abstract class Instruction
     }
 
     protected ushort IndAddr;
-    protected ushort Addr;
+    protected ushort? Addr;
 
     protected List<Action<ICpu>> AbsoluteAddressing()
     {
@@ -48,13 +48,14 @@ public abstract class Instruction
         };
     }
 
-    protected List<Action<ICpu>> AbsoluteXAddressing()
+    protected List<Action<ICpu>> AbsoluteXAddressing(bool addCyclePenalty = false)
     {
         return new()
         {
             (cpu) => { Addr = (ushort)(cpu.FetchMemory() + cpu.Registers.X); },
             (cpu) => {
-                if(Addr > 0xff)
+                if(addCyclePenalty 
+                    || Addr > 0xff)
                 {
                     cpu.State.Tick();
                 }
