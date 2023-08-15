@@ -2,16 +2,16 @@
 
 namespace Emu6502.Tests.Unit.Instructions;
 
-public abstract class Decrement_tests : InstructionTestBase
+public abstract class Increment_tests : InstructionTestBase
 {
     public abstract void SetupTestMemory(byte value);
     public abstract void VerifyMemory(byte expected);
 
     [Theory]
-    [InlineData(0x01, 0x00)]
-    [InlineData(0x00, 0xFF)]
-    [InlineData(0xFF, 0xFE)]
-    public void Should_decrement_memory_at_adress(byte initialValue, byte expectedValue)
+    [InlineData(0x00, 0x01)]
+    [InlineData(0x01, 0x02)]
+    [InlineData(0xFF, 0x00)]
+    public void Should_increment_memory_at_adress(byte initialValue, byte expectedValue)
     {
         SetupTestMemory(initialValue);
 
@@ -20,11 +20,11 @@ public abstract class Decrement_tests : InstructionTestBase
         VerifyMemory(expectedValue);
     }
 
-    public class DEC_Absoulte_tests : Decrement_tests
+    public class INC_Absoulte_tests : Increment_tests
     {
         public override int NumberOfCyclesForExecution => 5;
 
-        protected override Instruction Sut { get; } = new DEC_Absolute();
+        protected override Instruction Sut { get; } = new INC_Absolute();
 
         public override void SetupTestMemory(byte value)
         {
@@ -48,15 +48,15 @@ public abstract class Decrement_tests : InstructionTestBase
 
         public override void SteppedThroughVerification()
         {
-            Memory[0xABCD].Should().Be(0xCC);
+            Memory[0xABCD].Should().Be(0xCE);
         }
     }
 
-    public class DEC_AbsoulteX_tests : Decrement_tests
+    public class INC_AbsoulteX_tests : Increment_tests
     {
         public override int NumberOfCyclesForExecution => 6;
 
-        protected override Instruction Sut { get; } = new DEC_AbsoluteX();
+        protected override Instruction Sut { get; } = new INC_AbsoluteX();
 
         public override void SetupTestMemory(byte value)
         {
@@ -85,15 +85,15 @@ public abstract class Decrement_tests : InstructionTestBase
 
         public override void SteppedThroughVerification()
         {
-            Memory[0xABCE].Should().Be(0xCC);
+            Memory[0xABCE].Should().Be(0xCE);
         }
     }
 
-    public class DEC_Zeropage_tests : Decrement_tests
+    public class INC_Zeropage_tests : Increment_tests
     {
         public override int NumberOfCyclesForExecution => 4;
 
-        protected override Instruction Sut { get; } = new DEC_Zeropage();
+        protected override Instruction Sut { get; } = new INC_Zeropage();
 
         public override void SetupTestMemory(byte value)
         {
@@ -115,15 +115,15 @@ public abstract class Decrement_tests : InstructionTestBase
 
         public override void SteppedThroughVerification()
         {
-            Memory[0x00CD].Should().Be(0xAA);
+            Memory[0x00CD].Should().Be(0xAC);
         }
     }
 
-    public class DEC_ZeropageX_tests : Decrement_tests
+    public class INC_ZeropageX_tests : Increment_tests
     {
         public override int NumberOfCyclesForExecution => 5;
 
-        protected override Instruction Sut { get; } = new DEC_ZeropageX();
+        protected override Instruction Sut { get; } = new INC_ZeropageX();
 
         public override void SetupTestMemory(byte value)
         {
@@ -148,15 +148,15 @@ public abstract class Decrement_tests : InstructionTestBase
 
         public override void SteppedThroughVerification()
         {
-            Memory[0x0001].Should().Be(0xAA);
+            Memory[0x0001].Should().Be(0xAC);
         }
     }
 
-    public class DEX_tests : Decrement_tests
+    public class INX_tests : Increment_tests
     {
         public override int NumberOfCyclesForExecution => 1;
 
-        protected override Instruction Sut { get; } = new DEX();
+        protected override Instruction Sut { get; } = new INX();
 
         public override void SetupTestMemory(byte value)
         {
@@ -175,15 +175,15 @@ public abstract class Decrement_tests : InstructionTestBase
 
         public override void SteppedThroughVerification()
         {
-            CpuMock.Registers.X.Should().Be(0xEE);
+            CpuMock.Registers.X.Should().Be(0xF0);
         }
     }
 
-    public class DEY_tests : Decrement_tests
+    public class INY_tests : Increment_tests
     {
         public override int NumberOfCyclesForExecution => 1;
 
-        protected override Instruction Sut { get; } = new DEY();
+        protected override Instruction Sut { get; } = new INY();
 
         public override void SetupTestMemory(byte value)
         {
@@ -202,7 +202,7 @@ public abstract class Decrement_tests : InstructionTestBase
 
         public override void SteppedThroughVerification()
         {
-            CpuMock.Registers.Y.Should().Be(0xEE);
+            CpuMock.Registers.Y.Should().Be(0xF0);
         }
     }
 }

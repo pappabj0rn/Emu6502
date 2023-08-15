@@ -50,12 +50,19 @@ public class Cpu : ICpu
         public const byte SBC_IndirectX = 0xE1;
         public const byte SBC_IndirectY = 0xF1;
 
-        public const byte DEC_Zeropage = 0xC6;
+        public const byte DEC_Zeropage =  0xC6;
         public const byte DEC_ZeropageX = 0xD6;
-        public const byte DEC_Absolute = 0xCD;
+        public const byte DEC_Absolute =  0xCD;
         public const byte DEC_AbsoluteX = 0xDE;
         public const byte DEX = 0xCA;
         public const byte DEY = 0x88;
+
+        public const byte INC_Zeropage =  0xE6;
+        public const byte INC_ZeropageX = 0xF6;
+        public const byte INC_Absolute =  0xEE;
+        public const byte INC_AbsoluteX = 0xFE;
+        public const byte INX = 0xE8;
+        public const byte INY = 0xC8;
 
         public const byte NOP = 0xEA;
 
@@ -134,6 +141,13 @@ public class Cpu : ICpu
         _instructions[Instructions.DEC_ZeropageX] = new DEC_ZeropageX();
         _instructions[Instructions.DEX] = new DEX();
         _instructions[Instructions.DEY] = new DEY();
+
+        _instructions[Instructions.INC_Absolute] = new INC_Absolute();
+        _instructions[Instructions.INC_AbsoluteX] = new INC_AbsoluteX();
+        _instructions[Instructions.INC_Zeropage] = new INC_Zeropage();
+        _instructions[Instructions.INC_ZeropageX] = new INC_ZeropageX();
+        _instructions[Instructions.INX] = new INX();
+        _instructions[Instructions.INY] = new INY();
 
         _instructions[Instructions.NOP] = new NOP();
 

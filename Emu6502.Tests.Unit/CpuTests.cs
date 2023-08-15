@@ -153,6 +153,13 @@ public abstract class CpuTests
         [InlineData(Cpu.Instructions.DEX, typeof(DEX))]
         [InlineData(Cpu.Instructions.DEY, typeof(DEY))]
 
+        [InlineData(Cpu.Instructions.INC_Zeropage, typeof(INC_Zeropage))]
+        [InlineData(Cpu.Instructions.INC_ZeropageX, typeof(INC_ZeropageX))]
+        [InlineData(Cpu.Instructions.INC_Absolute, typeof(INC_Absolute))]
+        [InlineData(Cpu.Instructions.INC_AbsoluteX, typeof(INC_AbsoluteX))]
+        [InlineData(Cpu.Instructions.INX, typeof(INX))]
+        [InlineData(Cpu.Instructions.INY, typeof(INY))]
+
         [InlineData(Cpu.Instructions.NOP, typeof(NOP))]
 
         [InlineData(Cpu.Instructions.CLC, typeof(CLC))]
