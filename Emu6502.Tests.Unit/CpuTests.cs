@@ -31,7 +31,7 @@ public abstract class CpuTests
             Cpu.Registers.A.Should().Be(0x00);
             Cpu.Registers.X.Should().Be(0x00);
             Cpu.Registers.Y.Should().Be(0x00);
-            Cpu.Registers.S.Should().Be(0x00);
+            Cpu.Registers.SP.Should().Be(0xFF);
         }
 
         [Theory]
@@ -197,6 +197,11 @@ public abstract class CpuTests
         [InlineData(Cpu.Instructions.SEC, typeof(SEC))]
         [InlineData(Cpu.Instructions.SED, typeof(SED))]
         [InlineData(Cpu.Instructions.SEI, typeof(SEI))]
+
+        [InlineData(Cpu.Instructions.PHA, typeof(PHA))]
+        [InlineData(Cpu.Instructions.PLA, typeof(PLA))]
+        [InlineData(Cpu.Instructions.PHP, typeof(PHP))]
+        [InlineData(Cpu.Instructions.PLP, typeof(PLP))]
 
         [InlineData(Cpu.Instructions.JMP_Absolute, typeof(JMP_Absolute))]
         public void Should_not_throw_IOE_for_valid_instruction(byte instruction, Type expectedType)

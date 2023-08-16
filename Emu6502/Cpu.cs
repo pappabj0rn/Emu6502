@@ -101,11 +101,16 @@ public class Cpu : ICpu
         public const byte SEC = 0x38;
         public const byte SED = 0xF8;
         public const byte SEI = 0x78;
+
+        public const byte PHA = 0x48;
+        public const byte PLA = 0x68;
+        public const byte PHP = 0x08;
+        public const byte PLP = 0x28;
     }
 
     public ExecutionState State { get; } = new();
-    public Flags Flags { get; } = new();
-    public Registers Registers { get; } = new();
+    public Flags Flags { get; set; } = new();
+    public Registers Registers { get; set; } = new();
 
     public int Ticks => State.Ticks;
 
@@ -214,6 +219,11 @@ public class Cpu : ICpu
         _instructions[Instructions.SED] = new SED();
         _instructions[Instructions.SEI] = new SEI();
 
+        _instructions[Instructions.PHA] = new PHA();
+        _instructions[Instructions.PLA] = new PLA();
+        _instructions[Instructions.PHP] = new PHP();
+        _instructions[Instructions.PLP] = new PLP();
+
         _instructions[Instructions.Test_2cycle] = new Test_2cycle();
     }
 
@@ -222,7 +232,7 @@ public class Cpu : ICpu
         Registers.A = 0;
         Registers.X = 0;
         Registers.Y = 0;
-        Registers.S = 0;
+        Registers.SP = 0xFF;
         Flags.N = false;
         Flags.V = false;
         Flags.B = false;

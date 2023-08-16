@@ -2,8 +2,8 @@
 {
     public interface ICpu
     {
-        Flags Flags { get; }
-        Registers Registers { get; }
+        Flags Flags { get; set; }
+        Registers Registers { get; set; }
         int Ticks { get; }
         ExecutionState State { get; }
 

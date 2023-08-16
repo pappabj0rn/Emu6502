@@ -17,8 +17,12 @@ public abstract class InstructionTestBase
     
     public InstructionTestBase()
     {
-        State.Instruction = Sut;
+        CpuMock.Flags = new Flags();
+        CpuMock.Flags.I = true;
+        CpuMock.Registers.SP = 0xFF;
 
+        State.Instruction = Sut;
+        
         CpuMock.State.Returns(State);
 
         CpuMock
@@ -78,5 +82,24 @@ public abstract class InstructionTestBase
         }
 
         SteppedThroughVerification();
+    }
+
+    protected void VerifyFlags(string expected_flags)
+    {
+        CpuMock.Flags.N.Should().Be(expected_flags[0] == '1');
+        CpuMock.Flags.V.Should().Be(expected_flags[1] == '1');
+        CpuMock.Flags.D.Should().Be(expected_flags[2] == '1');
+        CpuMock.Flags.I.Should().Be(expected_flags[3] == '1');
+        CpuMock.Flags.Z.Should().Be(expected_flags[4] == '1');
+        CpuMock.Flags.C.Should().Be(expected_flags[5] == '1');
+    }
+
+    protected void VerifyFlags(byte expected_sr, bool ignoreSpecialBits = true)
+    {
+        byte expected = (byte)(ignoreSpecialBits 
+            ? expected_sr | 0x30 
+            : expected_sr);
+
+        CpuMock.Flags.GetSR().Should().Be(expected);
     }
 }

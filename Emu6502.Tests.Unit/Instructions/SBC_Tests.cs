@@ -41,10 +41,7 @@ public abstract class SBC_Tests : InstructionTestBase
         Sut.Execute(CpuMock);
 
         CpuMock.Registers.A.Should().Be(expected_a);
-        CpuMock.Flags.N.Should().Be(expected_flags[0] == '1');
-        CpuMock.Flags.V.Should().Be(expected_flags[1] == '1');
-        CpuMock.Flags.Z.Should().Be(expected_flags[4] == '1');        
-        CpuMock.Flags.C.Should().Be(expected_flags[5] == '1');        
+        VerifyFlags(expected_flags);
     }
 
     public class Immediate : SBC_Tests

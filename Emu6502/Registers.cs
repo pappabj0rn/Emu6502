@@ -5,6 +5,6 @@ public class Registers
     public byte A;
     public byte X;
     public byte Y;
-    public byte S;
+    public byte SP;
     public ushort PC;
 }
