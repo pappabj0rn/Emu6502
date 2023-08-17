@@ -6,9 +6,7 @@ public abstract class LDY : Instruction
         ICpu cpu,
         ushort? addr = null)
     {
-        cpu.Registers.Y = cpu.FetchMemory(addr);
-        cpu.Flags.N = (cpu.Registers.Y & 0b1000_0000) > 0;
-        cpu.Flags.Z = cpu.Registers.Y == 0;
+        cpu.SetRegister(Register.Y, cpu.FetchMemory(addr));
     }
 }
 

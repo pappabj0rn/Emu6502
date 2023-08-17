@@ -6,9 +6,7 @@ public abstract class LDA : Instruction
         ICpu cpu, 
         ushort? addr = null)
     {
-        cpu.Registers.A = cpu.FetchMemory(addr);
-        cpu.Flags.N = (cpu.Registers.A & 0b1000_0000) > 0;
-        cpu.Flags.Z = cpu.Registers.A == 0;
+        cpu.SetRegister(Register.A, cpu.FetchMemory(addr));
     }
 }
 

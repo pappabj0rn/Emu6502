@@ -6,9 +6,7 @@ public abstract class LDX : Instruction
         ICpu cpu,
         ushort? addr = null)
     {
-        cpu.Registers.X = cpu.FetchMemory(addr);
-        cpu.Flags.N = (cpu.Registers.X & 0b1000_0000) > 0;
-        cpu.Flags.Z = cpu.Registers.X == 0;
+        cpu.SetRegister(Register.X, cpu.FetchMemory(addr));
     }
 }
 

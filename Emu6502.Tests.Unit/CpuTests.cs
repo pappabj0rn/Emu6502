@@ -24,7 +24,7 @@ public abstract class CpuTests
             Cpu.Flags.V.Should().BeFalse();
             Cpu.Flags.B.Should().BeFalse();
             Cpu.Flags.D.Should().BeFalse();
-            Cpu.Flags.I.Should().BeFalse();
+            Cpu.Flags.I.Should().BeTrue();
             Cpu.Flags.Z.Should().BeFalse();
             Cpu.Flags.C.Should().BeFalse();
 
@@ -320,6 +320,52 @@ public abstract class CpuTests
             Cpu.WriteMemory(0x00, 0x0000);
 
             Cpu.Registers.PC.Should().Be(0x15);
+        }
+    }
+
+    public class SetRegister : CpuTests
+    {
+        [Theory]                      //NV BDIZC
+        [InlineData(Register.A, 0x00, 0b00110110)]
+        [InlineData(Register.A, 0x11, 0b00110100)]
+        [InlineData(Register.A, 0xFF, 0b10110100)]
+
+        [InlineData(Register.X, 0x00, 0b00110110)]
+        [InlineData(Register.X, 0x11, 0b00110100)]
+        [InlineData(Register.X, 0xFF, 0b10110100)]
+
+        [InlineData(Register.Y, 0x00, 0b00110110)]
+        [InlineData(Register.Y, 0x11, 0b00110100)]
+        [InlineData(Register.Y, 0xFF, 0b10110100)]
+
+        [InlineData(Register.SP, 0x00, 0b00110110)]
+        [InlineData(Register.SP, 0x11, 0b00110100)]
+        [InlineData(Register.SP, 0xFF, 0b10110100)]
+        public void Should_set_selected_register_to_given_value_and_update_N_and_Z_flags(
+            Register register,
+            byte value,
+            byte expected_flags)
+        {
+            Cpu.Reset();
+            Cpu.SetRegister(register, value);
+
+            Cpu.Flags.GetSR().Should().Be(expected_flags);
+
+            switch (register)
+            {
+                case Register.A:
+                    Cpu.Registers.A.Should().Be(value);
+                    break;
+                case Register.X:
+                    Cpu.Registers.X.Should().Be(value);
+                    break;
+                case Register.Y:
+                    Cpu.Registers.Y.Should().Be(value);
+                    break;
+                case Register.SP:
+                    Cpu.Registers.SP.Should().Be(value);
+                    break;
+            }
         }
     }
 }

@@ -251,7 +251,7 @@ public class Cpu : ICpu
         Flags.V = false;
         Flags.B = false;
         Flags.D = false;
-        Flags.I = false;
+        Flags.I = true;
         Flags.Z = false;
         Flags.C = false;
 

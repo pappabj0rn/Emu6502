@@ -9,11 +9,9 @@ public abstract class AND : Instruction
         var op1 = cpu.Registers.A;
         var op2 = cpu.FetchMemory(addr);
 
-        var result = (ushort)(op1 & op2);
+        var result = (byte)(op1 & op2);
 
-        cpu.Registers.A = (byte)(result & 0xff);
-        cpu.Flags.N = (cpu.Registers.A & 0x80) > 0;
-        cpu.Flags.Z = cpu.Registers.A == 0;
+        cpu.SetRegister(Register.A, result);
     }
 }
 

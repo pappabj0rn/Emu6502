@@ -16,9 +16,7 @@ public abstract class SBC : Instruction
         var op1Positive = (op1 & 0x80) == 0x00;
         var op2Positive = (op2 & 0x80) == 0x00;
 
-        cpu.Registers.A = (byte)result;
-        cpu.Flags.N = (cpu.Registers.A & 0x80) > 0;
-        cpu.Flags.Z = cpu.Registers.A == 0;
+        cpu.SetRegister(Register.A, (byte)result);
         cpu.Flags.C = result > 0xff;               
         cpu.Flags.V = ((op1Positive && op2Positive) || (!op1Positive && !op2Positive))
                       && cpu.Flags.N == op2Positive;
