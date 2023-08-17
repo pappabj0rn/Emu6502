@@ -16,8 +16,7 @@ public abstract class ADC : Instruction
         var op1Positive = (op1 & 0x80) == 0x00;
         var op2Positive = (op2 & 0x80) == 0x00;
 
-        cpu.Registers.A = (byte)(result & 0xff);
-        SetNZToMatchA(cpu);
+        cpu.SetRegister(Register.A,(byte)(result & 0xff));
         cpu.Flags.C = result > 0xff;
         cpu.Flags.V = ((op1Positive && op2Positive) || (!op1Positive && !op2Positive))
                       && cpu.Flags.N == op2Positive;

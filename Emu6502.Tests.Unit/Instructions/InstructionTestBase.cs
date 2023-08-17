@@ -1,4 +1,5 @@
 ﻿using Emu6502.Instructions;
+
 namespace Emu6502.Tests.Unit.Instructions;
 
 public abstract class InstructionTestBase
@@ -51,6 +52,31 @@ public abstract class InstructionTestBase
                 {
                     Memory[(ushort)x[1]] = value;
                 }
+            });
+
+        CpuMock
+            .When(x => x.SetRegister(Arg.Any<Register>(), Arg.Any<byte>()))
+            .Do(x =>
+            {
+                var value = (byte)x[1];
+                switch ((Register)x[0])
+                {
+                    case Register.A:
+                        CpuMock.Registers.A = value;
+                        break;
+                    case Register.X:
+                        CpuMock.Registers.X = value;
+                        break;
+                    case Register.Y:
+                        CpuMock.Registers.Y = value;
+                        break;
+                    case Register.SP:
+                        CpuMock.Registers.SP = value;
+                        break;
+                }
+
+                CpuMock.Flags.N = (value & 0x80) > 0;
+                CpuMock.Flags.Z = value == 0;
             });
     }
 

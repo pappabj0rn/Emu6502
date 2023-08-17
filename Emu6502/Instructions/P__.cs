@@ -27,8 +27,7 @@ public class PLA : Instruction
                 cpu.State.Tick();
             },
             (cpu) => {
-                cpu.Registers.A = cpu.FetchMemory((ushort?)(0x0100 | cpu.Registers.SP));
-                SetNZToMatchA(cpu);
+                cpu.SetRegister(Register.A, cpu.FetchMemory((ushort?)(0x0100 | cpu.Registers.SP)));
             }
         };
     }

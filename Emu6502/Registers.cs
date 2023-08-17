@@ -8,3 +8,11 @@ public class Registers
     public byte SP;
     public ushort PC;
 }
+
+public enum Register
+{
+    A,
+    X,
+    Y,
+    SP
+}

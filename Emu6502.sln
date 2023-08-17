@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33717.318
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emu6502", "Emu6502\Emu6502.csproj", "{EBA56E1D-26BF-4661-BEDD-9AF291B58DDB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emu6502", "Emu6502\Emu6502.csproj", "{EBA56E1D-26BF-4661-BEDD-9AF291B58DDB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emu6502.Tests.Unit", "Emu6502.Tests.Unit\Emu6502.Tests.Unit.csproj", "{EBE0C86D-BE81-47D7-8868-4D4E0C42A014}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emu6502.Tests.Unit", "Emu6502.Tests.Unit\Emu6502.Tests.Unit.csproj", "{EBE0C86D-BE81-47D7-8868-4D4E0C42A014}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emu6502.Console", "Emu6502.Console\Emu6502.Console.csproj", "{7DB51240-108B-43BE-8B7C-24EC28FCFF04}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emu6502.Console", "Emu6502.Console\Emu6502.Console.csproj", "{7DB51240-108B-43BE-8B7C-24EC28FCFF04}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

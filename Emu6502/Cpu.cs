@@ -106,6 +106,13 @@ public class Cpu : ICpu
         public const byte PLA = 0x68;
         public const byte PHP = 0x08;
         public const byte PLP = 0x28;
+
+        public const byte TAX = 0xAA;
+        public const byte TAY = 0xA8;
+        public const byte TXA = 0xBA;
+        public const byte TXS = 0x8A;
+        public const byte TSX = 0x9A;
+        public const byte TYA = 0x98;
     }
 
     public ExecutionState State { get; } = new();
@@ -224,6 +231,13 @@ public class Cpu : ICpu
         _instructions[Instructions.PHP] = new PHP();
         _instructions[Instructions.PLP] = new PLP();
 
+        _instructions[Instructions.TAX] = new TAX();
+        _instructions[Instructions.TAY] = new TAY();
+        _instructions[Instructions.TXA] = new TXA();
+        _instructions[Instructions.TXS] = new TXS();
+        _instructions[Instructions.TSX] = new TSX();
+        _instructions[Instructions.TYA] = new TYA();
+
         _instructions[Instructions.Test_2cycle] = new Test_2cycle();
     }
 
@@ -241,7 +255,7 @@ public class Cpu : ICpu
         Flags.Z = false;
         Flags.C = false;
 
-        Registers.PC = (ushort)(_memory[0xfffc] + (_memory[0xfffd] << 8));
+        Registers.PC = (ushort)(_memory[0xFFFC] + (_memory[0xFFFD] << 8));
     }
 
     public void Execute(int cycles)
@@ -271,5 +285,27 @@ public class Cpu : ICpu
     {
         State.Tick();
         _memory[addr ?? Registers.PC++] = value;
+    }
+
+    public void SetRegister(Register register, byte value)
+    {
+        switch (register)
+        {
+            case Register.A:
+                Registers.A = value;
+                break;
+            case Register.X:
+                Registers.X = value;
+                break;
+            case Register.Y:
+                Registers.Y = value;
+                break;
+            case Register.SP:
+                Registers.SP = value;
+                break;
+        }
+
+        Flags.N = (value & 0x80) > 0;
+        Flags.Z = value == 0;
     }
 }

@@ -34,12 +34,6 @@ public abstract class Instruction
         }
     }
 
-    protected static void SetNZToMatchA(ICpu cpu)
-    {
-        cpu.Flags.N = (cpu.Registers.A & 0x80) > 0;
-        cpu.Flags.Z = cpu.Registers.A == 0;
-    }
-
     protected ushort IndAddr;
     protected ushort? Addr;
 

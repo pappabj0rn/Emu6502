@@ -203,6 +203,13 @@ public abstract class CpuTests
         [InlineData(Cpu.Instructions.PHP, typeof(PHP))]
         [InlineData(Cpu.Instructions.PLP, typeof(PLP))]
 
+        [InlineData(Cpu.Instructions.TAX, typeof(TAX))]
+        [InlineData(Cpu.Instructions.TAY, typeof(TAY))]
+        [InlineData(Cpu.Instructions.TXA, typeof(TXA))]
+        [InlineData(Cpu.Instructions.TXS, typeof(TXS))]
+        [InlineData(Cpu.Instructions.TSX, typeof(TSX))]
+        [InlineData(Cpu.Instructions.TYA, typeof(TYA))]
+
         [InlineData(Cpu.Instructions.JMP_Absolute, typeof(JMP_Absolute))]
         public void Should_not_throw_IOE_for_valid_instruction(byte instruction, Type expectedType)
         {
