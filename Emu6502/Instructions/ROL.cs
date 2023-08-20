@@ -1,6 +1,6 @@
 ﻿namespace Emu6502.Instructions;
 
-public abstract class ASL : Instruction
+public abstract class ROL : Instruction
 {
     protected ushort Value;
 
@@ -11,7 +11,10 @@ public abstract class ASL : Instruction
 
     protected void ShiftValueLeft(ICpu cpu)
     {
-        Value = (ushort)(Value << 1);
+        Value = (ushort)((Value << 1)
+            | (cpu.Flags.C
+                ? 0x01
+                : 0x00));
         cpu.State.Tick();
     }
 
@@ -33,13 +36,16 @@ public abstract class ASL : Instruction
     }
 }
 
-public class ASL_Accumulator : ASL
+public class ROL_Accumulator : ROL
 {
-    public ASL_Accumulator()
+    public ROL_Accumulator()
     {
         SubTasks = new() {
             (cpu) => {
-                Value = (ushort)(cpu.Registers.A << 1);
+                Value = (ushort)((cpu.Registers.A << 1)
+                    | (cpu.Flags.C
+                        ? 0x01
+                        : 0x00));
                 cpu.SetRegister(Register.A, (byte)Value);
                 cpu.Flags.C = Value > 0xFF;
                 cpu.State.Tick();
@@ -48,36 +54,36 @@ public class ASL_Accumulator : ASL
     }
 }
 
-public class ASL_Zeropage : ASL
+public class ROL_Zeropage : ROL
 {
-    public ASL_Zeropage()
+    public ROL_Zeropage()
     {
         SubTasks = ZeropageAddressing();
         SubTasks.AddRange(AslMemoryInstructions());
     }
 }
 
-public class ASL_ZeropageX : ASL
+public class ROL_ZeropageX : ROL
 {
-    public ASL_ZeropageX()
+    public ROL_ZeropageX()
     {
         SubTasks = ZeropageXAddressing();
         SubTasks.AddRange(AslMemoryInstructions());
     }
 }
 
-public class ASL_Absolute : ASL
+public class ROL_Absolute : ROL
 {
-    public ASL_Absolute()
+    public ROL_Absolute()
     {
         SubTasks = AbsoluteAddressing();
         SubTasks.AddRange(AslMemoryInstructions());
     }
 }
 
-public class ASL_AbsoluteX : ASL
+public class ROL_AbsoluteX : ROL
 {
-    public ASL_AbsoluteX()
+    public ROL_AbsoluteX()
     {
         SubTasks = AbsoluteXAddressing(addCyclePenalty: true);
         SubTasks.AddRange(AslMemoryInstructions());

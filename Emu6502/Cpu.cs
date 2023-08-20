@@ -141,6 +141,18 @@ public class Cpu : ICpu
         public const byte LSR_ZeropageX =   0x56;
         public const byte LSR_Absolute =    0x4E;
         public const byte LSR_AbsoluteX =   0x5E;
+
+        public const byte ROL_Accumulator = 0x2A;
+        public const byte ROL_Zeropage =    0x26;
+        public const byte ROL_ZeropageX =   0x36;
+        public const byte ROL_Absolute =    0x2E;
+        public const byte ROL_AbsoluteX =   0x3E;
+
+        public const byte ROR_Accumulator = 0x6A;
+        public const byte ROR_Zeropage =    0x66;
+        public const byte ROR_ZeropageX =   0x76;
+        public const byte ROR_Absolute =    0x6E;
+        public const byte ROR_AbsoluteX =   0x7E;
     }
 
     public ExecutionState State { get; } = new();
@@ -293,6 +305,18 @@ public class Cpu : ICpu
         _instructions[Instructions.LSR_ZeropageX] = new LSR_ZeropageX();
         _instructions[Instructions.LSR_Absolute] = new LSR_Absolute();
         _instructions[Instructions.LSR_AbsoluteX] = new LSR_AbsoluteX();
+
+        _instructions[Instructions.ROL_Accumulator] = new ROL_Accumulator();
+        _instructions[Instructions.ROL_Zeropage] = new ROL_Zeropage();
+        _instructions[Instructions.ROL_ZeropageX] = new ROL_ZeropageX();
+        _instructions[Instructions.ROL_Absolute] = new ROL_Absolute();
+        _instructions[Instructions.ROL_AbsoluteX] = new ROL_AbsoluteX();
+
+        _instructions[Instructions.ROR_Accumulator] = new ROR_Accumulator();
+        _instructions[Instructions.ROR_Zeropage] = new ROR_Zeropage();
+        _instructions[Instructions.ROR_ZeropageX] = new ROR_ZeropageX();
+        _instructions[Instructions.ROR_Absolute] = new ROR_Absolute();
+        _instructions[Instructions.ROR_AbsoluteX] = new ROR_AbsoluteX();
 
         _instructions[Instructions.Test_2cycle] = new Test_2cycle();
     }

@@ -236,6 +236,18 @@ public abstract class CpuTests
         [InlineData(Cpu.Instructions.LSR_Absolute, typeof(LSR_Absolute))]
         [InlineData(Cpu.Instructions.LSR_AbsoluteX, typeof(LSR_AbsoluteX))]
 
+        [InlineData(Cpu.Instructions.ROL_Accumulator, typeof(ROL_Accumulator))]
+        [InlineData(Cpu.Instructions.ROL_Zeropage, typeof(ROL_Zeropage))]
+        [InlineData(Cpu.Instructions.ROL_ZeropageX, typeof(ROL_ZeropageX))]
+        [InlineData(Cpu.Instructions.ROL_Absolute, typeof(ROL_Absolute))]
+        [InlineData(Cpu.Instructions.ROL_AbsoluteX, typeof(ROL_AbsoluteX))]
+
+        [InlineData(Cpu.Instructions.ROR_Accumulator, typeof(ROR_Accumulator))]
+        [InlineData(Cpu.Instructions.ROR_Zeropage, typeof(ROR_Zeropage))]
+        [InlineData(Cpu.Instructions.ROR_ZeropageX, typeof(ROR_ZeropageX))]
+        [InlineData(Cpu.Instructions.ROR_Absolute, typeof(ROR_Absolute))]
+        [InlineData(Cpu.Instructions.ROR_AbsoluteX, typeof(ROR_AbsoluteX))]
+
         [InlineData(Cpu.Instructions.JMP_Absolute, typeof(JMP_Absolute))]
         public void Should_not_throw_IOE_for_valid_instruction(byte instruction, Type expectedType)
         {

@@ -1,6 +1,6 @@
 ﻿namespace Emu6502.Instructions;
 
-public abstract class LSR : Instruction
+public abstract class ROR : Instruction
 {
     protected ushort Value;
 
@@ -11,8 +11,11 @@ public abstract class LSR : Instruction
 
     protected void ShiftValueRight(ICpu cpu)
     {
+        var carry = cpu.Flags.C
+                ? 0x80
+                : 0x00;
         cpu.Flags.C = (Value & 0x01) == 1;
-        Value = (ushort)(Value >> 1);
+        Value = (ushort)((Value >> 1) | carry);
         cpu.State.Tick();
     }
 
@@ -33,13 +36,16 @@ public abstract class LSR : Instruction
     }
 }
 
-public class LSR_Accumulator : LSR
+public class ROR_Accumulator : ROR
 {
-    public LSR_Accumulator()
+    public ROR_Accumulator()
     {
         SubTasks = new() {
             (cpu) => {
-                Value = (ushort)(cpu.Registers.A >> 1);
+                var carry = cpu.Flags.C
+                        ? 0x80
+                        : 0x00;
+                Value = (ushort)((cpu.Registers.A >> 1) | carry);
                 cpu.Flags.C = (cpu.Registers.A & 0x01) == 1;
                 cpu.SetRegister(Register.A, (byte)Value);                
                 cpu.State.Tick();
@@ -48,36 +54,36 @@ public class LSR_Accumulator : LSR
     }
 }
 
-public class LSR_Zeropage : LSR
+public class ROR_Zeropage : ROR
 {
-    public LSR_Zeropage()
+    public ROR_Zeropage()
     {
         SubTasks = ZeropageAddressing();
         SubTasks.AddRange(LsrMemoryInstructions());
     }
 }
 
-public class LSR_ZeropageX : LSR
+public class ROR_ZeropageX : ROR
 {
-    public LSR_ZeropageX()
+    public ROR_ZeropageX()
     {
         SubTasks = ZeropageXAddressing();
         SubTasks.AddRange(LsrMemoryInstructions());
     }
 }
 
-public class LSR_Absolute : LSR
+public class ROR_Absolute : ROR
 {
-    public LSR_Absolute()
+    public ROR_Absolute()
     {
         SubTasks = AbsoluteAddressing();
         SubTasks.AddRange(LsrMemoryInstructions());
     }
 }
 
-public class LSR_AbsoluteX : LSR
+public class ROR_AbsoluteX : ROR
 {
-    public LSR_AbsoluteX()
+    public ROR_AbsoluteX()
     {
         SubTasks = AbsoluteXAddressing(addCyclePenalty: true);
         SubTasks.AddRange(LsrMemoryInstructions());
