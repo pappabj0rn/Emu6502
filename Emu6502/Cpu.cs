@@ -113,6 +113,22 @@ public class Cpu : ICpu
         public const byte TXS = 0x8A;
         public const byte TSX = 0x9A;
         public const byte TYA = 0x98;
+
+        public const byte STA_Zeropage =  0x85;
+        public const byte STA_ZeropageX = 0x95;
+        public const byte STA_Absolute =  0x8D;
+        public const byte STA_AbsoluteX = 0x9D;
+        public const byte STA_AbsoluteY = 0x99;
+        public const byte STA_IndirectX = 0x81;
+        public const byte STA_IndirectY = 0x91;
+
+        public const byte STX_Zeropage =  0x86;
+        public const byte STX_ZeropageY = 0x96;
+        public const byte STX_Absolute =  0x8E;
+
+        public const byte STY_Zeropage =  0x84;
+        public const byte STY_ZeropageX = 0x94;
+        public const byte STY_Absolute =  0x8C;
     }
 
     public ExecutionState State { get; } = new();
@@ -237,6 +253,22 @@ public class Cpu : ICpu
         _instructions[Instructions.TXS] = new TXS();
         _instructions[Instructions.TSX] = new TSX();
         _instructions[Instructions.TYA] = new TYA();
+
+        _instructions[Instructions.STA_Zeropage] = new STA_Zeropage();
+        _instructions[Instructions.STA_ZeropageX] = new STA_ZeropageX();
+        _instructions[Instructions.STA_Absolute] = new STA_Absolute();
+        _instructions[Instructions.STA_AbsoluteX] = new STA_AbsoluteX();
+        _instructions[Instructions.STA_AbsoluteY] = new STA_AbsoluteY();
+        _instructions[Instructions.STA_IndirectX] = new STA_IndirectX();
+        _instructions[Instructions.STA_IndirectY] = new STA_IndirectY();
+
+        _instructions[Instructions.STX_Zeropage] = new STX_Zeropage();
+        _instructions[Instructions.STX_ZeropageY] = new STX_ZeropageY();
+        _instructions[Instructions.STX_Absolute] = new STX_Absolute();
+
+        _instructions[Instructions.STY_Zeropage] = new STY_Zeropage();
+        _instructions[Instructions.STY_ZeropageX] = new STY_ZeropageX();
+        _instructions[Instructions.STY_Absolute] = new STY_Absolute();
 
         _instructions[Instructions.Test_2cycle] = new Test_2cycle();
     }

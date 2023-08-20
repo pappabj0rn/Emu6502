@@ -210,6 +210,22 @@ public abstract class CpuTests
         [InlineData(Cpu.Instructions.TSX, typeof(TSX))]
         [InlineData(Cpu.Instructions.TYA, typeof(TYA))]
 
+        [InlineData(Cpu.Instructions.STA_Zeropage, typeof(STA_Zeropage))]
+        [InlineData(Cpu.Instructions.STA_ZeropageX, typeof(STA_ZeropageX))]
+        [InlineData(Cpu.Instructions.STA_Absolute, typeof(STA_Absolute))]
+        [InlineData(Cpu.Instructions.STA_AbsoluteX, typeof(STA_AbsoluteX))]
+        [InlineData(Cpu.Instructions.STA_AbsoluteY, typeof(STA_AbsoluteY))]
+        [InlineData(Cpu.Instructions.STA_IndirectX, typeof(STA_IndirectX))]
+        [InlineData(Cpu.Instructions.STA_IndirectY, typeof(STA_IndirectY))]
+
+        [InlineData(Cpu.Instructions.STX_Zeropage, typeof(STX_Zeropage))]
+        [InlineData(Cpu.Instructions.STX_ZeropageY, typeof(STX_ZeropageY))]
+        [InlineData(Cpu.Instructions.STX_Absolute, typeof(STX_Absolute))]
+
+        [InlineData(Cpu.Instructions.STY_Zeropage, typeof(STY_Zeropage))]
+        [InlineData(Cpu.Instructions.STY_ZeropageX, typeof(STY_ZeropageX))]
+        [InlineData(Cpu.Instructions.STY_Absolute, typeof(STY_Absolute))]
+
         [InlineData(Cpu.Instructions.JMP_Absolute, typeof(JMP_Absolute))]
         public void Should_not_throw_IOE_for_valid_instruction(byte instruction, Type expectedType)
         {
