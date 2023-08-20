@@ -135,6 +135,12 @@ public class Cpu : ICpu
         public const byte ASL_ZeropageX =   0x16;
         public const byte ASL_Absolute =    0x0E;
         public const byte ASL_AbsoluteX =   0x1E;
+
+        public const byte LSR_Accumulator = 0x4A;
+        public const byte LSR_Zeropage =    0x46;
+        public const byte LSR_ZeropageX =   0x56;
+        public const byte LSR_Absolute =    0x4E;
+        public const byte LSR_AbsoluteX =   0x5E;
     }
 
     public ExecutionState State { get; } = new();
@@ -281,6 +287,12 @@ public class Cpu : ICpu
         _instructions[Instructions.ASL_ZeropageX] = new ASL_ZeropageX();
         _instructions[Instructions.ASL_Absolute] = new ASL_Absolute();
         _instructions[Instructions.ASL_AbsoluteX] = new ASL_AbsoluteX();
+
+        _instructions[Instructions.LSR_Accumulator] = new LSR_Accumulator();
+        _instructions[Instructions.LSR_Zeropage] = new LSR_Zeropage();
+        _instructions[Instructions.LSR_ZeropageX] = new LSR_ZeropageX();
+        _instructions[Instructions.LSR_Absolute] = new LSR_Absolute();
+        _instructions[Instructions.LSR_AbsoluteX] = new LSR_AbsoluteX();
 
         _instructions[Instructions.Test_2cycle] = new Test_2cycle();
     }

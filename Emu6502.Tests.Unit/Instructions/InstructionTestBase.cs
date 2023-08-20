@@ -1,8 +1,4 @@
-﻿using Emu6502.Instructions;
-using Newtonsoft.Json.Linq;
-using Xunit.Abstractions;
-
-namespace Emu6502.Tests.Unit.Instructions;
+﻿namespace Emu6502.Tests.Unit.Instructions;
 
 public abstract class InstructionTestBase
 {

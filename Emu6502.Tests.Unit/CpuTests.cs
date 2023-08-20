@@ -1,6 +1,4 @@
-﻿using Emu6502.Instructions;
-
-namespace Emu6502.Tests.Unit;
+﻿namespace Emu6502.Tests.Unit;
 
 public abstract class CpuTests
 {
@@ -231,6 +229,12 @@ public abstract class CpuTests
         [InlineData(Cpu.Instructions.ASL_ZeropageX, typeof(ASL_ZeropageX))]
         [InlineData(Cpu.Instructions.ASL_Absolute, typeof(ASL_Absolute))]
         [InlineData(Cpu.Instructions.ASL_AbsoluteX, typeof(ASL_AbsoluteX))]
+
+        [InlineData(Cpu.Instructions.LSR_Accumulator, typeof(LSR_Accumulator))]
+        [InlineData(Cpu.Instructions.LSR_Zeropage, typeof(LSR_Zeropage))]
+        [InlineData(Cpu.Instructions.LSR_ZeropageX, typeof(LSR_ZeropageX))]
+        [InlineData(Cpu.Instructions.LSR_Absolute, typeof(LSR_Absolute))]
+        [InlineData(Cpu.Instructions.LSR_AbsoluteX, typeof(LSR_AbsoluteX))]
 
         [InlineData(Cpu.Instructions.JMP_Absolute, typeof(JMP_Absolute))]
         public void Should_not_throw_IOE_for_valid_instruction(byte instruction, Type expectedType)
