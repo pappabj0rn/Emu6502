@@ -1,4 +1,5 @@
 ﻿using Emu6502.Instructions;
+using Xunit.Abstractions;
 
 namespace Emu6502.Tests.Unit.Instructions;
 
@@ -6,7 +7,9 @@ public abstract class InstructionTestBase
 {
     protected ICpu CpuMock = Substitute.For<ICpu>();
     protected ExecutionState State = new();
-    protected byte[] Memory = new byte[0xFFFF];
+    protected byte[] Memory = new byte[0x10000];
+
+    private readonly ITestOutputHelper _output;
 
     protected abstract Instruction Sut { get; }
     public abstract int NumberOfCyclesForExecution { get; }
@@ -16,8 +19,10 @@ public abstract class InstructionTestBase
         throw new NotImplementedException($"SteppedThroughVerification not implemeted for test of {Sut.GetType().FullName}");
     }
     
-    public InstructionTestBase()
+    public InstructionTestBase(ITestOutputHelper output)
     {
+        _output = output;
+
         CpuMock.Flags = new Flags();
         CpuMock.Flags.I = true;
         CpuMock.Registers.SP = 0xFF;
@@ -36,6 +41,12 @@ public abstract class InstructionTestBase
             })
             .AndDoes(x =>
             {
+                ushort addr = x[0] is null
+                    ? CpuMock.Registers.PC
+                    : (ushort)x[0];
+                var value = Memory[addr];
+                _output.WriteLine($"[{CpuMock.State.Ticks}] R 0x{addr:X4} (0x{value:X2})");
+
                 State.Tick();
             });
 
@@ -44,14 +55,12 @@ public abstract class InstructionTestBase
             .Do(x => {
                 State.Tick();
                 var value = (byte)x[0];
-                if (x[1] is null)
-                {
-                    Memory[CpuMock.Registers.PC++] = value;
-                }
-                else
-                {
-                    Memory[(ushort)x[1]] = value;
-                }
+                ushort addr = x[1] is null
+                    ? CpuMock.Registers.PC++
+                    : (ushort)x[1];
+
+                Memory[addr] = value;
+                _output.WriteLine($"[{CpuMock.State.Ticks}] W 0x{addr:X4} (0x{value:X2})");
             });
 
         CpuMock

@@ -1,9 +1,12 @@
 ﻿using Emu6502.Instructions;
+using Xunit.Abstractions;
 
 namespace Emu6502.Tests.Unit.Instructions;
 
 public abstract class SBC_Tests : InstructionTestBase
 {
+    public SBC_Tests(ITestOutputHelper output) : base(output) { }
+
     protected abstract void SBC_instruction_test_memory_setup(ICpu cpu, byte operand);
 
     [Theory]                            //nvdizc
@@ -46,6 +49,8 @@ public abstract class SBC_Tests : InstructionTestBase
 
     public class Immediate : SBC_Tests
     {
+        public Immediate(ITestOutputHelper output) : base(output) { }
+
         public override int NumberOfCyclesForExecution => 1;
         protected override Instruction Sut { get; } = new SBC_Immediate();
 
@@ -57,6 +62,8 @@ public abstract class SBC_Tests : InstructionTestBase
 
     public class Absolute : SBC_Tests
     {
+        public Absolute(ITestOutputHelper output) : base(output) { }
+
         public override int NumberOfCyclesForExecution => 3;
         protected override Instruction Sut { get; } = new SBC_Absolute();
 
@@ -87,6 +94,8 @@ public abstract class SBC_Tests : InstructionTestBase
 
     public class AbsoluteX : SBC_Tests
     {
+        public AbsoluteX(ITestOutputHelper output) : base(output) { }
+
         public override int NumberOfCyclesForExecution => 3;
         protected override Instruction Sut { get; } = new SBC_AbsoluteX();
 
@@ -146,6 +155,8 @@ public abstract class SBC_Tests : InstructionTestBase
 
     public class AbsoluteY : SBC_Tests
     {
+        public AbsoluteY(ITestOutputHelper output) : base(output) { }
+
         public override int NumberOfCyclesForExecution => 3;
         protected override Instruction Sut { get; } = new SBC_AbsoluteY();
 
@@ -205,6 +216,8 @@ public abstract class SBC_Tests : InstructionTestBase
 
     public class Zeropage : SBC_Tests
     {
+        public Zeropage(ITestOutputHelper output) : base(output) { }
+
         public override int NumberOfCyclesForExecution => 2;
         protected override Instruction Sut { get; } = new SBC_Zeropage();
 
@@ -235,6 +248,8 @@ public abstract class SBC_Tests : InstructionTestBase
 
     public class ZeropageX : SBC_Tests
     {
+        public ZeropageX(ITestOutputHelper output) : base(output) { }
+
         public override int NumberOfCyclesForExecution => 3;
         protected override Instruction Sut { get; } = new SBC_ZeropageX();
 
@@ -286,6 +301,8 @@ public abstract class SBC_Tests : InstructionTestBase
 
     public class IndirectX : SBC_Tests
     {
+        public IndirectX(ITestOutputHelper output) : base(output) { }
+
         public override int NumberOfCyclesForExecution => 5;
         protected override Instruction Sut { get; } = new SBC_IndirectX();
 
@@ -347,6 +364,8 @@ public abstract class SBC_Tests : InstructionTestBase
 
     public class IndirectY : SBC_Tests
     {
+        public IndirectY(ITestOutputHelper output) : base(output) { }
+
         public override int NumberOfCyclesForExecution => 4;
         protected override Instruction Sut { get; } = new SBC_IndirectY();
 

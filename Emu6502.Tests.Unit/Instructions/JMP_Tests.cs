@@ -1,13 +1,16 @@
 ﻿using Emu6502.Instructions;
+using Xunit.Abstractions;
 
 namespace Emu6502.Tests.Unit.Instructions;
 
 public abstract class JMP_Tests : InstructionTestBase
 {
+    public JMP_Tests(ITestOutputHelper output) : base(output) { }
+
     public class Absolute : JMP_Tests
     {
 
-        public Absolute()
+        public Absolute(ITestOutputHelper output) : base(output)
         {
             State.Instruction = Sut;
         }

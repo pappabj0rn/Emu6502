@@ -1,9 +1,12 @@
 ﻿using Emu6502.Instructions;
+using Xunit.Abstractions;
 
 namespace Emu6502.Tests.Unit.Instructions;
 
 public abstract class LDY_Tests : InstructionTestBase
 {
+    public LDY_Tests(ITestOutputHelper output) : base(output) { }
+
     protected abstract void LDY_instruction_test_memory_setup(ICpu cpu, byte expectedValue);
 
     [Theory]
@@ -29,6 +32,8 @@ public abstract class LDY_Tests : InstructionTestBase
 
     public class Immediate : LDY_Tests
     {
+        public Immediate(ITestOutputHelper output) : base(output) { }
+
         public override int NumberOfCyclesForExecution => 1;
         protected override Instruction Sut { get; } = new LDY_Immediate();
 
@@ -40,6 +45,8 @@ public abstract class LDY_Tests : InstructionTestBase
 
     public class Absolute : LDY_Tests
     {
+        public Absolute(ITestOutputHelper output) : base(output) { }
+
         public override int NumberOfCyclesForExecution => 3;
         protected override Instruction Sut { get; } = new LDY_Absolute();
 
@@ -82,6 +89,8 @@ public abstract class LDY_Tests : InstructionTestBase
 
     public class AbsoluteX : LDY_Tests
     {
+        public AbsoluteX(ITestOutputHelper output) : base(output) { }
+
         public override int NumberOfCyclesForExecution => 3;
         protected override Instruction Sut { get; } = new LDY_AbsoluteX();
 
@@ -134,6 +143,8 @@ public abstract class LDY_Tests : InstructionTestBase
     }
     public class Zeropage : LDY_Tests
     {
+        public Zeropage(ITestOutputHelper output) : base(output) { }
+
         public override int NumberOfCyclesForExecution => 2;
         protected override Instruction Sut { get; } = new LDY_Zeropage();
 
@@ -161,6 +172,8 @@ public abstract class LDY_Tests : InstructionTestBase
 
     public class ZeropageX : LDY_Tests
     {
+        public ZeropageX(ITestOutputHelper output) : base(output) { }
+
         public override int NumberOfCyclesForExecution => 3;
         protected override Instruction Sut { get; } = new LDY_ZeropageX();
 

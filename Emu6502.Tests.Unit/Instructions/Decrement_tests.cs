@@ -1,9 +1,12 @@
 ﻿using Emu6502.Instructions;
+using Xunit.Abstractions;
 
 namespace Emu6502.Tests.Unit.Instructions;
 
 public abstract class Decrement_tests : InstructionTestBase
 {
+    public Decrement_tests(ITestOutputHelper output) : base(output) { }
+
     public abstract void SetupTestMemory(byte value);
     public abstract void VerifyMemory(byte expected);
 
@@ -22,6 +25,8 @@ public abstract class Decrement_tests : InstructionTestBase
 
     public class DEC_Absoulte_tests : Decrement_tests
     {
+        public DEC_Absoulte_tests(ITestOutputHelper output) : base(output) { }
+
         public override int NumberOfCyclesForExecution => 5;
 
         protected override Instruction Sut { get; } = new DEC_Absolute();
@@ -54,6 +59,8 @@ public abstract class Decrement_tests : InstructionTestBase
 
     public class DEC_AbsoulteX_tests : Decrement_tests
     {
+        public DEC_AbsoulteX_tests(ITestOutputHelper output) : base(output) { }
+
         public override int NumberOfCyclesForExecution => 6;
 
         protected override Instruction Sut { get; } = new DEC_AbsoluteX();
@@ -91,6 +98,7 @@ public abstract class Decrement_tests : InstructionTestBase
 
     public class DEC_Zeropage_tests : Decrement_tests
     {
+        public DEC_Zeropage_tests(ITestOutputHelper output) : base(output) { }
         public override int NumberOfCyclesForExecution => 4;
 
         protected override Instruction Sut { get; } = new DEC_Zeropage();
@@ -121,6 +129,8 @@ public abstract class Decrement_tests : InstructionTestBase
 
     public class DEC_ZeropageX_tests : Decrement_tests
     {
+        public DEC_ZeropageX_tests(ITestOutputHelper output) : base(output) { }
+
         public override int NumberOfCyclesForExecution => 5;
 
         protected override Instruction Sut { get; } = new DEC_ZeropageX();
@@ -154,6 +164,8 @@ public abstract class Decrement_tests : InstructionTestBase
 
     public class DEX_tests : Decrement_tests
     {
+        public DEX_tests(ITestOutputHelper output) : base(output) { }
+
         public override int NumberOfCyclesForExecution => 1;
 
         protected override Instruction Sut { get; } = new DEX();
@@ -181,6 +193,8 @@ public abstract class Decrement_tests : InstructionTestBase
 
     public class DEY_tests : Decrement_tests
     {
+        public DEY_tests(ITestOutputHelper output) : base(output) { }
+
         public override int NumberOfCyclesForExecution => 1;
 
         protected override Instruction Sut { get; } = new DEY();

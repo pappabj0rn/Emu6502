@@ -1,9 +1,12 @@
 ﻿using Emu6502.Instructions;
+using Xunit.Abstractions;
 
 namespace Emu6502.Tests.Unit.Instructions;
 
 public abstract class AND_Tests : InstructionTestBase
 {
+    public AND_Tests(ITestOutputHelper output) : base(output) { }
+
     protected abstract void AND_instruction_test_memory_setup(ICpu cpu, byte operand);
 
     [Theory]                     //nvdizc
@@ -35,6 +38,8 @@ public abstract class AND_Tests : InstructionTestBase
 
     public class Immediate : AND_Tests
     {
+        public Immediate(ITestOutputHelper output) : base(output) { }
+
         public override int NumberOfCyclesForExecution => 1;
         protected override Instruction Sut { get; } = new AND_Immediate();
 
@@ -46,6 +51,8 @@ public abstract class AND_Tests : InstructionTestBase
 
     public class Absolute : AND_Tests
     {
+        public Absolute(ITestOutputHelper output) : base(output) { }
+
         public override int NumberOfCyclesForExecution => 3;
         protected override Instruction Sut { get; } = new AND_Absolute();
 
@@ -75,6 +82,8 @@ public abstract class AND_Tests : InstructionTestBase
 
     public class AbsoluteX : AND_Tests
     {
+        public AbsoluteX(ITestOutputHelper output) : base(output) { }
+
         public override int NumberOfCyclesForExecution => 3;
         protected override Instruction Sut { get; } = new AND_AbsoluteX();
 
@@ -130,6 +139,8 @@ public abstract class AND_Tests : InstructionTestBase
 
     public class AbsoluteY : AND_Tests
     {
+        public AbsoluteY(ITestOutputHelper output) : base(output) { }
+
         public override int NumberOfCyclesForExecution => 3;
         protected override Instruction Sut { get; } = new AND_AbsoluteY();
 
@@ -185,6 +196,8 @@ public abstract class AND_Tests : InstructionTestBase
 
     public class Zeropage : AND_Tests
     {
+        public Zeropage(ITestOutputHelper output) : base(output) { }
+
         public override int NumberOfCyclesForExecution => 2;
         protected override Instruction Sut { get; } = new AND_Zeropage();
 
@@ -213,6 +226,8 @@ public abstract class AND_Tests : InstructionTestBase
 
     public class ZeropageX : AND_Tests
     {
+        public ZeropageX(ITestOutputHelper output) : base(output) { }
+
         public override int NumberOfCyclesForExecution => 3;
         protected override Instruction Sut { get; } = new AND_ZeropageX();
 
@@ -260,6 +275,8 @@ public abstract class AND_Tests : InstructionTestBase
 
     public class IndirectX : AND_Tests
     {
+        public IndirectX(ITestOutputHelper output) : base(output) { }
+
         public override int NumberOfCyclesForExecution => 5;
         protected override Instruction Sut { get; } = new AND_IndirectX();
 
@@ -317,6 +334,8 @@ public abstract class AND_Tests : InstructionTestBase
 
     public class IndirectY : AND_Tests
     {
+        public IndirectY(ITestOutputHelper output) : base(output) { }
+
         public override int NumberOfCyclesForExecution => 4;
         protected override Instruction Sut { get; } = new AND_IndirectY();
 

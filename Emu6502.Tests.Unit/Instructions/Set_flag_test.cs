@@ -1,10 +1,13 @@
 ﻿using Emu6502.Instructions;
 using System.Linq.Expressions;
+using Xunit.Abstractions;
 
 namespace Emu6502.Tests.Unit.Instructions;
 
 public abstract class Set_flag_test : InstructionTestBase
 {
+    public Set_flag_test(ITestOutputHelper output) : base(output) { }
+
     public override int NumberOfCyclesForExecution => 1;
     public abstract Expression<Func<ICpu, bool>> AffectedBit { get; }
 
@@ -36,6 +39,8 @@ public abstract class Set_flag_test : InstructionTestBase
 
     public class SEC_tests : Set_flag_test
     {
+        public SEC_tests(ITestOutputHelper output) : base(output) { }
+
         public override Expression<Func<ICpu, bool>> AffectedBit => cpu => cpu.Flags.C;
 
         protected override Instruction Sut { get; } = new SEC();
@@ -43,12 +48,16 @@ public abstract class Set_flag_test : InstructionTestBase
 
     public class SED_tests : Set_flag_test
     {
+        public SED_tests(ITestOutputHelper output) : base(output) { }
+
         public override Expression<Func<ICpu, bool>> AffectedBit => cpu => cpu.Flags.D;
         protected override Instruction Sut { get; } = new SED();
     }
 
     public class SEI_tests : Set_flag_test
     {
+        public SEI_tests(ITestOutputHelper output) : base(output) { }
+
         public override Expression<Func<ICpu, bool>> AffectedBit => cpu => cpu.Flags.I;
         protected override Instruction Sut { get; } = new SEI();
     }

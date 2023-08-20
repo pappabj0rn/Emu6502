@@ -1,9 +1,12 @@
 ﻿using Emu6502.Instructions;
+using Xunit.Abstractions;
 
 namespace Emu6502.Tests.Unit.Instructions;
 
 public abstract class ADC_Tests : InstructionTestBase
 {
+    public ADC_Tests(ITestOutputHelper output) : base(output) { }
+
     protected abstract void ADC_instruction_test_memory_setup(ICpu cpu, byte expectedValue);
 
     [Theory]
@@ -52,6 +55,8 @@ public abstract class ADC_Tests : InstructionTestBase
 
     public class Immediate : ADC_Tests
     {
+        public Immediate(ITestOutputHelper output) : base(output) { }
+
         public override int NumberOfCyclesForExecution => 1;
         protected override Instruction Sut { get; } = new ADC_Immediate();
 
@@ -63,6 +68,8 @@ public abstract class ADC_Tests : InstructionTestBase
 
     public class Absolute : ADC_Tests
     {
+        public Absolute(ITestOutputHelper output) : base(output) { }
+
         public override int NumberOfCyclesForExecution => 3;
         protected override Instruction Sut { get; } = new ADC_Absolute();
 
@@ -90,6 +97,8 @@ public abstract class ADC_Tests : InstructionTestBase
 
     public class AbsoluteX : ADC_Tests
     {
+        public AbsoluteX(ITestOutputHelper output) : base(output) { }
+
         public override int NumberOfCyclesForExecution => 3;
         protected override Instruction Sut { get; } = new ADC_AbsoluteX();
 
@@ -143,6 +152,8 @@ public abstract class ADC_Tests : InstructionTestBase
     
     public class AbsoluteY : ADC_Tests
     {
+        public AbsoluteY(ITestOutputHelper output) : base(output) { }
+
         public override int NumberOfCyclesForExecution => 3;
         protected override Instruction Sut { get; } = new ADC_AbsoluteY();
 
@@ -196,6 +207,8 @@ public abstract class ADC_Tests : InstructionTestBase
 
     public class Zeropage : ADC_Tests
     {
+        public Zeropage(ITestOutputHelper output) : base(output) { }
+
         public override int NumberOfCyclesForExecution => 2;
         protected override Instruction Sut { get; } = new ADC_Zeropage();
 
@@ -223,6 +236,8 @@ public abstract class ADC_Tests : InstructionTestBase
 
     public class ZeropageX : ADC_Tests
     {
+        public ZeropageX(ITestOutputHelper output) : base(output) { }
+
         public override int NumberOfCyclesForExecution => 3;
         protected override Instruction Sut { get; } = new ADC_ZeropageX();
 
@@ -268,6 +283,8 @@ public abstract class ADC_Tests : InstructionTestBase
 
     public class IndirectX : ADC_Tests
     {
+        public IndirectX(ITestOutputHelper output) : base(output) { }
+
         public override int NumberOfCyclesForExecution => 5;
         protected override Instruction Sut { get; } = new ADC_IndirectX();
 
@@ -323,6 +340,8 @@ public abstract class ADC_Tests : InstructionTestBase
 
     public class IndirectY : ADC_Tests
     {
+        public IndirectY(ITestOutputHelper output) : base(output) { }
+
         public override int NumberOfCyclesForExecution => 4;
         protected override Instruction Sut { get; } = new ADC_IndirectY();
 

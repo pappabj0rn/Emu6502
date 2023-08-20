@@ -53,7 +53,7 @@ public abstract class Instruction
             (cpu) => { Addr = (ushort)(cpu.FetchMemory() + cpu.Registers.X); },
             (cpu) => {
                 if(addCyclePenalty 
-                    || Addr > 0xff)
+                   || Addr > 0xff)
                 {
                     cpu.State.Tick();
                 }
@@ -62,13 +62,14 @@ public abstract class Instruction
         };
     }
 
-    protected List<Action<ICpu>> AbsoluteYAddressing()
+    protected List<Action<ICpu>> AbsoluteYAddressing(bool addCyclePenalty = false)
     {
         return new()
         {
             (cpu) => { Addr = (ushort)(cpu.FetchMemory() + cpu.Registers.Y); },
             (cpu) => {
-                if(Addr > 0xff)
+                if(addCyclePenalty
+                   || Addr > 0xff)
                 {
                     cpu.State.Tick();
                 }
@@ -125,14 +126,15 @@ public abstract class Instruction
         };
     }
 
-    protected List<Action<ICpu>> IndirectYAdressing()
+    protected List<Action<ICpu>> IndirectYAdressing(bool addCyclePenalty = false)
     {
         return new()
         {
             (cpu) => { IndAddr = cpu.FetchMemory(); },
             (cpu) => { Addr = (ushort)(cpu.FetchMemory(IndAddr) + cpu.Registers.Y); },
             (cpu) => {
-                if(Addr > 0xff)
+                if(addCyclePenalty
+                   || Addr > 0xff)
                 {
                     cpu.State.Tick();
                 }

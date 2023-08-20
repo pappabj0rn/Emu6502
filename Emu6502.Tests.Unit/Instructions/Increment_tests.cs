@@ -1,9 +1,11 @@
 ﻿using Emu6502.Instructions;
+using Xunit.Abstractions;
 
 namespace Emu6502.Tests.Unit.Instructions;
 
 public abstract class Increment_tests : InstructionTestBase
 {
+    public Increment_tests(ITestOutputHelper output) : base(output) { }
     public abstract void SetupTestMemory(byte value);
     public abstract void VerifyMemory(byte expected);
 
@@ -22,6 +24,8 @@ public abstract class Increment_tests : InstructionTestBase
 
     public class INC_Absoulte_tests : Increment_tests
     {
+        public INC_Absoulte_tests(ITestOutputHelper output) : base(output) { }
+
         public override int NumberOfCyclesForExecution => 5;
 
         protected override Instruction Sut { get; } = new INC_Absolute();
@@ -54,6 +58,8 @@ public abstract class Increment_tests : InstructionTestBase
 
     public class INC_AbsoulteX_tests : Increment_tests
     {
+        public INC_AbsoulteX_tests(ITestOutputHelper output) : base(output) { }
+
         public override int NumberOfCyclesForExecution => 6;
 
         protected override Instruction Sut { get; } = new INC_AbsoluteX();
@@ -91,6 +97,8 @@ public abstract class Increment_tests : InstructionTestBase
 
     public class INC_Zeropage_tests : Increment_tests
     {
+        public INC_Zeropage_tests(ITestOutputHelper output) : base(output) { }
+
         public override int NumberOfCyclesForExecution => 4;
 
         protected override Instruction Sut { get; } = new INC_Zeropage();
@@ -121,6 +129,8 @@ public abstract class Increment_tests : InstructionTestBase
 
     public class INC_ZeropageX_tests : Increment_tests
     {
+        public INC_ZeropageX_tests(ITestOutputHelper output) : base(output) { }
+
         public override int NumberOfCyclesForExecution => 5;
 
         protected override Instruction Sut { get; } = new INC_ZeropageX();
@@ -154,6 +164,8 @@ public abstract class Increment_tests : InstructionTestBase
 
     public class INX_tests : Increment_tests
     {
+        public INX_tests(ITestOutputHelper output) : base(output) { }
+
         public override int NumberOfCyclesForExecution => 1;
 
         protected override Instruction Sut { get; } = new INX();
@@ -181,6 +193,8 @@ public abstract class Increment_tests : InstructionTestBase
 
     public class INY_tests : Increment_tests
     {
+        public INY_tests(ITestOutputHelper output) : base(output) { }
+
         public override int NumberOfCyclesForExecution => 1;
 
         protected override Instruction Sut { get; } = new INY();

@@ -1,8 +1,11 @@
 ﻿using Emu6502.Instructions;
+using Xunit.Abstractions;
 
 namespace Emu6502.Tests.Unit.Instructions;
 public abstract class ORA_Tests : InstructionTestBase
 {
+    public ORA_Tests(ITestOutputHelper output) : base(output) { }
+
     protected abstract void ORA_instruction_test_memory_setup(ICpu cpu, byte operand);
 
     [Theory]                     //nvdizc
@@ -34,6 +37,8 @@ public abstract class ORA_Tests : InstructionTestBase
 
     public class Immediate : ORA_Tests
     {
+        public Immediate(ITestOutputHelper output) : base(output) { }
+
         public override int NumberOfCyclesForExecution => 1;
         protected override Instruction Sut { get; } = new ORA_Immediate();
 
@@ -45,6 +50,8 @@ public abstract class ORA_Tests : InstructionTestBase
 
     public class Absolute : ORA_Tests
     {
+        public Absolute(ITestOutputHelper output) : base(output) { }
+
         public override int NumberOfCyclesForExecution => 3;
         protected override Instruction Sut { get; } = new ORA_Absolute();
 
@@ -74,6 +81,8 @@ public abstract class ORA_Tests : InstructionTestBase
 
     public class AbsoluteX : ORA_Tests
     {
+        public AbsoluteX(ITestOutputHelper output) : base(output) { }
+
         public override int NumberOfCyclesForExecution => 3;
         protected override Instruction Sut { get; } = new ORA_AbsoluteX();
 
@@ -129,6 +138,8 @@ public abstract class ORA_Tests : InstructionTestBase
 
     public class AbsoluteY : ORA_Tests
     {
+        public AbsoluteY(ITestOutputHelper output) : base(output) { }
+
         public override int NumberOfCyclesForExecution => 3;
         protected override Instruction Sut { get; } = new ORA_AbsoluteY();
 
@@ -184,6 +195,8 @@ public abstract class ORA_Tests : InstructionTestBase
 
     public class Zeropage : ORA_Tests
     {
+        public Zeropage(ITestOutputHelper output) : base(output) { }
+
         public override int NumberOfCyclesForExecution => 2;
         protected override Instruction Sut { get; } = new ORA_Zeropage();
 
@@ -212,6 +225,8 @@ public abstract class ORA_Tests : InstructionTestBase
 
     public class ZeropageX : ORA_Tests
     {
+        public ZeropageX(ITestOutputHelper output) : base(output) { }
+
         public override int NumberOfCyclesForExecution => 3;
         protected override Instruction Sut { get; } = new ORA_ZeropageX();
 
@@ -259,6 +274,8 @@ public abstract class ORA_Tests : InstructionTestBase
 
     public class IndirectX : ORA_Tests
     {
+        public IndirectX(ITestOutputHelper output) : base(output) { }
+
         public override int NumberOfCyclesForExecution => 5;
         protected override Instruction Sut { get; } = new ORA_IndirectX();
 
@@ -316,6 +333,8 @@ public abstract class ORA_Tests : InstructionTestBase
 
     public class IndirectY : ORA_Tests
     {
+        public IndirectY(ITestOutputHelper output) : base(output) { }
+
         public override int NumberOfCyclesForExecution => 4;
         protected override Instruction Sut { get; } = new ORA_IndirectY();
 

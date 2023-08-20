@@ -9,7 +9,7 @@
 
         void Execute(int cycles);
         byte FetchMemory(ushort? addr = null);
-        void WriteMemory(byte valuem, ushort? addr = null);
+        void WriteMemory(byte value, ushort? addr = null);
         void Reset();
         void SetRegister(Register register, byte value);
     }

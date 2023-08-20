@@ -1,11 +1,16 @@
 ﻿using Emu6502.Instructions;
+using Xunit.Abstractions;
 
 namespace Emu6502.Tests.Unit.Instructions;
 
 public abstract class TransferInstructions_tests : InstructionTestBase
 {
+    public TransferInstructions_tests(ITestOutputHelper output) : base(output) { }
+
     public class TAX_tests : TransferInstructions_tests
     {
+        public TAX_tests(ITestOutputHelper output) : base(output) { }
+
         public override int NumberOfCyclesForExecution => 1;
 
         protected override Instruction Sut { get; } = new TAX();
@@ -29,6 +34,8 @@ public abstract class TransferInstructions_tests : InstructionTestBase
 
     public class TAY_tests : TransferInstructions_tests
     {
+        public TAY_tests(ITestOutputHelper output) : base(output) { }
+
         public override int NumberOfCyclesForExecution => 1;
 
         protected override Instruction Sut { get; } = new TAY();
@@ -52,6 +59,8 @@ public abstract class TransferInstructions_tests : InstructionTestBase
 
     public class TSX_tests : TransferInstructions_tests
     {
+        public TSX_tests(ITestOutputHelper output) : base(output) { }
+
         public override int NumberOfCyclesForExecution => 1;
 
         protected override Instruction Sut { get; } = new TSX();
@@ -75,6 +84,8 @@ public abstract class TransferInstructions_tests : InstructionTestBase
 
     public class TXA_tests : TransferInstructions_tests
     {
+        public TXA_tests(ITestOutputHelper output) : base(output) { }
+
         public override int NumberOfCyclesForExecution => 1;
 
         protected override Instruction Sut { get; } = new TXA();
@@ -98,6 +109,8 @@ public abstract class TransferInstructions_tests : InstructionTestBase
 
     public class TXS_tests : TransferInstructions_tests
     {
+        public TXS_tests(ITestOutputHelper output) : base(output) { }
+
         public override int NumberOfCyclesForExecution => 1;
 
         protected override Instruction Sut { get; } = new TXS();
@@ -121,6 +134,8 @@ public abstract class TransferInstructions_tests : InstructionTestBase
 
     public class TYA_tests : TransferInstructions_tests
     {
+        public TYA_tests(ITestOutputHelper output) : base(output) { }
+
         public override int NumberOfCyclesForExecution => 1;
 
         protected override Instruction Sut { get; } = new TYA();

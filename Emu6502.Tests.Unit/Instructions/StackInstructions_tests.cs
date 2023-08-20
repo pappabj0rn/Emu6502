@@ -1,11 +1,16 @@
 ﻿using Emu6502.Instructions;
+using Xunit.Abstractions;
 
 namespace Emu6502.Tests.Unit.Instructions;
 
 public abstract class StackInstructions_tests : InstructionTestBase
 {
+    public StackInstructions_tests(ITestOutputHelper output) : base(output) { }
+
     public class PHA_tests : StackInstructions_tests
     {
+        public PHA_tests(ITestOutputHelper output) : base(output) { }
+
         public override int NumberOfCyclesForExecution => 2;
 
         protected override Instruction Sut { get; } = new PHA();
@@ -43,6 +48,8 @@ public abstract class StackInstructions_tests : InstructionTestBase
 
     public class PLA_tests : StackInstructions_tests
     {
+        public PLA_tests(ITestOutputHelper output) : base(output) { }
+
         public override int NumberOfCyclesForExecution => 3;
 
         protected override Instruction Sut { get; } = new PLA();
@@ -86,6 +93,8 @@ public abstract class StackInstructions_tests : InstructionTestBase
 
     public class PHP_tests : StackInstructions_tests
     {
+        public PHP_tests(ITestOutputHelper output) : base(output) { }
+
         public override int NumberOfCyclesForExecution => 2;
 
         protected override Instruction Sut { get; } = new PHP();
@@ -136,6 +145,8 @@ public abstract class StackInstructions_tests : InstructionTestBase
 
     public class PLP_tests : StackInstructions_tests
     {
+        public PLP_tests(ITestOutputHelper output) : base(output) { }
+
         public override int NumberOfCyclesForExecution => 3;
 
         protected override Instruction Sut { get; } = new PLP();
