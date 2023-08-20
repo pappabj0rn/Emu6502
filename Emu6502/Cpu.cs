@@ -129,6 +129,12 @@ public class Cpu : ICpu
         public const byte STY_Zeropage =  0x84;
         public const byte STY_ZeropageX = 0x94;
         public const byte STY_Absolute =  0x8C;
+
+        public const byte ASL_Accumulator = 0x0A;
+        public const byte ASL_Zeropage =    0x06;
+        public const byte ASL_ZeropageX =   0x16;
+        public const byte ASL_Absolute =    0x0E;
+        public const byte ASL_AbsoluteX =   0x1E;
     }
 
     public ExecutionState State { get; } = new();
@@ -270,6 +276,12 @@ public class Cpu : ICpu
         _instructions[Instructions.STY_ZeropageX] = new STY_ZeropageX();
         _instructions[Instructions.STY_Absolute] = new STY_Absolute();
 
+        _instructions[Instructions.ASL_Accumulator] = new ASL_Accumulator();
+        _instructions[Instructions.ASL_Zeropage] = new ASL_Zeropage();
+        _instructions[Instructions.ASL_ZeropageX] = new ASL_ZeropageX();
+        _instructions[Instructions.ASL_Absolute] = new ASL_Absolute();
+        _instructions[Instructions.ASL_AbsoluteX] = new ASL_AbsoluteX();
+
         _instructions[Instructions.Test_2cycle] = new Test_2cycle();
     }
 
@@ -337,6 +349,11 @@ public class Cpu : ICpu
                 break;
         }
 
+        UpdateNZ(value);
+    }
+
+    public void UpdateNZ(byte value)
+    {
         Flags.N = (value & 0x80) > 0;
         Flags.Z = value == 0;
     }

@@ -12,5 +12,6 @@
         void WriteMemory(byte value, ushort? addr = null);
         void Reset();
         void SetRegister(Register register, byte value);
+        void UpdateNZ(byte value);
     }
 }

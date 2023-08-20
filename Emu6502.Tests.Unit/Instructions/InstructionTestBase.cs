@@ -1,4 +1,5 @@
 ﻿using Emu6502.Instructions;
+using Newtonsoft.Json.Linq;
 using Xunit.Abstractions;
 
 namespace Emu6502.Tests.Unit.Instructions;
@@ -84,6 +85,13 @@ public abstract class InstructionTestBase
                         break;
                 }
 
+                CpuMock.UpdateNZ(value);
+            });
+
+        CpuMock
+            .When(x => x.UpdateNZ(Arg.Any<byte>()))
+            .Do(x => {
+                var value = (byte)x[0];
                 CpuMock.Flags.N = (value & 0x80) > 0;
                 CpuMock.Flags.Z = value == 0;
             });

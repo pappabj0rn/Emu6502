@@ -226,6 +226,12 @@ public abstract class CpuTests
         [InlineData(Cpu.Instructions.STY_ZeropageX, typeof(STY_ZeropageX))]
         [InlineData(Cpu.Instructions.STY_Absolute, typeof(STY_Absolute))]
 
+        [InlineData(Cpu.Instructions.ASL_Accumulator, typeof(ASL_Accumulator))]
+        [InlineData(Cpu.Instructions.ASL_Zeropage, typeof(ASL_Zeropage))]
+        [InlineData(Cpu.Instructions.ASL_ZeropageX, typeof(ASL_ZeropageX))]
+        [InlineData(Cpu.Instructions.ASL_Absolute, typeof(ASL_Absolute))]
+        [InlineData(Cpu.Instructions.ASL_AbsoluteX, typeof(ASL_AbsoluteX))]
+
         [InlineData(Cpu.Instructions.JMP_Absolute, typeof(JMP_Absolute))]
         public void Should_not_throw_IOE_for_valid_instruction(byte instruction, Type expectedType)
         {
