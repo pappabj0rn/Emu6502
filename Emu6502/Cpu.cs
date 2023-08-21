@@ -79,7 +79,7 @@ public class Cpu : ICpu
 
         public const byte DEC_Zeropage =  0xC6;
         public const byte DEC_ZeropageX = 0xD6;
-        public const byte DEC_Absolute =  0xCD;
+        public const byte DEC_Absolute =  0xCE;
         public const byte DEC_AbsoluteX = 0xDE;
         public const byte DEX = 0xCA;
         public const byte DEY = 0x88;
@@ -153,6 +153,23 @@ public class Cpu : ICpu
         public const byte ROR_ZeropageX =   0x76;
         public const byte ROR_Absolute =    0x6E;
         public const byte ROR_AbsoluteX =   0x7E;
+
+        public const byte CMP_Immediate = 0xC9;
+        public const byte CMP_Zeropage =  0xC5;
+        public const byte CMP_ZeropageX = 0xD5;
+        public const byte CMP_Absolute =  0xCD;
+        public const byte CMP_AbsoluteX = 0xDD;
+        public const byte CMP_AbsoluteY = 0xD9;
+        public const byte CMP_IndirectX = 0xC1;
+        public const byte CMP_IndirectY = 0xD1;
+
+        public const byte CPX_Immediate = 0xE0;
+        public const byte CPX_Zeropage =  0xE4;
+        public const byte CPX_Absolute =  0xEC;
+
+        public const byte CPY_Immediate = 0xC0;
+        public const byte CPY_Zeropage =  0xC4;
+        public const byte CPY_Absolute =  0xCc;
     }
 
     public ExecutionState State { get; } = new();
@@ -317,6 +334,23 @@ public class Cpu : ICpu
         _instructions[Instructions.ROR_ZeropageX] = new ROR_ZeropageX();
         _instructions[Instructions.ROR_Absolute] = new ROR_Absolute();
         _instructions[Instructions.ROR_AbsoluteX] = new ROR_AbsoluteX();
+
+        _instructions[Instructions.CMP_Immediate] = new CMP_Immediate();
+        _instructions[Instructions.CMP_Zeropage] = new CMP_Zeropage();
+        _instructions[Instructions.CMP_ZeropageX] = new CMP_ZeropageX();
+        _instructions[Instructions.CMP_Absolute] = new CMP_Absolute();
+        _instructions[Instructions.CMP_AbsoluteX] = new CMP_AbsoluteX();
+        _instructions[Instructions.CMP_AbsoluteY] = new CMP_AbsoluteY();
+        _instructions[Instructions.CMP_IndirectX] = new CMP_IndirectX();
+        _instructions[Instructions.CMP_IndirectY] = new CMP_IndirectY();
+
+        _instructions[Instructions.CPX_Immediate] = new CPX_Immediate();
+        _instructions[Instructions.CPX_Zeropage] = new CPX_Zeropage();
+        _instructions[Instructions.CPX_Absolute] = new CPX_Absolute();
+
+        _instructions[Instructions.CPY_Immediate] = new CPY_Immediate();
+        _instructions[Instructions.CPY_Zeropage] = new CPY_Zeropage();
+        _instructions[Instructions.CPY_Absolute] = new CPY_Absolute();
 
         _instructions[Instructions.Test_2cycle] = new Test_2cycle();
     }

@@ -248,6 +248,23 @@ public abstract class CpuTests
         [InlineData(Cpu.Instructions.ROR_Absolute, typeof(ROR_Absolute))]
         [InlineData(Cpu.Instructions.ROR_AbsoluteX, typeof(ROR_AbsoluteX))]
 
+        [InlineData(Cpu.Instructions.CMP_Immediate, typeof(CMP_Immediate))]
+        [InlineData(Cpu.Instructions.CMP_Zeropage, typeof(CMP_Zeropage))]
+        [InlineData(Cpu.Instructions.CMP_ZeropageX, typeof(CMP_ZeropageX))]
+        [InlineData(Cpu.Instructions.CMP_Absolute, typeof(CMP_Absolute))]
+        [InlineData(Cpu.Instructions.CMP_AbsoluteX, typeof(CMP_AbsoluteX))]
+        [InlineData(Cpu.Instructions.CMP_AbsoluteY, typeof(CMP_AbsoluteY))]
+        [InlineData(Cpu.Instructions.CMP_IndirectX, typeof(CMP_IndirectX))]
+        [InlineData(Cpu.Instructions.CMP_IndirectY, typeof(CMP_IndirectY))]
+
+        [InlineData(Cpu.Instructions.CPX_Immediate, typeof(CPX_Immediate))]
+        [InlineData(Cpu.Instructions.CPX_Zeropage, typeof(CPX_Zeropage))]
+        [InlineData(Cpu.Instructions.CPX_Absolute, typeof(CPX_Absolute))]
+
+        [InlineData(Cpu.Instructions.CPY_Immediate, typeof(CPY_Immediate))]
+        [InlineData(Cpu.Instructions.CPY_Zeropage, typeof(CPY_Zeropage))]
+        [InlineData(Cpu.Instructions.CPY_Absolute, typeof(CPY_Absolute))]
+
         [InlineData(Cpu.Instructions.JMP_Absolute, typeof(JMP_Absolute))]
         public void Should_not_throw_IOE_for_valid_instruction(byte instruction, Type expectedType)
         {
