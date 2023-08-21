@@ -20,7 +20,7 @@ public abstract class Instruction
                 var subtask = SubTasks[i];
                 subtask(cpu);
 
-                if (i == SubTasks.Count - 1)
+                if (cpu.State.InstructionSubstate == SubTasks.Count - 1)
                 {
                     cpu.State.ClearInstruction();
                 }

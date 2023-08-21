@@ -11,6 +11,7 @@ public abstract class InstructionTestBase
     protected abstract Instruction Sut { get; }
     public abstract int NumberOfCyclesForExecution { get; }
     public virtual void SteppedThroughSetup() { }
+    public virtual void CycleCountSetup() { }
     public virtual void SteppedThroughVerification() 
     {
         throw new NotImplementedException($"SteppedThroughVerification not implemeted for test of {Sut.GetType().FullName}");
@@ -97,6 +98,8 @@ public abstract class InstructionTestBase
     public void Should_execute_in_defined_number_of_cycles()
     {
         State.RemainingCycles = NumberOfCyclesForExecution;
+
+        CycleCountSetup();
 
         Sut.Execute(CpuMock);
 
