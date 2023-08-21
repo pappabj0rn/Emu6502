@@ -2,15 +2,29 @@
 
 public class JMP_Absolute : Instruction
 {
-    private ushort _addr = 0;
-
     public JMP_Absolute()
     {
         SubTasks = new() {
-            (cpu) => _addr = cpu.FetchMemory(),
+            (cpu) => Addr = cpu.FetchMemory(),
             (cpu) => {
-                _addr += (ushort)(cpu.FetchMemory() << 8);
-                cpu.Registers.PC = _addr;
+                Addr += (ushort)(cpu.FetchMemory() << 8);
+                cpu.Registers.PC = (ushort)Addr!;
+            }
+        };
+    }
+}
+
+public class JMP_Indirect : Instruction
+{
+    public JMP_Indirect()
+    {
+        SubTasks = new() {
+            (cpu) => IndAddr = cpu.FetchMemory(),
+            (cpu) => { IndAddr += (ushort)(cpu.FetchMemory() << 8); },
+            (cpu) => Addr = cpu.FetchMemory(IndAddr),
+            (cpu) => {
+                Addr += (ushort)(cpu.FetchMemory((ushort)(IndAddr + 1)) << 8);
+                cpu.Registers.PC = (ushort)Addr!;
             }
         };
     }

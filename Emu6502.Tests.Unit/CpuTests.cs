@@ -266,6 +266,7 @@ public abstract class CpuTests
         [InlineData(Cpu.Instructions.CPY_Absolute, typeof(CPY_Absolute))]
 
         [InlineData(Cpu.Instructions.JMP_Absolute, typeof(JMP_Absolute))]
+        [InlineData(Cpu.Instructions.JMP_Indirect, typeof(JMP_Indirect))]
         public void Should_not_throw_IOE_for_valid_instruction(byte instruction, Type expectedType)
         {
             Memory[0x00] = instruction;
