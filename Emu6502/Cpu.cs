@@ -11,6 +11,7 @@ public class Cpu : ICpu
         public const byte Test_2cycle = 0x02;
         public const byte JMP_Absolute = 0x4C;
         public const byte JMP_Indirect = 0x6C;
+        public const byte JSR_Absolute = 0x20;
 
         public const byte LDA_Immediate = 0xA9;
         public const byte LDA_Zeropage =  0xA5;
@@ -196,6 +197,8 @@ public class Cpu : ICpu
         Array.Fill(_instructions, new InvalidOperation());
         _instructions[Instructions.JMP_Absolute] = new JMP_Absolute();
         _instructions[Instructions.JMP_Indirect] = new JMP_Indirect();
+
+        _instructions[Instructions.JSR_Absolute] = new JSR_Absolute();
 
         _instructions[Instructions.LDA_Immediate] = new LDA_Immediate();
         _instructions[Instructions.LDA_Absolute] = new LDA_Absolute();
