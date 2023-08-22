@@ -170,7 +170,10 @@ public class Cpu : ICpu
 
         public const byte CPY_Immediate = 0xC0;
         public const byte CPY_Zeropage =  0xC4;
-        public const byte CPY_Absolute =  0xCc;
+        public const byte CPY_Absolute =  0xCC;
+
+        public const byte BIT_Zeropage = 0x24;
+        public const byte BIT_Absolute = 0x2C;
     }
 
     public ExecutionState State { get; } = new();
@@ -353,6 +356,9 @@ public class Cpu : ICpu
         _instructions[Instructions.CPY_Immediate] = new CPY_Immediate();
         _instructions[Instructions.CPY_Zeropage] = new CPY_Zeropage();
         _instructions[Instructions.CPY_Absolute] = new CPY_Absolute();
+
+        _instructions[Instructions.BIT_Zeropage] = new BIT_Zeropage();
+        _instructions[Instructions.BIT_Absolute] = new BIT_Absolute();
 
         _instructions[Instructions.Test_2cycle] = new Test_2cycle();
     }
