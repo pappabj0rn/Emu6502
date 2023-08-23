@@ -15,7 +15,10 @@ public class Cpu : ICpu
         public const byte JSR_Absolute = 0x20;
 
         public const byte RTI = 0x40;
+
         public const byte RTS = 0x60;
+
+        public const byte BRK = 0x00;
 
         public const byte LDA_Immediate = 0xA9;
         public const byte LDA_Zeropage =  0xA5;
@@ -207,6 +210,8 @@ public class Cpu : ICpu
         _instructions[Instructions.RTI] = new RTI();
 
         _instructions[Instructions.RTS] = new RTS();
+
+        _instructions[Instructions.BRK] = new BRK();
 
         _instructions[Instructions.LDA_Immediate] = new LDA_Immediate();
         _instructions[Instructions.LDA_Absolute] = new LDA_Absolute();
