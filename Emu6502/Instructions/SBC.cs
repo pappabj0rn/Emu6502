@@ -1,25 +1,10 @@
 ﻿namespace Emu6502.Instructions;
 
-public abstract class SBC : Instruction
+public abstract class SBC : ADC
 {
-    protected void SubtractMemoryWithBorrowFromAccumulator(
-        ICpu cpu,
-        ushort? addr = null)
+    protected override byte FetchOp2(ICpu cpu, ushort? addr = null)
     {
-        var op1 = cpu.Registers.A;
-        var op2 = (byte)~cpu.FetchMemory(addr);
-
-        var result = (ushort)(op1
-            + op2
-            + (cpu.Flags.C ? 1 : 0));
-
-        var op1Positive = (op1 & 0x80) == 0x00;
-        var op2Positive = (op2 & 0x80) == 0x00;
-
-        cpu.SetRegister(Register.A, (byte)result);
-        cpu.Flags.C = result > 0xff;               
-        cpu.Flags.V = ((op1Positive && op2Positive) || (!op1Positive && !op2Positive))
-                      && cpu.Flags.N == op2Positive;
+        return (byte)~base.FetchOp2(cpu, addr);
     }
 }
 
@@ -29,7 +14,7 @@ public class SBC_Immediate : SBC
     {
         SubTasks = new()
         {
-            (cpu) => SubtractMemoryWithBorrowFromAccumulator(cpu)
+            (cpu) => AddMemoryAndCarryToAccumulator(cpu)
         };
     }
 }
@@ -39,7 +24,7 @@ public class SBC_Absolute : SBC
     public SBC_Absolute()
     {
         SubTasks = AbsoluteAddressing();
-        SubTasks.Add((cpu) => SubtractMemoryWithBorrowFromAccumulator(cpu, Addr));
+        SubTasks.Add((cpu) => AddMemoryAndCarryToAccumulator(cpu, Addr));
     }
 }
 
@@ -48,7 +33,7 @@ public class SBC_AbsoluteX : SBC
     public SBC_AbsoluteX()
     {
         SubTasks = AbsoluteXAddressing();
-        SubTasks.Add((cpu) => SubtractMemoryWithBorrowFromAccumulator(cpu, Addr));
+        SubTasks.Add((cpu) => AddMemoryAndCarryToAccumulator(cpu, Addr));
     }
 }
 
@@ -57,7 +42,7 @@ public class SBC_AbsoluteY : SBC
     public SBC_AbsoluteY()
     {
         SubTasks = AbsoluteYAddressing();
-        SubTasks.Add((cpu) => SubtractMemoryWithBorrowFromAccumulator(cpu, Addr));
+        SubTasks.Add((cpu) => AddMemoryAndCarryToAccumulator(cpu, Addr));
     }
 }
 
@@ -66,7 +51,7 @@ public class SBC_Zeropage : SBC
     public SBC_Zeropage()
     {
         SubTasks = ZeropageAddressing();
-        SubTasks.Add((cpu) => SubtractMemoryWithBorrowFromAccumulator(cpu, Addr));
+        SubTasks.Add((cpu) => AddMemoryAndCarryToAccumulator(cpu, Addr));
     }
 }
 
@@ -75,7 +60,7 @@ public class SBC_ZeropageX : SBC
     public SBC_ZeropageX()
     {
         SubTasks = ZeropageXAddressing();
-        SubTasks.Add((cpu) => SubtractMemoryWithBorrowFromAccumulator(cpu, Addr));
+        SubTasks.Add((cpu) => AddMemoryAndCarryToAccumulator(cpu, Addr));
     }
 }
 
@@ -84,7 +69,7 @@ public class SBC_IndirectX : SBC
     public SBC_IndirectX()
     {
         SubTasks = IndirectXAdressing();
-        SubTasks.Add((cpu) => SubtractMemoryWithBorrowFromAccumulator(cpu, Addr));
+        SubTasks.Add((cpu) => AddMemoryAndCarryToAccumulator(cpu, Addr));
     }
 }
 
@@ -93,6 +78,6 @@ public class SBC_IndirectY : SBC
     public SBC_IndirectY()
     {
         SubTasks = IndirectYAdressing();
-        SubTasks.Add((cpu) => SubtractMemoryWithBorrowFromAccumulator(cpu, Addr));
+        SubTasks.Add((cpu) => AddMemoryAndCarryToAccumulator(cpu, Addr));
     }
 }

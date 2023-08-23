@@ -2,12 +2,17 @@
 
 public abstract class ADC : Instruction
 {
+    protected virtual byte FetchOp2(ICpu cpu, ushort? addr = null)
+    {
+        return cpu.FetchMemory(addr);
+    }
+
     protected void AddMemoryAndCarryToAccumulator(
         ICpu cpu,
         ushort? addr = null)
     {
         var op1 = cpu.Registers.A;
-        var op2 = cpu.FetchMemory(addr);
+        var op2 = FetchOp2(cpu, addr);
 
         var result = (ushort)(op1
             + op2
@@ -16,7 +21,7 @@ public abstract class ADC : Instruction
         var op1Positive = (op1 & 0x80) == 0x00;
         var op2Positive = (op2 & 0x80) == 0x00;
 
-        cpu.SetRegister(Register.A,(byte)(result & 0xff));
+        cpu.SetRegister(Register.A, (byte)result);
         cpu.Flags.C = result > 0xff;
         cpu.Flags.V = ((op1Positive && op2Positive) || (!op1Positive && !op2Positive))
                       && cpu.Flags.N == op2Positive;
