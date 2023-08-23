@@ -23,6 +23,5 @@ public class JSR_Absolute : Instruction
                 cpu.Registers.PC = (ushort)Addr!;
             }
         };
-    }
-    
+    }    
 }
