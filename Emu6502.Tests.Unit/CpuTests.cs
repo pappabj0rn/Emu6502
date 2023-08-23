@@ -272,6 +272,8 @@ public abstract class CpuTests
 
         [InlineData(Cpu.Instructions.RTS, typeof(RTS))]
 
+        [InlineData(Cpu.Instructions.RTI, typeof(RTI))]
+
         [InlineData(Cpu.Instructions.BIT_Zeropage, typeof(BIT_Zeropage))]
         [InlineData(Cpu.Instructions.BIT_Absolute, typeof(BIT_Absolute))]
         public void Should_not_throw_IOE_for_valid_instruction(byte instruction, Type expectedType)
