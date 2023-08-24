@@ -19,6 +19,15 @@ public class Cpu : ICpu
 
         public const byte BRK = 0x00;
 
+        public const byte BPL = 0x10;
+        public const byte BMI = 0x30;
+        public const byte BVC = 0x50;
+        public const byte BVS = 0x70;
+        public const byte BCC = 0x90;
+        public const byte BCS = 0xB0;
+        public const byte BNE = 0xD0;
+        public const byte BEQ = 0xF0;
+
         public const byte LDA_Immediate = 0xA9;
         public const byte LDA_Zeropage =  0xA5;
         public const byte LDA_ZeropageX = 0xB5;
@@ -183,7 +192,7 @@ public class Cpu : ICpu
         public const byte BIT_Absolute = 0x2C;
     }
 
-    public ExecutionState State { get; } = new();
+    public ExecutionState State { get; private set; } = new();
     public Flags Flags { get; set; } = new();
     public Registers Registers { get; set; } = new();
 
@@ -211,6 +220,15 @@ public class Cpu : ICpu
         _instructions[Instructions.RTS] = new RTS();
 
         _instructions[Instructions.BRK] = new BRK();
+
+        _instructions[Instructions.BPL] = new BPL();
+        _instructions[Instructions.BMI] = new BMI();
+        _instructions[Instructions.BVC] = new BVC();
+        _instructions[Instructions.BVS] = new BVS();
+        _instructions[Instructions.BCC] = new BCC();
+        _instructions[Instructions.BCS] = new BCS();
+        _instructions[Instructions.BNE] = new BNE();
+        _instructions[Instructions.BEQ] = new BEQ();
 
         _instructions[Instructions.LDA_Immediate] = new LDA_Immediate();
         _instructions[Instructions.LDA_Absolute] = new LDA_Absolute();
@@ -391,6 +409,8 @@ public class Cpu : ICpu
         Flags.C = false;
 
         Registers.PC = (ushort)(_memory[0xFFFC] + (_memory[0xFFFD] << 8));
+
+        State = new();
     }
 
     public void Execute(int cycles)

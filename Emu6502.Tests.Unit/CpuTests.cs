@@ -1,4 +1,6 @@
-﻿namespace Emu6502.Tests.Unit;
+﻿using System.Text;
+
+namespace Emu6502.Tests.Unit;
 
 public abstract class CpuTests
 {
@@ -7,7 +9,7 @@ public abstract class CpuTests
 
     public CpuTests()
     {
-        Memory = new byte[0xffff];
+        Memory = new byte[0x10000];
         Cpu = new Cpu(Memory);
     }
 
@@ -287,6 +289,15 @@ public abstract class CpuTests
         
         [InlineData(Cpu.Instructions.BRK, typeof(BRK))]
 
+        [InlineData(Cpu.Instructions.BPL, typeof(BPL))]
+        [InlineData(Cpu.Instructions.BMI, typeof(BMI))]
+        [InlineData(Cpu.Instructions.BVC, typeof(BVC))]
+        [InlineData(Cpu.Instructions.BVS, typeof(BVS))]
+        [InlineData(Cpu.Instructions.BCC, typeof(BCC))]
+        [InlineData(Cpu.Instructions.BCS, typeof(BCS))]
+        [InlineData(Cpu.Instructions.BNE, typeof(BNE))]
+        [InlineData(Cpu.Instructions.BEQ, typeof(BEQ))]
+
         [InlineData(Cpu.Instructions.BIT_Zeropage, typeof(BIT_Zeropage))]
         [InlineData(Cpu.Instructions.BIT_Absolute, typeof(BIT_Absolute))]
         public void Should_not_throw_IOE_for_valid_instruction(byte instruction, Type expectedType)
@@ -295,6 +306,32 @@ public abstract class CpuTests
             Cpu.Execute(1);
 
             Cpu.State.Instruction.Should().BeOfType(expectedType);
+        }
+
+        [Fact]
+        public void Should_have_151_instructions()
+        {
+            var sb = new StringBuilder();
+            var valid = 0;
+
+            for (var i = 0; i < 256; i++)
+            {
+                Cpu.Reset();
+
+                Memory[0x0000] = (byte)i;
+
+                Cpu.Execute(1);
+                if(Cpu.State.Instruction is InvalidOperation)
+                {
+                    sb.AppendLine($"0x{i:x}");
+                }
+                else
+                {
+                    valid++;
+                }
+            }
+
+            valid.Should().Be(151);
         }
     }
 
