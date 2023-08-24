@@ -6,48 +6,67 @@ public abstract class ADC_Tests : InstructionTestBase
 
     protected abstract void ADC_instruction_test_memory_setup(ICpu cpu, byte expectedValue);
 
-    [Theory]
-    [InlineData(0x00, 0x01, false, 0x01, false, false, false, false)]
-    [InlineData(0x01, 0x01, false, 0x02, false, false, false, false)]
-    [InlineData(0x00, 0xFF, false, 0xFF, false, true, false, false)]
-    [InlineData(0x01, 0xFF, false, 0x00, true, false, true, false)]
-    [InlineData(0x7F, 0x01, false, 0x80, false, true, false, true)]
-    [InlineData(0x80, 0x01, false, 0x81, false, true, false, false)]
-    [InlineData(0xFF, 0x02, false, 0x01, false, false, true, false)]
-    [InlineData(0x80, 0x80, false, 0x00, true, false, true, true)]
-    [InlineData(0x7E, 0x7E, false, 0xFC, false, true, false, true)]
+    [Theory]//   a     op2    c      d     exp    NV-BDIZC
+    [InlineData(0x00, 0x01, false, false, 0x01, 0b00110100)]
+    [InlineData(0x01, 0x01, false, false, 0x02, 0b00110100)]
+    [InlineData(0x00, 0xFF, false, false, 0xFF, 0b10110100)]
+    [InlineData(0x01, 0xFF, false, false, 0x00, 0b00110111)]
+    [InlineData(0x7F, 0x01, false, false, 0x80, 0b11110100)]
+    [InlineData(0x80, 0x01, false, false, 0x81, 0b10110100)]
+    [InlineData(0xFF, 0x02, false, false, 0x01, 0b00110101)]
+    [InlineData(0x80, 0x80, false, false, 0x00, 0b01110111)]
+    [InlineData(0x7E, 0x7E, false, false, 0xFC, 0b11110100)]
 
-    [InlineData(0x00, 0x01, true,  0x02, false, false, false, false)]
-    [InlineData(0x01, 0x01, true,  0x03, false, false, false, false)]
-    [InlineData(0x00, 0xFF, true,  0x00, true, false, true, false)]
-    [InlineData(0x01, 0xFF, true,  0x01, false, false, true, false)]
-    [InlineData(0x7F, 0x01, true,  0x81, false, true, false, true)]
-    [InlineData(0x80, 0x01, true,  0x82, false, true, false, false)]
-    [InlineData(0xFF, 0x02, true,  0x02, false, false, true, false)]    
-    [InlineData(0x80, 0x80, true,  0x01, false, false, true, true)]
-    [InlineData(0x7E, 0x7E, true,  0xFD, false, true, false, true)]
+    [InlineData(0x00, 0x01, true,  false, 0x02, 0b00110100)]
+    [InlineData(0x01, 0x01, true,  false, 0x03, 0b00110100)]
+    [InlineData(0x00, 0xFF, true,  false, 0x00, 0b00110111)]
+    [InlineData(0x01, 0xFF, true,  false, 0x01, 0b00110101)]
+    [InlineData(0x7F, 0x01, true,  false, 0x81, 0b11110100)]
+    [InlineData(0x80, 0x01, true,  false, 0x82, 0b10110100)]
+    [InlineData(0xFF, 0x02, true,  false, 0x02, 0b00110101)]   
+    [InlineData(0x80, 0x80, true,  false, 0x01, 0b01110101)]
+    [InlineData(0x7E, 0x7E, true,  false, 0xFD, 0b11110100)]
+
+    [InlineData(0x00, 0x00, false,  true, 0x00, 0b00111110)]
+    [InlineData(0x00, 0x01, false,  true, 0x01, 0b00111100)]
+    [InlineData(0x01, 0x00, false,  true, 0x01, 0b00111100)]
+    [InlineData(0x01, 0x01, false,  true, 0x02, 0b00111100)]
+    [InlineData(0x01, 0x09, false,  true, 0x10, 0b00111100)]
+    [InlineData(0x09, 0x01, false,  true, 0x10, 0b00111100)]
+    [InlineData(0x10, 0x10, false,  true, 0x20, 0b00111100)]
+    [InlineData(0x80, 0x10, false,  true, 0x90, 0b10111100)]
+    [InlineData(0x99, 0x01, false,  true, 0x00, 0b00111111)]
+    [InlineData(0x23, 0x45, false,  true, 0x68, 0b00111100)]
+
+    [InlineData(0x00, 0x00, true, true, 0x01, 0b00111100)]
+    [InlineData(0x00, 0x01, true, true, 0x02, 0b00111100)]
+    [InlineData(0x01, 0x00, true, true, 0x02, 0b00111100)]
+    [InlineData(0x01, 0x01, true, true, 0x03, 0b00111100)]
+    [InlineData(0x01, 0x09, true, true, 0x11, 0b00111100)]
+    [InlineData(0x09, 0x01, true, true, 0x11, 0b00111100)]
+    [InlineData(0x10, 0x10, true, true, 0x21, 0b00111100)]
+    [InlineData(0x80, 0x10, true, true, 0x91, 0b10111100)]
+    [InlineData(0x99, 0x01, true, true, 0x01, 0b00111101)]
+    [InlineData(0x00, 0x99, true, true, 0x00, 0b00111111)]
+    [InlineData(0x23, 0x45, true, true, 0x69, 0b00111100)]
     public void Should_update_Z_and_N_and_C_flags_matching_result_stored_in_accumulator(
-        byte inital_a,
-        byte memory,
-        bool initial_c,
+        byte initial_a,
+        byte mem,
+        bool c,
+        bool d,
         byte expected_a,
-        bool expected_z,
-        bool expected_n,
-        bool expected_c,
-        bool expected_v)
+        byte expected_flags)
     {
-        ADC_instruction_test_memory_setup(CpuMock, memory);
+        ADC_instruction_test_memory_setup(CpuMock, mem);
 
-        CpuMock.Registers.A = inital_a;
-        CpuMock.Flags.C = initial_c;
+        CpuMock.Registers.A = initial_a;
+        CpuMock.Flags.C = c;
+        CpuMock.Flags.D = d;
 
         Sut.Execute(CpuMock);
 
         CpuMock.Registers.A.Should().Be(expected_a);
-        CpuMock.Flags.Z.Should().Be(expected_z);
-        CpuMock.Flags.N.Should().Be(expected_n);
-        CpuMock.Flags.C.Should().Be(expected_c);
-        CpuMock.Flags.V.Should().Be(expected_v);
+        CpuMock.Flags.GetSR().Should().Be(expected_flags);
     }
 
     public class Immediate : ADC_Tests

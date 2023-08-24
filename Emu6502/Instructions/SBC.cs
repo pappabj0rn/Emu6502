@@ -4,7 +4,14 @@ public abstract class SBC : ADC
 {
     protected override byte FetchOp2(ICpu cpu, ushort? addr = null)
     {
-        return (byte)~base.FetchOp2(cpu, addr);
+        return (byte)(cpu.Flags.D             
+            ? NinesCompliment(base.FetchOp2(cpu, addr))
+            : ~base.FetchOp2(cpu, addr));
+    }
+
+    private byte NinesCompliment(byte value)
+    {
+        return (byte)(0x99 - value);
     }
 }
 

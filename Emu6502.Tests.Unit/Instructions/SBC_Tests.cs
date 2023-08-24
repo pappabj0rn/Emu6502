@@ -6,37 +6,54 @@ public abstract class SBC_Tests : InstructionTestBase
 
     protected abstract void SBC_instruction_test_memory_setup(ICpu cpu, byte operand);
 
-    [Theory]                            //nvdizc
-    [InlineData(0x00, 0x01, false, 0xFE, "100100")]
-    [InlineData(0x01, 0x01, false, 0xFF, "100100")]
-    [InlineData(0x00, 0xFF, false, 0x00, "000110")]
-    [InlineData(0x01, 0xFF, false, 0x01, "000100")]
-    [InlineData(0x7F, 0x01, false, 0x7D, "000101")]
-    [InlineData(0x80, 0x01, false, 0x7E, "010101")]
-    [InlineData(0xFF, 0x02, false, 0xFC, "100101")]
-    [InlineData(0x80, 0x80, false, 0xFF, "100100")]
-    [InlineData(0x7E, 0x7E, false, 0xFF, "100100")]
-    //                                   nvdizc
-    [InlineData(0x00, 0x01, true, 0xFF, "100100")]
-    [InlineData(0x01, 0x01, true, 0x00, "000111")]
-    [InlineData(0x00, 0xFF, true, 0x01, "000100")]
-    [InlineData(0x01, 0xFF, true, 0x02, "000100")]
-    [InlineData(0x7F, 0x01, true, 0x7E, "000101")]
-    [InlineData(0x80, 0x01, true, 0x7F, "010101")]
-    [InlineData(0xFF, 0x02, true, 0xFD, "100101")]
-    [InlineData(0x80, 0x80, true, 0x00, "000111")]
-    [InlineData(0x7E, 0x7E, true, 0x00, "000111")]
+    [Theory]//   a     op2    c      d     exp    nv-bdizc
+    [InlineData(0x00, 0x00, false, false, 0xFF, 0b10110100)]
+    [InlineData(0x00, 0x01, false, false, 0xFE, 0b10110100)]
+    [InlineData(0x01, 0x01, false, false, 0xFF, 0b10110100)]
+    [InlineData(0x00, 0xFF, false, false, 0x00, 0b00110110)]
+    [InlineData(0x01, 0xFF, false, false, 0x01, 0b00110100)]
+    [InlineData(0x7F, 0x01, false, false, 0x7D, 0b00110101)]
+    [InlineData(0x80, 0x01, false, false, 0x7E, 0b01110101)]
+    [InlineData(0xFF, 0x02, false, false, 0xFC, 0b10110101)]
+    [InlineData(0x80, 0x80, false, false, 0xFF, 0b10110100)]
+    [InlineData(0x7E, 0x7E, false, false, 0xFF, 0b10110100)]
+    //                                            nv-bdizc
+    [InlineData(0x00, 0x01, true,  false, 0xFF, 0b10110100)]
+    [InlineData(0x01, 0x01, true,  false, 0x00, 0b00110111)]
+    [InlineData(0x00, 0xFF, true,  false, 0x01, 0b00110100)]
+    [InlineData(0x01, 0xFF, true,  false, 0x02, 0b00110100)]
+    [InlineData(0x7F, 0x01, true,  false, 0x7E, 0b00110101)]
+    [InlineData(0x80, 0x01, true,  false, 0x7F, 0b01110101)]
+    [InlineData(0xFF, 0x02, true,  false, 0xFD, 0b10110101)]
+    [InlineData(0x80, 0x80, true,  false, 0x00, 0b00110111)]
+    [InlineData(0x7E, 0x7E, true,  false, 0x00, 0b00110111)]
+    
+    [InlineData(0x00, 0x00, true,  true,  0x00, 0b00111111)]
+    [InlineData(0x01, 0x01, true,  true,  0x00, 0b00111111)]
+    [InlineData(0x02, 0x01, true,  true,  0x01, 0b00111101)]
+    [InlineData(0x10, 0x01, true,  true,  0x09, 0b00111101)]
+    [InlineData(0x90, 0x10, true,  true,  0x80, 0b10111101)]
+    [InlineData(0x01, 0x02, true,  true,  0x99, 0b10111100)]
+    
+    [InlineData(0x00, 0x00, false, true,  0x99, 0b10111100)]
+    [InlineData(0x01, 0x01, false, true,  0x99, 0b10111100)]
+    [InlineData(0x02, 0x01, false, true,  0x00, 0b00111111)]
+    [InlineData(0x10, 0x01, false, true,  0x08, 0b00111101)]
+    [InlineData(0x90, 0x10, false, true,  0x79, 0b00111101)]
+    [InlineData(0x01, 0x02, false, true,  0x98, 0b10111100)]
     public void Should_update_Z_and_N_and_C_flags_matching_result_stored_in_accumulator(
        byte inital_a,
        byte memory,
        bool initial_c,
+       bool d,
        byte expected_a,
-       string expected_flags)
+       byte expected_flags)
     {
         SBC_instruction_test_memory_setup(CpuMock, memory);
 
         CpuMock.Registers.A = inital_a;
         CpuMock.Flags.C = initial_c;
+        CpuMock.Flags.D = d;
 
         Sut.Execute(CpuMock);
 

@@ -14,6 +14,14 @@ public abstract class ADC : Instruction
         var op1 = cpu.Registers.A;
         var op2 = FetchOp2(cpu, addr);
 
+        byte max = 0xff;
+        if (cpu.Flags.D)
+        {
+            op1 = DecodeDecimal(op1);
+            op2 = DecodeDecimal(op2);
+            max = 0x63;
+        }
+
         var result = (ushort)(op1
             + op2
             + (cpu.Flags.C ? 1 : 0));
@@ -21,10 +29,24 @@ public abstract class ADC : Instruction
         var op1Positive = (op1 & 0x80) == 0x00;
         var op2Positive = (op2 & 0x80) == 0x00;
 
-        cpu.SetRegister(Register.A, (byte)result);
-        cpu.Flags.C = result > 0xff;
+        cpu.SetRegister(Register.A, cpu.Flags.D ? EncodeDecimal(result) : (byte)result);
+        cpu.Flags.C = result > max;
         cpu.Flags.V = ((op1Positive && op2Positive) || (!op1Positive && !op2Positive))
-                      && cpu.Flags.N == op2Positive;
+                      && cpu.Flags.N == op2Positive
+                      && !cpu.Flags.D;
+    }
+
+    private byte EncodeDecimal(int value)
+    {
+        int digitOne = (value / 10);
+        int digitTwo = (value - digitOne * 10);
+
+        return (byte)((digitOne % 10) << 4 | digitTwo);
+    }
+
+    private byte DecodeDecimal(byte value)
+    {
+        return (byte)((((value&  0xF0) >> 4) * 10) + (value & 0x0F));
     }
 }
 
