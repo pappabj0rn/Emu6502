@@ -8,7 +8,6 @@ public class Cpu : ICpu
 
     public static class Instructions
     {
-        public const byte Test_2cycle = 0x02;
         public const byte JMP_Absolute = 0x4C;
         public const byte JMP_Indirect = 0x6C;
 
@@ -375,8 +374,6 @@ public class Cpu : ICpu
 
         _instructions[Instructions.BIT_Zeropage] = new BIT_Zeropage();
         _instructions[Instructions.BIT_Absolute] = new BIT_Absolute();
-
-        _instructions[Instructions.Test_2cycle] = new Test_2cycle();
     }
 
     public void Reset()

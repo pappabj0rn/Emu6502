@@ -2,9 +2,11 @@
 
 public class NOP : Instruction
 {
-    public override void Execute(ICpu cpu)
+    public NOP()
     {
-        cpu.State.Tick();
-        cpu.State.ClearInstruction();
+        SubTasks = new()
+        {
+            (cpu) => { cpu.State.Tick(); }
+        };
     }
 }

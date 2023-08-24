@@ -1,5 +1,7 @@
 ﻿namespace Emu6502.Instructions;
 
+#pragma warning disable CS8619 // Nullability of reference types in value doesn't match target type.
+
 public class JSR_Absolute : Instruction
 {
     public JSR_Absolute()

@@ -73,24 +73,35 @@ public abstract class CpuTests
         [Fact]
         public void Should_be_able_to_resume_multi_cycle_instructions_using_multiple_calls_to_execute()
         {
-            Memory[0x00] = Cpu.Instructions.Test_2cycle;
+            Memory[0x0000] = Cpu.Instructions.LDA_Absolute;
+            Memory[0x0001] = 0x03;
+            Memory[0x0002] = 0x04;
+
+            Memory[0x0403] = 0x01;
 
             //fetch
             Cpu.Execute(1);
             Cpu.Ticks.Should().Be(1);
+            Cpu.Registers.A.Should().Be(0x00);
             Cpu.Registers.PC.Should().Be(0x01);
 
             //cycle 1
             Cpu.Execute(1);
             Cpu.Ticks.Should().Be(2);
-            Cpu.Registers.X.Should().Be(1);
-            Cpu.Registers.PC.Should().Be(0x01);
+            Cpu.Registers.A.Should().Be(0x00);
+            Cpu.Registers.PC.Should().Be(0x02);
 
             //cycle 2
             Cpu.Execute(1);
             Cpu.Ticks.Should().Be(3);
-            Cpu.Registers.X.Should().Be(2);
-            Cpu.Registers.PC.Should().Be(0x01);
+            Cpu.Registers.A.Should().Be(0x00);
+            Cpu.Registers.PC.Should().Be(0x03);
+
+            //cycle 3
+            Cpu.Execute(1);
+            Cpu.Ticks.Should().Be(4);
+            Cpu.Registers.A.Should().Be(0x01);
+            Cpu.Registers.PC.Should().Be(0x03);
         }
 
         [Fact]
