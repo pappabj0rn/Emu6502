@@ -2,6 +2,8 @@
 
 namespace Emu6502;
 
+//todo nmi
+
 public class Cpu : ICpu
 {
     private byte[] _memory;
@@ -193,6 +195,7 @@ public class Cpu : ICpu
     }
 
     public ExecutionState State { get; private set; } = new();
+    public Pins Pins { get; set; } = new();
     public Flags Flags { get; set; } = new();
     public Registers Registers { get; set; } = new();
 
@@ -433,13 +436,26 @@ public class Cpu : ICpu
     public byte FetchMemory(ushort? addr = null)
     {
         State.Tick();
-        return _memory[addr ?? Registers.PC++];
+
+        addr ??= Registers.PC++;
+        Pins.SetAddr((ushort)addr);
+        Pins.RW = true;
+
+        var data = _memory[(ushort)addr];
+        Pins.SetData(data);
+
+        return data;
     }
 
     public void WriteMemory(byte value, ushort? addr = null)
     {
         State.Tick();
-        _memory[addr ?? Registers.PC++] = value;
+        addr ??= Registers.PC++;
+        Pins.SetAddr((ushort)addr);
+        Pins.RW = false;
+
+        _memory[(int)addr] = value;
+        Pins.SetData(value);
     }
 
     public void SetRegister(Register register, byte value)

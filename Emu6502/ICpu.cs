@@ -2,6 +2,7 @@
 
 public interface ICpu
 {
+    Pins Pins { get; set; }
     Flags Flags { get; set; }
     Registers Registers { get; set; }
     int Ticks { get; }
