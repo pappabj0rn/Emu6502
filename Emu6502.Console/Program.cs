@@ -1,4 +1,5 @@
 ﻿using Emu6502;
+using System.Diagnostics;
 using Instr = Emu6502.Cpu.Instructions;
 
 byte[] memory = File.ReadAllBytes("6502_functional_test.bin");
@@ -14,38 +15,42 @@ var tIndex = 0;
 
 //for(int i = 0; i < 1000; i++)
 var cycles = 0;
+var sw = new Stopwatch();
+sw.Start();
 while (true)
 {
-    
 
-    //Console.SetCursorPosition(0, 0);
-    //Console.WriteLine(
-    //    $"A: 0x{cpu.Registers.A:X2}   " +
-    //    $"X: 0x{cpu.Registers.X:X2}   " +
-    //    $"Y: 0x{cpu.Registers.Y:X2}   " +
-    //    $"SR: {ToNamedSr(cpu.Flags.GetSR())}   " +
-    //    $"SP: 0x{cpu.Registers.SP:X2}   " +
-    //    $"PC: 0x{cpu.Registers.PC:X4}   " +
-    //    $"RW: {(cpu.Pins.RW ? 'R' : 'W')}   " +
-    //    $"Addr: 0x{cpu.Pins.GetAddr():X4}   " +
-    //    $"Data: 0x{cpu.Pins.GetData():X2}");
+
+//    Console.SetCursorPosition(0, 0);
+////    if (cycles % 10_000 == 0)
+//    Console.WriteLine(
+//        $"A: 0x{cpu.Registers.A:X2}   " +
+//        $"X: 0x{cpu.Registers.X:X2}   " +
+//        $"Y: 0x{cpu.Registers.Y:X2}   " +
+//        $"SR: {ToNamedSr(cpu.Flags.GetSR())}   " +
+//        $"SP: 0x{cpu.Registers.SP:X2}   " +
+//        $"PC: 0x{cpu.Registers.PC:X4}   " +
+//        $"RW: {(cpu.Pins.RW ? 'R' : 'W')}   " +
+//        $"Addr: 0x{cpu.Pins.GetAddr():X4}   " +
+//        $"Data: 0x{cpu.Pins.GetData():X2}   " +
+//        $"Instr: {cpu.State.Instruction?.GetType().Name}");
 
     //Console.SetCursorPosition(0, 5);
 
-    
-    if(lastPC != cpu.Registers.PC)
+
+    if (lastPC != cpu.Registers.PC)
     {
-        Console.WriteLine(
-            $"A: 0x{cpu.Registers.A:X2}   " +
-            $"X: 0x{cpu.Registers.X:X2}   " +
-            $"Y: 0x{cpu.Registers.Y:X2}   " +
-            $"SR: {ToNamedSr(cpu.Flags.GetSR())}   " +
-            $"SP: 0x{cpu.Registers.SP:X2}   " +
-            $"PC: 0x{cpu.Registers.PC:X4}   " +
-            $"RW: {(cpu.Pins.RW ? 'R' : 'W')}   " +
-            $"Addr: 0x{cpu.Pins.GetAddr():X4}   " +
-            $"Data: 0x{cpu.Pins.GetData():X2}   " +
-            $"Instr: {cpu.State.Instruction?.GetType().Name}");
+        //Console.WriteLine(
+        //    $"A: 0x{cpu.Registers.A:X2}   " +
+        //    $"X: 0x{cpu.Registers.X:X2}   " +
+        //    $"Y: 0x{cpu.Registers.Y:X2}   " +
+        //    $"SR: {ToNamedSr(cpu.Flags.GetSR())}   " +
+        //    $"SP: 0x{cpu.Registers.SP:X2}   " +
+        //    $"PC: 0x{cpu.Registers.PC:X4}   " +
+        //    $"RW: {(cpu.Pins.RW ? 'R' : 'W')}   " +
+        //    $"Addr: 0x{cpu.Pins.GetAddr():X4}   " +
+        //    $"Data: 0x{cpu.Pins.GetData():X2}   " +
+        //    $"Instr: {cpu.State.Instruction?.GetType().Name}");
 
         lastPC = cpu.Registers.PC;
         trapMonitor[tIndex++] = cpu.Registers.PC;
@@ -60,7 +65,10 @@ while (true)
         && trapMonitor[1] == trapMonitor[4]
         && trapMonitor[2] == trapMonitor[5])
     {
-        Console.WriteLine($"Trapped at 0x{trapMonitor[1]:X4}");
+        sw.Stop();
+        Console.WriteLine($"Trapped at 0x{trapMonitor.First():X4}, sw: {sw.Elapsed}");
+        if (trapMonitor[0]==0x3469)
+            Console.WriteLine("Success, if you get here everything went well");
         break;
     }
     //switch (memory[0x0200])
