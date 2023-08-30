@@ -128,9 +128,9 @@ public class Cpu : ICpu
 
         public const byte TAX = 0xAA;
         public const byte TAY = 0xA8;
-        public const byte TXA = 0xBA;
-        public const byte TXS = 0x8A;
-        public const byte TSX = 0x9A;
+        public const byte TSX = 0xBA;
+        public const byte TXA = 0x8A;
+        public const byte TXS = 0x9A;
         public const byte TYA = 0x98;
 
         public const byte STA_Zeropage =  0x85;
