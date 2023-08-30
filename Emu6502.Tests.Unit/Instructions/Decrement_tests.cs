@@ -7,17 +7,21 @@ public abstract class Decrement_tests : InstructionTestBase
     public abstract void SetupTestMemory(byte value);
     public abstract void VerifyMemory(byte expected);
 
-    [Theory]
-    [InlineData(0x01, 0x00)]
-    [InlineData(0x00, 0xFF)]
-    [InlineData(0xFF, 0xFE)]
-    public void Should_decrement_memory_at_adress(byte initialValue, byte expectedValue)
+    [Theory]                //NV-BDIZC
+    [InlineData(0x01, 0x00, 0b00110110)]
+    [InlineData(0x00, 0xFF, 0b10110100)]
+    [InlineData(0xFF, 0xFE, 0b10110100)]
+    public void Should_decrement_memory_at_adress(
+        byte initialValue, 
+        byte expectedValue,
+        byte expectedFlags)
     {
         SetupTestMemory(initialValue);
 
         Sut.Execute(CpuMock);
 
         VerifyMemory(expectedValue);
+        VerifyFlags(expectedFlags);
     }
 
     public class DEC_Absoulte_tests : Decrement_tests

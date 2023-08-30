@@ -20,8 +20,8 @@ public abstract class Branch : Instruction
             (cpu) =>
             {
                 NewPC = (Addr & 0x80) == 0x00
-                    ? (ushort)(cpu.Registers.PC + (byte)Addr!)
-                    : (ushort)(cpu.Registers.PC - (byte)(0xFF - Addr!));
+                    ? Forward(cpu)
+                    : Reverse(cpu);
 
                 if((cpu.Registers.PC & 0xFF00) != (NewPC & 0xFF00))
                 {
@@ -34,6 +34,16 @@ public abstract class Branch : Instruction
                 cpu.Registers.PC = NewPC;
             }
         };
+    }
+
+    private ushort Reverse(ICpu cpu)
+    {
+        return (ushort)(cpu.Registers.PC - (byte)(0x100 - Addr!));
+    }
+
+    private ushort Forward(ICpu cpu)
+    {
+        return (ushort)(cpu.Registers.PC + (byte)Addr!);
     }
 }
 

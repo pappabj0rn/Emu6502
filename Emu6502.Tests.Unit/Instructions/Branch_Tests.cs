@@ -28,8 +28,9 @@ public abstract class Branch_Tests : InstructionTestBase
 
     [Theory]
     [InlineData(true, 0x0005, 0x01, 0x0007)]
-    [InlineData(true, 0x0005, 0xFD, 0x0004)]
+    [InlineData(true, 0x0005, 0xFD, 0x0003)]
     [InlineData(false, 0x0005, 0x05, 0x0006)]
+    [InlineData(true, 0x0434, 0xF4, 0x0429)]
     public void Should_branch_on_condition(
             bool trigger,
             ushort initial_pc,
@@ -62,7 +63,7 @@ public abstract class Branch_Tests : InstructionTestBase
 
     [Theory]
     [InlineData(0x00FE, 0x01, 0x0100)]
-    [InlineData(0x0100, 0xFD, 0x00FF)]
+    [InlineData(0x0100, 0xFD, 0x00FE)]
     public void Should_require_3_cycles_when_branching_to_other_page(
         ushort initial_pc,
         byte relative_addr,

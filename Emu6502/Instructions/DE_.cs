@@ -11,6 +11,7 @@ public abstract class DE_ : Instruction
             (cpu) => { value = cpu.FetchMemory(Addr); },
             (cpu) => { 
                 value--;
+                cpu.UpdateNZ(value);
                 cpu.State.Tick();
             },
             (cpu) => { cpu.WriteMemory(value, Addr); }
@@ -62,6 +63,7 @@ public class DEX : DE_
         {
             (cpu) => {
                 cpu.Registers.X--;
+                cpu.UpdateNZ(cpu.Registers.X);
                 cpu.State.Tick();
             }
         };
@@ -77,6 +79,7 @@ public class DEY : DE_
         {
             (cpu) => {
                 cpu.Registers.Y--;
+                cpu.UpdateNZ(cpu.Registers.Y);
                 cpu.State.Tick();
             }
         };
