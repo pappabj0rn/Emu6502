@@ -23,6 +23,7 @@ public class BRK : Instruction
                 cpu.Registers.PC = cpu.FetchMemory(0xFFFE);
             },
             (cpu) => {
+                cpu.Flags.I = true;
                 cpu.Registers.PC |= (ushort)(cpu.FetchMemory(0xFFFF) << 8);
             }
         };

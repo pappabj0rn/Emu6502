@@ -26,4 +26,15 @@ public class BRK_Tests : InstructionTestBase
         Memory[0x01FE].Should().Be(0x01);
         Memory[0x01FF].Should().Be(0x00);
     }
+
+    [Fact]
+    public void Should_set_interrupt_disable_falg()
+    {
+        CpuMock.Flags.I = false;
+
+        Sut.Execute(CpuMock);
+
+        CpuMock.Flags.I.Should().BeTrue();
+    }
+
 }
