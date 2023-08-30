@@ -10,11 +10,16 @@ public abstract class Compare_Tests : InstructionTestBase
     protected abstract byte GetComparedRegister();
 
     [Theory]                //NV-BDIZC
-    [InlineData(0x34, 0x34, 0b00110111)]
+    [InlineData(0x34, 0x34, 0b00110111)]    //Eq
+    [InlineData(0xFF, 0xFF, 0b00110111)]
+    [InlineData(0x00, 0x00, 0b00110111)]
+
+    [InlineData(0x00, 0x01, 0b10110100)]    //Gt    
     [InlineData(0x81, 0x82, 0b10110100)]
-    [InlineData(0x7E, 0x7F, 0b00110100)]
-    [InlineData(0x7E, 0x7D, 0b00110101)]
-    [InlineData(0x81, 0x80, 0b10110101)]
+    [InlineData(0x7E, 0x7F, 0b10110100)]
+    
+    [InlineData(0x7E, 0x7D, 0b00110101)]    //Lt
+    [InlineData(0x81, 0x80, 0b00110101)]
     public void Should_compare_specified_memory_with_accumulator_and_set_Z_N_and_C(
         byte reg,
         byte mem,

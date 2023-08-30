@@ -8,7 +8,7 @@ public abstract class Compare : Instruction
     {
         var result = ComparedRegister(cpu) + (((byte)~op) + 1);
 
-        cpu.Flags.N = (op & 0x80) > 0;
+        cpu.Flags.N = (result & 0x80) > 0;
         cpu.Flags.Z = ((byte)result) == 0;
         cpu.Flags.C = result > 0xFF;
     }
