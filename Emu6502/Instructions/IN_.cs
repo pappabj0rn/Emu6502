@@ -13,7 +13,10 @@ public abstract class IN_ : Instruction
                 value++;
                 cpu.State.Tick();
             },
-            (cpu) => { cpu.WriteMemory(value, Addr); }
+            (cpu) => { 
+                cpu.WriteMemory(value, Addr);
+                cpu.UpdateNZ(value);
+            }
         };
     }
 }
@@ -61,7 +64,7 @@ public class INX : IN_
         SubTasks = new()
         {
             (cpu) => {
-                cpu.Registers.X++;
+                cpu.SetRegister(Register.X, (byte)(cpu.Registers.X + 1));                
                 cpu.State.Tick();
             }
         };
@@ -76,7 +79,7 @@ public class INY : IN_
         SubTasks = new()
         {
             (cpu) => {
-                cpu.Registers.Y++;
+                cpu.SetRegister(Register.Y, (byte)(cpu.Registers.Y + 1));
                 cpu.State.Tick();
             }
         };

@@ -6,17 +6,23 @@ public abstract class Increment_tests : InstructionTestBase
     public abstract void SetupTestMemory(byte value);
     public abstract void VerifyMemory(byte expected);
 
-    [Theory]
-    [InlineData(0x00, 0x01)]
-    [InlineData(0x01, 0x02)]
-    [InlineData(0xFF, 0x00)]
-    public void Should_increment_memory_at_adress(byte initialValue, byte expectedValue)
+    [Theory]                //NV-BDIZC
+    [InlineData(0x00, 0x01, 0b00110100)]
+    [InlineData(0x01, 0x02, 0b00110100)]
+    [InlineData(0x7F, 0x80, 0b10110100)]
+    [InlineData(0xFE, 0xFF, 0b10110100)]
+    [InlineData(0xFF, 0x00, 0b00110110)]
+    public void Should_increment_memory_at_adress(
+        byte initialValue, 
+        byte expectedValue,
+        byte expectedFlags)
     {
         SetupTestMemory(initialValue);
 
         Sut.Execute(CpuMock);
 
         VerifyMemory(expectedValue);
+        VerifyFlags(expectedFlags);
     }
 
     public class INC_Absoulte_tests : Increment_tests
