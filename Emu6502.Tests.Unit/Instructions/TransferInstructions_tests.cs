@@ -112,20 +112,21 @@ public abstract class TransferInstructions_tests : InstructionTestBase
 
         protected override Instruction Sut { get; } = new TXS();
 
-        [Theory]         //NV BDIZC
-        [InlineData(0x00, 0b00000110)]
-        [InlineData(0x01, 0b00000100)]
-        [InlineData(0x80, 0b10000100)]
-        public void Should_transfer_X_to_SP(
-        byte inital,
-        byte expected_flags)
+        [Theory]
+        [InlineData(0x00)]
+        [InlineData(0x01)]
+        [InlineData(0x7E)]
+        [InlineData(0x80)]
+        [InlineData(0xFF)]
+        public void Should_transfer_X_to_SP(byte inital)
         {
             CpuMock.Registers.X = inital;
+            var initialFlags = CpuMock.Flags.GetSR();
 
             Sut.Execute(CpuMock);
 
             CpuMock.Registers.SP.Should().Be(inital);
-            VerifyFlags(expected_flags);
+            VerifyFlags(initialFlags);
         }
     }
 

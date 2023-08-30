@@ -63,7 +63,7 @@ public class TXS : Instruction
         SubTasks = new()
         {
             (cpu) => {
-                cpu.SetRegister(Register.SP, cpu.Registers.X);
+                cpu.Registers.SP = cpu.Registers.X;
                 cpu.State.Tick();
             }
         };
